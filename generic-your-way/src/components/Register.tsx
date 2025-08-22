@@ -28,7 +28,17 @@ const Register: FunctionComponent = () => {
         .matches(/^(?=.*[A-Z])(?=.*[a-z])(?=.*\d)(?=.*[!@#$%^&*\-"])[A-Za-z\d!@#$%^&*\-"]{8,}$/, 
           'Password must contain at least one uppercase letter, one lowercase letter, one number, and one special character (!@#$%^&*-"), and be at least 8 characters long'),
       phone: yup.string().min(9).max(15).required(),
-      region: yup.string().min(2).max(256).required(),
+      region: yup.string().oneOf([
+      "North America",
+      "Caribbean",
+      "Central America",
+      "South America",
+      "Africa",
+      "Middle East",
+      "Europe",
+      "Asia",
+      "Australia and Oceania"
+      ]).required("Region is required"),
       country: yup.string().min(2).max(256).required(),
       city: yup.string().min(2).max(256).required(),
       street: yup.string().min(2).max(256).required(),
@@ -165,23 +175,33 @@ return (
     />
   </div>
 
-  <div className="col-12">
-    <label htmlFor="country" className="form-label">Country</label>
-    {formik.touched.country && formik.errors.country && ( 
-    <p className="text-danger">{formik.errors.country}</p>
-    )}
-    <input 
-    name="country"
-    type="text" 
-    className="form-control" 
-    id="country"
-    autoComplete="on"
-    value={formik.values.country}
+  <div className="col-md-6">
+  <label htmlFor="region" className="form-label">Region</label>
+  {formik.touched.region && formik.errors.region && (
+    <p className="text-danger">{formik.errors.region}</p>
+  )}
+  <select
+    name="region"
+    id="region"
+    className="form-control"
+    value={formik.values.region}
     onChange={formik.handleChange}
     onBlur={formik.handleBlur}
-    required 
-    />
-  </div>
+    required
+  >
+    <option value="" disabled>Select region</option>
+    <option value="North America">North America</option>
+    <option value="Caribbean">Caribbean</option>
+    <option value="Central America">Central America</option>
+    <option value="South America">South America</option>
+    <option value="Africa">Africa</option>
+    <option value="Middle East">Middle East</option>
+    <option value="Europe">Europe</option>
+    <option value="Asia">Asia</option>
+    <option value="Australia">Australia</option>
+    <option value="Oceania">Oceania</option>
+  </select>
+</div>
 
   <div className="col-md-6">
     <label htmlFor="city" className="form-label">City</label>
