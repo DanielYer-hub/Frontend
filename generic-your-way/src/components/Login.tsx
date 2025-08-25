@@ -1,15 +1,16 @@
 import { type FormikValues, useFormik } from "formik";
 import type { FunctionComponent } from "react";
 import { Link, useNavigate } from "react-router-dom";
-import { setToken } from "../services/http";
-import { loginUser } from "../services/userService";
 import * as yup from "yup";
+import { useAuth } from "../context/AuthContext";
+
 
 
 interface LoginProps {}
  
 const Login: FunctionComponent<LoginProps> = () => {
 const navigate = useNavigate();
+const { login} = useAuth();
 
 const formik: FormikValues = useFormik<FormikValues>({
     initialValues: {
@@ -32,22 +33,19 @@ const formik: FormikValues = useFormik<FormikValues>({
             'Password must contain at least one uppercase letter, one lowercase letter, one number, and one special character (!@#$%^&*-"), and be at least 8 characters long'
         ),
     }),
-  
-onSubmit: async (values, { resetForm, setSubmitting }) => {
-  try {
-    const login = await loginUser(values.email, values.password); 
-    if (!login?.token) throw new Error("No token returned by login");
-    setToken(login.token);
-    if (login?.user?.id) localStorage.setItem("userId", login.user.id);
-    navigate("/dashboard");
-    resetForm();
-  } catch (error: any) {
-    console.error("Login failed:", error);
-    alert(error?.response?.data?.message || "Login failed. Please try again.");
-  } finally {
-    setSubmitting(false);
-  }
-}
+
+    onSubmit: async (values, { resetForm, setSubmitting }) => {
+        try {
+          await login(values.email, values.password); 
+          navigate("/dashboard");
+          resetForm();
+        } catch (error: any) {
+          console.error("Login failed:", error);
+          alert(error?.response?.data?.message || "Login failed. Please try again.");
+        } finally {
+          setSubmitting(false);
+        }
+      }
 })
 
 return (
@@ -102,6 +100,7 @@ return (
 New Acolyte? Please <Link to="/register">register</Link> first.
 </span>
 </div>    
+
 </>
 );
 }

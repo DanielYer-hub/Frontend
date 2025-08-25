@@ -44,8 +44,7 @@ const PlayerCard: FunctionComponent<PlayerCardProps> = () => {
   const onSave = async () => {
     try {
       setSaving(true);
-      const updated = await updateMe({ factionText }); // PATCH /api/users/me
-      // Обновим локальный кэш, чтобы при перезагрузке был актуал
+      const updated = await updateMe({ factionText }); 
       localStorage.setItem("user", JSON.stringify(updated));
       setSavedOnce(true);
     } catch (e: any) {
@@ -55,8 +54,6 @@ const PlayerCard: FunctionComponent<PlayerCardProps> = () => {
       setSaving(false);
     }
   };
-
-  
 
     return ( <>
    <div className="container py-4">
@@ -73,11 +70,7 @@ const PlayerCard: FunctionComponent<PlayerCardProps> = () => {
                   <tr>
                     <th style={{ width: 160 }}>Name</th>
                     <td>{u.name?.first} {u.name?.last}</td>
-                  </tr>
-                  {/* <tr>
-                    <th>Email</th>
-                    <td>{u.email || "-"}</td>
-                  </tr> */}
+                  </tr>              
                   <tr>
                     <th>Region</th>
                     <td>{u.region || "-"}</td>
@@ -132,7 +125,7 @@ const PlayerCard: FunctionComponent<PlayerCardProps> = () => {
             rows={6}
             value={factionText}
             onChange={(e) => setFactionText(e.target.value)}
-            placeholder="Вставь сюда заметку/строку правил по фракции"
+            placeholder="Put your notes about your faction here..."
           />
           <div className="mt-2 d-flex align-items-center gap-2">
             <button className="btn btn-primary" onClick={onSave} disabled={!canSave}>

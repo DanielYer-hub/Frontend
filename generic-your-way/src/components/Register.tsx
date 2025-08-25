@@ -7,6 +7,7 @@ import { normalizeUser } from "../interface/user/normalizeUser";
 import { sucessMassage } from "../services/feedbackService";
 import { useAuth } from "../context/AuthContext"; 
 
+
 const Register: FunctionComponent = () => {
   const navigate = useNavigate();
   const { registerAndLogin } = useAuth(); 
@@ -157,24 +158,6 @@ return (
      />
   </div>
 
-  <div className="col-12">
-    <label htmlFor="region" className="form-label">Region</label>
-    { formik.touched.region && formik.errors.region && (
-    <p className="text-danger">{formik.errors.region}</p>
-    )}
-    <input 
-    name="region"
-    type="text" 
-    className="form-control" 
-    id="region"
-    autoComplete="on"
-    value={formik.values.region}  
-    onChange={formik.handleChange}
-    onBlur={formik.handleBlur}
-    required 
-    />
-  </div>
-
   <div className="col-md-6">
   <label htmlFor="region" className="form-label">Region</label>
   {formik.touched.region && formik.errors.region && (
@@ -198,10 +181,27 @@ return (
     <option value="Middle East">Middle East</option>
     <option value="Europe">Europe</option>
     <option value="Asia">Asia</option>
-    <option value="Australia">Australia</option>
-    <option value="Oceania">Oceania</option>
+    <option value="Australia and Oceania">Australia and Oceania</option>
   </select>
 </div>
+
+ <div className="col-md-6">
+    <label htmlFor="country" className="form-label">Country</label>
+    {formik.touched.country && formik.errors. country && (
+    <p className="text-danger">{formik.errors. country}</p>
+    )}
+    <input 
+    name="country"
+    type="text" 
+    className="form-control" 
+    id="country"
+    autoComplete="on"
+    value={formik.values.country}
+    onChange={formik.handleChange}
+    onBlur={formik.handleBlur}
+    required
+    />
+  </div>
 
   <div className="col-md-6">
     <label htmlFor="city" className="form-label">City</label>
@@ -295,6 +295,7 @@ return (
   </div>
 </form>
 </div>
+
 </>
 );
 }
