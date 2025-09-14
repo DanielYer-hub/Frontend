@@ -56,7 +56,7 @@ return (
 <NavLink className="nav-link ms-auto"  to="/player-card">Profile</NavLink>  
 <NavLink className="nav-link ms-auto" to="/about">About</NavLink>  
 
-<div className="dropdown text-end">
+{/* <div className="dropdown text-end">
 <button className="btn btn-light dropdown-toggle" data-bs-toggle="dropdown">
     Rules
 </button>
@@ -66,10 +66,10 @@ return (
     <li><NavLink className="dropdown-item" to="/rules/planets">Planets</NavLink></li>
     <li><NavLink className="dropdown-item" to="/rules/campaign">Campaign Story</NavLink></li>
 </ul>
-</div>
+</div> */}
 
-<NavLink className="nav-link ms-auto" to="/find">Find Players</NavLink>
-<NavLink className="nav-link ms-auto" to="/updates">Updates</NavLink>
+<NavLink className="nav-link ms-auto" to="/players">Find Players</NavLink>
+{/* <NavLink className="nav-link ms-auto" to="/updates">Updates</NavLink> */}
 
  <div className="card ms-auto mt-2" style={{width:"100%"}}>
     <div className="card-body">
@@ -121,7 +121,7 @@ return (
           <NavLink className="btn btn-light" to="/player-card" data-bs-dismiss="offcanvas">Profile</NavLink>
           <NavLink className="btn btn-light" to="/about" data-bs-dismiss="offcanvas">About</NavLink>
 
-<div className="dropdown">
+{/* <div className="dropdown">
     <button className="btn btn-light dropdown-toggle" data-bs-toggle="dropdown">Rules</button>
     <ul className="dropdown-menu dropdown-menu-end show" style={{position:"static", float:"none"}}>
         <li><NavLink className="dropdown-item" to="/rules/factions" data-bs-dismiss="offcanvas">Factions</NavLink></li>
@@ -129,10 +129,10 @@ return (
         <li><NavLink className="dropdown-item" to="/rules/planets" data-bs-dismiss="offcanvas">Planets</NavLink></li>
         <li><NavLink className="dropdown-item" to="/rules/campaign" data-bs-dismiss="offcanvas">Campaign Story</NavLink></li>
     </ul>
-</div>
+</div> */}
 
  <NavLink className="btn btn-light" to="/find" data-bs-dismiss="offcanvas">Find Players</NavLink>
- <NavLink className="btn btn-light" to="/updates" data-bs-dismiss="offcanvas">Updates</NavLink>
+ {/* <NavLink className="btn btn-light" to="/updates" data-bs-dismiss="offcanvas">Updates</NavLink> */}
 
  <div className="card mt-2">
             <div className="card-body">
@@ -160,7 +160,7 @@ return (
                 <label className="form-label">City</label>
                 <input className="form-control" value={city} onChange={e=>setCity(e.target.value)} placeholder="e.g. London" />
               </div>
-        <button className="btn btn-primary w-100" onClick={() => { applyFilters(); }} data-bs-dismiss="offcanvas">Apply</button>
+        <button className="btn btn-accent-outline w-100" onClick={() => { applyFilters(); }} data-bs-dismiss="offcanvas">Apply</button>
     </div>
 </div>
 

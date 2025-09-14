@@ -66,3 +66,51 @@ button:focus-visible {
     background-color: #f9f9f9;
   }
 } */
+:root{
+  --bg: #0f0f10;
+  --text: #ffffff;
+  --accent: #ffd000;         
+  --text-dark: #111;
+}
+
+html, body, #root {
+  height: 100%;
+  background: var(--bg);
+  color: var(--text);
+}
+
+a, .nav-link { color: var(--text); }
+a:hover, .nav-link.active { color: var(--accent); }
+
+.card {
+  background: #1a1b1e;
+  color: var(--text);
+  border: 1px solid rgba(255,255,255,0.08);
+}
+
+.btn-accent-outline {
+  border: 2px solid var(--accent);
+  color: var(--accent);
+  background: transparent;
+}
+.btn-accent-outline:hover {
+  background: var(--accent);
+  color: var(--text-dark);
+}
+
+.btn-accent {
+  background: var(--accent);
+  color: var(--text-dark);
+  border: none;
+}
+.btn-accent:hover {
+  filter: brightness(0.95);
+}
+
+
+.form-control, .form-select, .dropdown-menu {
+  background-color: #141518;
+  color: var(--text);
+  border: 1px solid rgba(255,255,255,0.15);
+}
+.form-control::placeholder { color: #aaa; }
