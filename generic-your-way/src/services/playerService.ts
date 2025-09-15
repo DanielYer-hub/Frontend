@@ -1,4 +1,3 @@
-// services/playerService.ts
 import { api } from "./http";
 
 export type PlayerDTO = {
@@ -13,7 +12,7 @@ export type PlayerDTO = {
   planets?: string[];
 };
 
-const ENDPOINT = "/api/users"; // используем существующий бэкенд-роут
+const ENDPOINT = "/api/users"; 
 
 export async function listPlayers(params: { region?: string; country?: string; city?: string }) {
   const q = new URLSearchParams();
@@ -24,6 +23,5 @@ export async function listPlayers(params: { region?: string; country?: string; c
   const url = q.toString() ? `${ENDPOINT}?${q.toString()}` : ENDPOINT;
   const { data } = await api.get(url);
 
-  // Бэкенд отдаёт массив пользователей (без обёртки)
   return (Array.isArray(data) ? data : data?.players ?? []) as PlayerDTO[];
 }

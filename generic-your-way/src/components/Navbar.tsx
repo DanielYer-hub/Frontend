@@ -106,11 +106,6 @@ return (
 </nav>    
 
 <div className="mt-auto d-grid">
-    {/* {token ? (
-    <button className="btn btn-outline-danger" onClick={logout}>Logout</button>
-        ) : (
-        <NavLink className="btn btn-outline-primary" to="/login">Login</NavLink>
-        )} */}
         {token ? (
       <button onClick={handleLogout} className="btn btn-link">Logout</button>
     ) : (
@@ -173,11 +168,6 @@ return (
 </div>
 
 <div className="mt-auto d-grid">
-        {/* {token ? (
-    <button className="btn btn-outline-danger" onClick={logout} data-bs-dismiss="offcanvas">Logout</button>
-        ) : (
-        <NavLink className="btn btn-outline-primary" to="/login" data-bs-dismiss="offcanvas">Login</NavLink>
-    )} */}
      {token ? (
       <button onClick={handleLogout} className="btn btn-link">Logout</button>
     ) : (

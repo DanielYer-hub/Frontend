@@ -17,7 +17,6 @@ export const authService = {
     return token;
   },
  
-
   logout() {
     removeFromStorage('token'); 
     removeFromStorage('user');

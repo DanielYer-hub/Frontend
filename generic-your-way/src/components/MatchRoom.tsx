@@ -73,9 +73,6 @@ const MatchRoom: React.FC = () => {
 
   if (!b) return <div className="container py-3">Loading...</div>;
 
-  // const aName = `${battle.attackerId?.name?.first || ""} ${battle.attackerId?.name?.last || ""}`.trim();
-  // const dName = `${battle.defenderId?.name?.first || ""} ${battle.defenderId?.name?.last || ""}`.trim();
-
   return (
     <div className="container py-3">
       <h3>Match Room</h3>

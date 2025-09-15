@@ -1,7 +1,6 @@
 import type { UserAddress } from "./UserAddress";
 import type { UserName } from "./UserName";
 
-
 export interface User {
     name: UserName;
     email: string;

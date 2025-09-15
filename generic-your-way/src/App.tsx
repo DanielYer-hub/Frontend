@@ -32,14 +32,11 @@ function App() {
          <Route path='/players' element={<Players />} />
          <Route path='/match/:battleId' element={<MatchRoom />}/>
         </Route>
-        
-    {/* PrivateRoute обёртка для маршрутов, где нужна авторизация. */}
       {/* <Route element={<PrivateRoute />}> */}
         {/* <Route path='/dashboard' element={<Dashboard />} />
         <Route path='*' element={<PageNotFound/>} />
         <Route path='/player-card' element={<PlayerCard />} /> */}
       {/* </Route>  */}
-        
       </Routes>
      </BrowserRouter>
     </>
