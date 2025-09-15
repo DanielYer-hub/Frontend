@@ -1,5 +1,5 @@
 import { createContext, useState, useContext, useEffect, type FunctionComponent, type ReactNode } from 'react';
-import { loginUser, registerUser } from '../services/userService';
+import { getMe, loginUser, registerUser } from '../services/userService';
 import { setToken } from '../services/http';
 
 type ApiName = { first: string; last: string };
@@ -27,6 +27,7 @@ interface AuthContextType {
   login: (email: string, password: string) => Promise<void>;
   logout: () => void;
   registerAndLogin: (payload: any) => Promise<void>;
+  refreshMe: () => Promise<void>;
 }
 
 const AuthContext = createContext<AuthContextType | undefined>(undefined);
@@ -71,6 +72,12 @@ export const AuthProvider: FunctionComponent<{ children: ReactNode }> = ({ child
     await login(payload.email, payload.password);
   };
 
+  const refreshMe = async () => {
+    const me = await getMe();
+    setUser(me);
+    localStorage.setItem('user', JSON.stringify(me));
+  };
+
   const logout = () => {
     setTok(null);
     setUser(null);
@@ -80,7 +87,7 @@ export const AuthProvider: FunctionComponent<{ children: ReactNode }> = ({ child
   };
 
   return (
-    <AuthContext.Provider value={{ user, token, loading, login, logout, registerAndLogin }}>
+    <AuthContext.Provider value={{ user, token, loading, login, logout, registerAndLogin, refreshMe }}>
       {children}
     </AuthContext.Provider>
   );

@@ -192,12 +192,9 @@ const Dashboard: React.FC = () => {
 
   const onAccept = async (b: Battle) => {
     try {
-      // Подтверждаем участие (со стороны защитника)
       await confirmBattle(b._id);
       toast.success("Accepted");
-      // Переходим в комнату матча
       navigate(`/match/${b._id}`);
-      // refresh(true); // уже не обязательно — мы уходим со страницы
     } catch (e: any) {
       toast.error(e?.response?.data?.message || "Failed to accept");
     }
@@ -276,16 +273,20 @@ const Dashboard: React.FC = () => {
                         {m.defenderId?.address?.city || "-"}
                       </div>
                     </div>
-                    <span className="badge text-dark" style={{ background: "#ffd000" }}>
-                      pending
-                    </span>
+                   <div className="d-flex gap-2 align-items-center">
+                   <span className="badge text-dark" style={{ background: "#ffd000" }}>
+                    pending
+                   </span>
+                   <button className="btn btn-sm btn-accent-outline" onClick={()=>navigate(`/match/${m._id}`)}>
+                    Open
+                   </button>
+                   </div>
                   </li>
                 ))}
               </ul>
             </div>
           </div>
         </div>
-
       </div>
     </div>
   );

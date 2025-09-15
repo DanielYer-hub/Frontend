@@ -6,10 +6,13 @@ export default function LayautRight() {
     const { token, logout } = useAuth();
     const navigate = useNavigate();
     const loc = useLocation();
-
     const [country, setCountry] = useState('');
     const [region, setRegion] = useState('');
     const [city, setCity] = useState('');
+    const handleLogout = () => {
+        logout();
+        navigate('/login', { replace: true });
+    };
 
 useEffect(() => {
     const q = new URLSearchParams(loc.search);
@@ -103,11 +106,16 @@ return (
 </nav>    
 
 <div className="mt-auto d-grid">
-    {token ? (
+    {/* {token ? (
     <button className="btn btn-outline-danger" onClick={logout}>Logout</button>
         ) : (
         <NavLink className="btn btn-outline-primary" to="/login">Login</NavLink>
-        )}
+        )} */}
+        {token ? (
+      <button onClick={handleLogout} className="btn btn-link">Logout</button>
+    ) : (
+      <button onClick={() => navigate("/login")} className="btn btn-link">Login</button>
+    )}
     </div>
 </aside>
 
@@ -165,10 +173,15 @@ return (
 </div>
 
 <div className="mt-auto d-grid">
-        {token ? (
+        {/* {token ? (
     <button className="btn btn-outline-danger" onClick={logout} data-bs-dismiss="offcanvas">Logout</button>
         ) : (
         <NavLink className="btn btn-outline-primary" to="/login" data-bs-dismiss="offcanvas">Login</NavLink>
+    )} */}
+     {token ? (
+      <button onClick={handleLogout} className="btn btn-link">Logout</button>
+    ) : (
+      <button onClick={() => navigate("/login")} className="btn btn-link">Login</button>
     )}
 </div>
 </div>
