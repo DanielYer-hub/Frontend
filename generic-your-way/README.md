@@ -1,69 +1,28 @@
-# React + TypeScript + Vite
+Generik Your Way — Warhammer 40k Player Hub (Demo)
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+בגדול:
+אפליקציה למציאת שחקני Warhammer 40,000, יצירת אתגרים (קרבות), וניהול קמפיינים בסיסי – עם פרופיל שחקן, נקודות, ופלנטות.
+מה האפליקציה יודעת לעשות
+הרשמה / התחברות (JWT).
+הקצאת Homeland ופלנטות פתיחה אוטומטית לשחקן חדש.
+שליחת אתגר (Challenge) לשחקן אחר — הצד המגן (Defender) יכול לאשר או לדחות.
+לאחר אישור תוצאה, המערכת מעדכנת נקודות ומעבירה פלנטה בהתאם לכללים.
+כרטיס שחקן (PlayerCard) עם פרטי שחקן + הערות סיעה (Faction Notes).
+                                                                                                                                                                                 Find Players עם סינון לפי Region / Country / City.
+שדרוגים/מגבלות בסיסיים לפי נקודות (Spaceports/Epic heroes).
+טכנולוגיות
 
-Currently, two official plugins are available:
+                                                                                                                                                                                  Backend: Node.js, Express, Mongoose (MongoDB).
+                                                                                                                                                                           Frontend: React + TypeScript, Formik, Yup, Bootstrap.
+                                                                                                                                                                                                                      Auth: JWT.
+                                                                                                                                                                                                            Dev: nodemon, axios.
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Babel](https://babeljs.io/) for Fast Refresh
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/) for Fast Refresh
+למה זה טוב?
+האפליקציה נועדה לשפר תקשורת בין שחקנים ברחבי העולם: גם כשנוסעים לחו״ל, עוברים עיר/מדינה, או פשוט רוצים להכיר שחקנים חדשים — אפשר למצוא יריב, לקבוע משחק, ולהריץ קמפיינים בצורה פשוטה ונגישה.
 
-## Expanding the ESLint configuration
-
-If you are developing a production application, we recommend updating the configuration to enable type-aware lint rules:
-
-```js
-export default tseslint.config([
-  globalIgnores(['dist']),
-  {
-    files: ['**/*.{ts,tsx}'],
-    extends: [
-      // Other configs...
-
-      // Remove tseslint.configs.recommended and replace with this
-      ...tseslint.configs.recommendedTypeChecked,
-      // Alternatively, use this for stricter rules
-      ...tseslint.configs.strictTypeChecked,
-      // Optionally, add this for stylistic rules
-      ...tseslint.configs.stylisticTypeChecked,
-
-      // Other configs...
-    ],
-    languageOptions: {
-      parserOptions: {
-        project: ['./tsconfig.node.json', './tsconfig.app.json'],
-        tsconfigRootDir: import.meta.dirname,
-      },
-      // other options...
-    },
-  },
-])
-```
-
-You can also install [eslint-plugin-react-x](https://github.com/Rel1cx/eslint-react/tree/main/packages/plugins/eslint-plugin-react-x) and [eslint-plugin-react-dom](https://github.com/Rel1cx/eslint-react/tree/main/packages/plugins/eslint-plugin-react-dom) for React-specific lint rules:
-
-```js
-// eslint.config.js
-import reactX from 'eslint-plugin-react-x'
-import reactDom from 'eslint-plugin-react-dom'
-
-export default tseslint.config([
-  globalIgnores(['dist']),
-  {
-    files: ['**/*.{ts,tsx}'],
-    extends: [
-      // Other configs...
-      // Enable lint rules for React
-      reactX.configs['recommended-typescript'],
-      // Enable lint rules for React DOM
-      reactDom.configs.recommended,
-    ],
-    languageOptions: {
-      parserOptions: {
-        project: ['./tsconfig.node.json', './tsconfig.app.json'],
-        tsconfigRootDir: import.meta.dirname,
-      },
-      // other options...
-    },
-  },
-])
-```
+התקנה והרצה (מקומי)
+1) שכבת שרת (Backend)
+                                                                                                                                                                                                             git clone <repo-url>
+                                                                                                                                                                                                                      cd Backand
+                                                                                                                                                                                                            cp .env.example .env
+   
