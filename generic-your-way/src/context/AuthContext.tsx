@@ -59,6 +59,8 @@ export const AuthProvider: FunctionComponent<{ children: ReactNode }> = ({ child
     localStorage.setItem('user', JSON.stringify(data.user));
   };
 
+ 
+
   const registerAndLogin = async (payload: any) => {
     const reg = await registerUser(payload);
     if (reg?.token && reg?.user) {

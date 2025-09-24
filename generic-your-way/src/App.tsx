@@ -7,7 +7,7 @@ import { ToastContainer } from 'react-toastify';
 import Dashboard from './components/Dashboard';
 import PlayerCard from './components/PlayerCard';
 import About from './components/About';
-import Updates from './components/Updates';
+
 import LayoutRight from './components/Navbar';
 import Players from './components/Players';
 import MatchRoom from './components/MatchRoom';
@@ -25,7 +25,7 @@ function App() {
          <Route path='/register' element={<Register />} />
          <Route path='/login' element={<Login />} />
          <Route path='about' element={<About />} />
-         <Route path='updates' element={<Updates />} />
+         
          <Route path='*' element={<PageNotFound/>} />
          <Route path='/player-card' element={<PlayerCard />} />
          <Route path='/dashboard' element={<Dashboard />} />

@@ -28,7 +28,7 @@ export async function updateMe(patch: Partial<{ factionText: string }>) {
 }
 
 export async function getMe() {
-  const { data } = await api.get("http://localhost:8181/api/auth/me");
+  const { data } = await api.get("http://localhost:8181/api/users/me");
   return data.user;
 }
 

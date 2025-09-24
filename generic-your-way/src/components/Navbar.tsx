@@ -52,27 +52,13 @@ return (
 </div>
 
 <aside className="d-none d-md-flex flex-column p-3 border-start" style={{ width: '300px', minHeight: '100vh' }}>
-    <Link to="/" className="text-decoration-none mb-3 h5 align-self-end">Menu</Link>
-
+<Link to="/" className="text-decoration-none mb-3 h5 align-self-end">Menu</Link>
 <nav className="nav nav-pills flex-column gap-2">
 <NavLink className="nav-link ms-auto"  to="/dashboard">Home</NavLink>    
 <NavLink className="nav-link ms-auto"  to="/player-card">Profile</NavLink>  
 <NavLink className="nav-link ms-auto" to="/about">About</NavLink>  
-
-{/* <div className="dropdown text-end">
-<button className="btn btn-light dropdown-toggle" data-bs-toggle="dropdown">
-    Rules
-</button>
-<ul className="dropdown-menu dropdown-menu-end">
-    <li><NavLink className="dropdown-item" to="/rules/factions">Factions</NavLink></li>
-    <li><NavLink className="dropdown-item" to="/rules/terrain">Terrain Rules</NavLink></li>
-    <li><NavLink className="dropdown-item" to="/rules/planets">Planets</NavLink></li>
-    <li><NavLink className="dropdown-item" to="/rules/campaign">Campaign Story</NavLink></li>
-</ul>
-</div> */}
-
 <NavLink className="nav-link ms-auto" to="/players">Find Players</NavLink>
-{/* <NavLink className="nav-link ms-auto" to="/updates">Updates</NavLink> */}
+
 
  <div className="card ms-auto mt-2" style={{width:"100%"}}>
     <div className="card-body">
@@ -120,22 +106,10 @@ return (
     <button type="button" className="btn-close" data-bs-dismiss="offcanvas"/>
 </div>
         <div className="offcanvas-body d-flex flex-column gap-2">
-          <NavLink className="btn btn-light" to="/dashboard" data-bs-dismiss="offcanvas">Home</NavLink>
-          <NavLink className="btn btn-light" to="/player-card" data-bs-dismiss="offcanvas">Profile</NavLink>
-          <NavLink className="btn btn-light" to="/about" data-bs-dismiss="offcanvas">About</NavLink>
-
-{/* <div className="dropdown">
-    <button className="btn btn-light dropdown-toggle" data-bs-toggle="dropdown">Rules</button>
-    <ul className="dropdown-menu dropdown-menu-end show" style={{position:"static", float:"none"}}>
-        <li><NavLink className="dropdown-item" to="/rules/factions" data-bs-dismiss="offcanvas">Factions</NavLink></li>
-        <li><NavLink className="dropdown-item" to="/rules/terrain" data-bs-dismiss="offcanvas">Terrain Rules</NavLink></li>
-        <li><NavLink className="dropdown-item" to="/rules/planets" data-bs-dismiss="offcanvas">Planets</NavLink></li>
-        <li><NavLink className="dropdown-item" to="/rules/campaign" data-bs-dismiss="offcanvas">Campaign Story</NavLink></li>
-    </ul>
-</div> */}
-
- <NavLink className="btn btn-light" to="/find" data-bs-dismiss="offcanvas">Find Players</NavLink>
- {/* <NavLink className="btn btn-light" to="/updates" data-bs-dismiss="offcanvas">Updates</NavLink> */}
+          <NavLink className="btn btn-light" to="/dashboard" >Home</NavLink>
+          <NavLink className="btn btn-light" to="/player-card" >Profile</NavLink>
+          <NavLink className="btn btn-light" to="/about" >About</NavLink>
+          <NavLink className="btn btn-light" to="/players" >Find Players</NavLink>
 
  <div className="card mt-2">
             <div className="card-body">

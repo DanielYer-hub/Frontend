@@ -47,29 +47,31 @@ const PlayerCard: FunctionComponent<PlayerCardProps> = () => {
 
   const canSave = factionText.trim() !== (u.factionText || "").trim() && !saving;
 
-  const onSave = async () => {
-    try {
-      setSaving(true);
-      const updated = await updateMe({ factionText }); 
-      if (typeof auth?.refreshMe === "function") {
-        await auth.refreshMe();
-      } else {
-        try {
-          const userObj = (updated && updated.name && updated) || updated?.user || null;
-          if (userObj) {
-            localStorage.setItem("user", JSON.stringify(userObj));
-          }
-        } catch {}
-      }
-
-      setSavedOnce(true);
-    } catch (e: any) {
-      console.error(e);
-      alert(e?.response?.data?.message || "Save failed");
-    } finally {
-      setSaving(false);
+ const onSave = async () => {
+  try {
+    setSaving(true);
+    const updated = await updateMe({ factionText }); 
+    if (typeof auth?.refreshMe === "function") {
+      await auth.refreshMe();
+    } else {
+      try {
+        const userObj = (updated && updated.name && updated) || updated?.user || null;
+        if (userObj) {
+          localStorage.setItem("user", JSON.stringify(userObj));
+        }
+      } catch {}
     }
-  };
+    if (updated?.factionText) {
+      setFactionText(updated.factionText);
+    }
+    setSavedOnce(true);
+  } catch (e: any) {
+    console.error(e);
+    alert(e?.response?.data?.message || "Save failed");
+  } finally {
+    setSaving(false);
+  }
+};
 
   return (
     <div className="container py-4">
@@ -134,7 +136,6 @@ const PlayerCard: FunctionComponent<PlayerCardProps> = () => {
               </table>
             </div>
           </div>
-
           <hr />
           <div className="mb-2">
             <b>Faction Notes</b>
@@ -152,6 +153,16 @@ const PlayerCard: FunctionComponent<PlayerCardProps> = () => {
             </button>
             {savedOnce && !saving && <span className="text-success">Saved ✓</span>}
           </div>
+          <div className="mt-4">
+         <div className="mb-2"><b>Faction Notes — preview</b></div>
+         <div
+           className="p-3 border rounded "
+           style={{ whiteSpace: "pre-wrap", minHeight: 120 }}>
+           {factionText.trim()
+           ? factionText
+           : <span className="text-muted">No notes yet…</span>}
+          </div>
+         </div>
         </div>
       </div>
     </div>
