@@ -3,10 +3,12 @@ export interface unnormalizedUser {
     last: string;
     email: string;
     password: string;
-    phone: string;
     region: string;
     country: string;
     city: string;
-    street: string;
-    faction: string; 
+    settings: string[];
+    contacts: {
+    phoneE164?: string;          
+    telegramUsername?: string;   
+  };
 }

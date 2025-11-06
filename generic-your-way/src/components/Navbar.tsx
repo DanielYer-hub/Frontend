@@ -35,7 +35,7 @@ return (
     <div className="container d-flex align-items-center justify-content-between py-2">
     <Link to="/" className="text-decoration-none h5 m-0">GYW</Link>    
      <button className="btn btn-outline-secondary" data-bs-toggle="offcanvas" data-bs-target="#mobileRightNav">
-              ☰
+      ☰
      </button>
     </div>
 </header>
@@ -45,9 +45,9 @@ return (
 </main>
 
 <footer className="border-top">
-    <div className="container py-3 text-center small">
-    © {new Date().getFullYear()} Generic Your Way by Daniel Yerema.
-    </div>
+<div className="container py-3 text-center small">
+  © {new Date().getFullYear()} Generic Your Way by Daniel Yerema.
+</div>
 </footer>
 </div>
 
@@ -57,6 +57,7 @@ return (
 <NavLink className="nav-link ms-auto"  to="/dashboard">Home</NavLink>    
 <NavLink className="nav-link ms-auto"  to="/player-card">Profile</NavLink>  
 <NavLink className="nav-link ms-auto" to="/about">About</NavLink>  
+<NavLink className="nav-link ms-auto" to="/updates">Updates</NavLink> 
 <NavLink className="nav-link ms-auto" to="/players">Find Players</NavLink>
 
 
@@ -150,7 +151,6 @@ return (
 </div>
 </div>
 </div>
-
 </div>
 );
 }

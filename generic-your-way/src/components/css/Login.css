@@ -1,0 +1,77 @@
+.login-page {
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  background: #000;
+  color: #fff;
+}
+
+.login-page .page-body {
+  flex: 1;
+  display: flex;
+}
+
+.login-page .container {
+  margin: 0 auto;
+  padding: 50px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.login-page .welcome-page-content {
+  display: flex;
+  justify-content: center;
+  margin: 32px 0 16px;
+}
+.login-page .logo {
+  max-width: 200px; 
+  width: 100%;
+  height: auto;
+  border-radius: 12px;
+}
+
+.login-page form {
+  width: 100%;
+  max-width: 400px;
+  background: #111;
+  padding: 16px;
+  border-radius: 10px;
+  box-shadow: 0 0 12px rgba(255, 255, 255, 0.08);
+}
+.login-page form label {
+  font-weight: 600;
+}
+.login-page form input {
+  font-size: 14px;
+  padding: 8px;
+}
+
+.login-page .text-danger {
+  color: #ff4d4f;
+  font-size: 0.85rem;
+  margin: 4px 0;
+  text-transform: capitalize;
+}
+
+.login-page .submit-btn {
+  width: 100%;
+  margin-top: 10px;
+  font-weight: 700;
+  transition: filter 0.15s ease;
+}
+.login-page .submit-btn:hover {
+  filter: brightness(1.15);
+}
+
+.login-page .span-text {
+  display: block;
+  margin-top: 12px;
+  text-align: center;
+  font-size: 0.9rem;
+}
+
+.login-page .login-footer {
+  background: #0d0d0d;
+  color: #9f9f9f;
+}

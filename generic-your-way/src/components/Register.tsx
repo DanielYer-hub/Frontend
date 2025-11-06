@@ -6,17 +6,36 @@ import type { unnormalizedUser } from "../interface/user/unnormalizedUser";
 import { normalizeUser } from "../interface/user/normalizeUser";
 import { sucessMassage } from "../services/feedbackService";
 import { useAuth } from "../context/AuthContext"; 
+import "./css/Register.css";
+import { contactsSchema } from "../validation/contactsValidation";
 
+const SETTINGS = [
+  "Warhammer 40k",
+  "Age of Sigmar",
+  "The Horus Heresy",
+  "Kill Team",
+  "Necromunda",
+  "The Old World",
+  "Underworlds",
+  "Warcry",
+  "Blood Bowl",
+  "Legions Imperialis",
+  "Warhammer Quest",
+  "Middle-Earth",
+];
 
 const Register: FunctionComponent = () => {
   const navigate = useNavigate();
   const { registerAndLogin } = useAuth(); 
-
   const formik: FormikValues = useFormik<FormikValues>({
     initialValues: {
       first: "", last: "", email: "", password: "",
-      phone: "", region: "", country: "", city: "", street: "",
-      faction: "",
+      region: "", country: "", city: "", 
+      settings: [] as string[],
+     contacts: {
+     phoneE164: "",
+     telegramUsername: ""
+   }
     },
     validationSchema: yup.object({
       first: yup.string().min(2).max(256).required(),
@@ -28,7 +47,6 @@ const Register: FunctionComponent = () => {
         .required()
         .matches(/^(?=.*[A-Z])(?=.*[a-z])(?=.*\d)(?=.*[!@#$%^&*\-"])[A-Za-z\d!@#$%^&*\-"]{8,}$/, 
           'Password must contain at least one uppercase letter, one lowercase letter, one number, and one special character (!@#$%^&*-"), and be at least 8 characters long'),
-      phone: yup.string().min(9).max(15).required(),
       region: yup.string().oneOf([
       "North America",
       "Caribbean",
@@ -42,21 +60,18 @@ const Register: FunctionComponent = () => {
       ]).required("Region is required"),
       country: yup.string().min(2).max(256).required(),
       city: yup.string().min(2).max(256).required(),
-      street: yup.string().min(2).max(256).required(),
-      faction: yup.string().oneOf([
-        "Space Marines", "Dark Angels", "Blood Angels", "Space Wolves",
-        "Grey Knights", "Black Templars", "Deathwatch", "Adeptus Mechanicus",
-        "Imperial Knights", "Astra Militarum", "Adeptus Custodes",
-        "Adepta Sororitas", "Imperial Agents", "Chaos Space Marines",
-        "Chaos Daemons", "Thousand Sons", "Death Guard", "World Eaters",
-        "Emperor’s Children", "Chaos Knights", "Aeldari", "Drukhari",
-        "Necrons", "Orks", "T’au Empire", "Tyranids",
-        "Genestealer Cults", "Leagues of Votann"
-      ]).required(),
+      settings: yup
+        .array()
+        .of(yup.string().oneOf(SETTINGS))
+        .min(1, "Select at least one setting")
+        .required("Settings is required"),
+     contacts: contactsSchema.required(),
     }),
+
     onSubmit: async (values, { resetForm, setSubmitting }) => {
       try {
         const normalized = normalizeUser(values as unknown as unnormalizedUser);
+
         await registerAndLogin(normalized); 
         sucessMassage(`${normalized.email} registered successfully`);
         navigate("/dashboard");
@@ -69,19 +84,29 @@ const Register: FunctionComponent = () => {
       }
     }
   });
-    
+
+   const toggleSetting = (s: string) => {
+    const current = formik.values.settings as string[];
+    const next = current.includes(s) ? current.filter((x) => x !== s) : [...current, s];
+    formik.setFieldValue("settings", next);
+  };
+
 return ( 
 <>
+<div className="register-page">
+  <div className="page-body">
 <div className="container">
+   <main className="welcome-page-content">
+        <img src="/content/gyw.png" alt="GYW logo" className="logo" />
+  </main>
 <form className="row g-3" onSubmit={formik.handleSubmit}>
    <div className="col-md-6">
-    <label htmlFor="first" className="form-label">First Name</label>
+    <label htmlFor="first" className="form-label">First Name:</label>
     <input 
     name="first"
     type="text" 
     className="form-control" 
     id="first"
-    autoComplete="on"
     value={formik.values.first}
     onChange={formik.handleChange}
     onBlur={formik.handleBlur}
@@ -90,13 +115,12 @@ return (
   </div>
 
    <div className="col-md-6">
-    <label htmlFor="last" className="form-label">Last Name</label>
+    <label htmlFor="last" className="form-label">Last Name:</label>
     <input 
     name="last"
     type="text" 
     className="form-control" 
     id="last"
-    autoComplete="on"
     value={formik.values.last}  
     onChange={formik.handleChange}
     onBlur={formik.handleBlur}
@@ -105,7 +129,7 @@ return (
   </div>
 
   <div className="col-md-6">
-    <label htmlFor="email" className="form-label">Email</label>
+    <label htmlFor="email" className="form-label">Email:</label>
     {formik.touched.email && formik.errors.email && (
     <p className="text-danger">{formik.errors.email}</p>
     )}
@@ -114,7 +138,6 @@ return (
     type="email" 
     className="form-control" 
     id="email"
-    autoComplete="on"
     value={formik.values.email} 
     onChange={formik.handleChange}
     onBlur={formik.handleBlur}
@@ -123,7 +146,7 @@ return (
   </div>
 
   <div className="col-md-6">
-    <label htmlFor="password" className="form-label">Password</label>
+    <label htmlFor="password" className="form-label">Password:</label>
      {formik.touched.password && formik.errors.password && (
       <p className="text-danger">{formik.errors.password}</p>
       )}
@@ -132,7 +155,6 @@ return (
     type="password" 
     className="form-control" 
     id="password"
-    autoComplete="on"
     value={formik.values.password}
     onChange={formik.handleChange}
     onBlur={formik.handleBlur}
@@ -141,25 +163,7 @@ return (
   </div>
 
   <div className="col-md-6">
-    <label htmlFor="phone" className="form-label">Phone</label>
-    {formik.touched.phone && formik.errors.phone && (
-    <p className="text-danger">{formik.errors.phone}</p>
-    )}
-    <input 
-    name="phone"
-    type="tel" 
-    className="form-control"
-    id="phone"
-    autoComplete="on"
-    value={formik.values.phone}
-    onChange={formik.handleChange}
-    onBlur={formik.handleBlur}
-    required
-     />
-  </div>
-
-  <div className="col-md-6">
-  <label htmlFor="region" className="form-label">Region</label>
+  <label htmlFor="region" className="form-label">Region:</label>
   {formik.touched.region && formik.errors.region && (
     <p className="text-danger">{formik.errors.region}</p>
   )}
@@ -186,7 +190,7 @@ return (
 </div>
 
  <div className="col-md-6">
-    <label htmlFor="country" className="form-label">Country</label>
+    <label htmlFor="country" className="form-label">Country:</label>
     {formik.touched.country && formik.errors. country && (
     <p className="text-danger">{formik.errors. country}</p>
     )}
@@ -204,7 +208,7 @@ return (
   </div>
 
   <div className="col-md-6">
-    <label htmlFor="city" className="form-label">City</label>
+    <label htmlFor="city" className="form-label">City:</label>
     {formik.touched.city && formik.errors.city && (
     <p className="text-danger">{formik.errors.city}</p>
     )}
@@ -221,81 +225,95 @@ return (
     />
   </div>
 
-  <div className="col-md-4">
-    <label htmlFor="street" className="form-label">Street</label>
-    {formik.touched.street && formik.errors.street && (
-    <p className="text-danger">{formik.errors.street}</p>
-    )}
-    <input
-    name="street" 
-    type="text" 
-    className="form-control" 
-    id="street"
-    autoComplete="on"
-    value={formik.values.street}
-    onChange={formik.handleChange}
-    onBlur={formik.handleBlur}
-    required
-    />
-  </div>
+ <div className="col-md-6">
+  <label className="form-label">Contacts:</label>
+  <div className="row g-2">
+    <div className="col-md-12">
+      <input
+        className="form-control"
+        name="contacts.phoneE164"
+        placeholder="Your WhatsApp number."
+        value={formik.values.contacts.phoneE164}
+        onChange={formik.handleChange}
+        onBlur={formik.handleBlur}
+      />
+      {formik.touched.contacts?.phoneE164 &&
+        (formik.errors.contacts as any)?.phoneE164 && (
+          <p className="text-danger">
+            {(formik.errors.contacts as any).phoneE164}
+          </p>
+      )}
+    </div>
 
-   <div className="col-md-4">
-    <label htmlFor="street" className="form-label">Faction</label>
-    {formik.touched.faction && formik.errors.faction && (
-    <p className="text-danger">{formik.errors.faction}</p>
-    )}
-    <select
-    name="faction" 
-    className="form-control" 
-    id="faction"
-    value={formik.values.faction}
-    onChange={formik.handleChange}
-    onBlur={formik.handleBlur}
-    required
-    >
-     <option value="" disabled>Select your faction</option>
-    <option value="Space Marines">Space Marines</option>
-    <option value="Dark Angels">Dark Angels</option>
-    <option value="Blood Angels">Blood Angels</option>
-    <option value="Space Wolves">Space Wolves</option>
-    <option value="Grey Knights">Grey Knights</option>
-    <option value="Black Templars">Black Templars</option>
-    <option value="Deathwatch">Deathwatch</option>
-    <option value="Adeptus Mechanicus">Adeptus Mechanicus</option>
-    <option value="Imperial Knights">Imperial Knights</option>
-    <option value="Astra Militarum">Astra Militarum</option>
-    <option value="Adeptus Custodes">Adeptus Custodes</option>
-    <option value="Adepta Sororitas">Adepta Sororitas</option>
-    <option value="Imperial Agents">Imperial Agents</option>
-    <option value="Chaos Space Marines">Chaos Space Marines</option>
-    <option value="Chaos Daemons">Chaos Daemons</option>
-    <option value="Thousand Sons">Thousand Sons</option>
-    <option value="Death Guard">Death Guard</option>
-    <option value="World Eaters">World Eaters</option>
-    <option value="Emperor’s Children">Emperor’s Children</option>
-    <option value="Chaos Knights">Chaos Knights</option>
-    <option value="Aeldari">Aeldari</option>
-    <option value="Drukhari">Drukhari</option>
-    <option value="Necrons">Necrons</option>
-    <option value="Orks">Orks</option>
-    <option value="T’au Empire">T’au Empire</option>
-    <option value="Tyranids">Tyranids</option>
-    <option value="Genestealer Cults">Genestealer Cults</option>
-    <option value="Leagues of Votann">Leagues of Votann</option>
-    </select>
+    <div className="col-md-12">
+      <input
+        className="form-control"
+        name="contacts.telegramUsername"
+        placeholder="Telegram username (e.g. my_nick)"
+        value={formik.values.contacts.telegramUsername}
+        onChange={formik.handleChange}
+        onBlur={formik.handleBlur}
+      />
+      {formik.touched.contacts?.telegramUsername &&
+        (formik.errors.contacts as any)?.telegramUsername && (
+          <p className="text-danger">
+            {(formik.errors.contacts as any).telegramUsername}
+          </p>
+      )}
+    </div>
   </div>
+  {formik.touched.contacts && typeof formik.errors.contacts === "string" && (
+    <p className="text-danger">{formik.errors.contacts}</p>
+  )}
+</div>
+
+   <div className="col-12">
+    <label className="form-label">Settings:</label>
+    {formik.touched.settings && formik.errors.settings && (
+      <p className="text-danger">
+      {typeof formik.errors.settings === "string"
+      ? formik.errors.settings
+      : "Please select at least one setting"}
+      </p>
+      )}
+      <div className="settings-grid">
+      {SETTINGS.map((s) => {
+      const checked = (formik.values.settings as string[]).includes(s);
+      return (
+        <div
+        key={s}
+        className={`setting-card ${checked ? "selected" : ""}`}
+        onClick={() => toggleSetting(s)}
+        >
+        <input
+          type="checkbox"
+          checked={checked}
+          onChange={() => toggleSetting(s)}
+          />
+          <span>{s}</span>
+           </div>
+          );
+         })}
+        </div>
+    </div>
   
   <div className="col-12">
     <button 
-    disabled={!formik.dirty || !formik.isValid}
+    disabled={!formik.dirty || !formik.isValid }
     type="submit" 
-    className="btn btn-primary">
+    className="btn btn-success">
     REGISTER
     </button>
   </div>
 </form>
 </div>
-
+</div>
+ <footer className="login-footer border-top">
+        <div className="container py-3 text-center small">
+          © {new Date().getFullYear()} Generic Your Way by Daniel Yerema.
+        </div>
+  </footer>
+</div>
 </>
 );
 }

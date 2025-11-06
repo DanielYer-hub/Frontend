@@ -1,0 +1,62 @@
+import { api } from "./http";
+const ROOT = import.meta.env.VITE_API_ROOT;
+
+export type InviteDTO = {
+  _id: string;
+  fromUser?: any;
+  toUser?: any;
+  message?: string;
+  status: "pending"|"accepted"|"declined"|"canceled";
+  createdAt: string;
+  slot?: InviteSlot | null;
+  slotReadable?: string | null;
+};
+
+export type ChatInfo = {
+  preferred: "whatsapp" | "telegram" | "none";
+  whatsAppUrl?: string | null;
+  telegramUrl?: string | null;
+};
+
+export type AcceptInviteDTO = {
+  message: string;
+  inviteId: string;
+  opponent: { id: string; name: { first?: string; last?: string } };
+  chat?: ChatInfo; 
+};
+
+export type InviteSlot = {
+   day: number; 
+   from?: string | null; 
+   to?: string | null 
+  };
+
+export async function createInvite(targetUserId: string, slot: { day:number; from?:string; to?:string }, message?: string) {
+  const { data } = await api.post(`/api/invites/create`, { targetUserId, slot, ...(message ? { message } : {}) });
+  return data.invite;
+}
+
+export async function getIncomingInvites() {
+  const { data } = await api.get(`${ROOT}/api/invites/incoming`);
+  return (data.invites || []) as InviteDTO[];
+}
+
+export async function getOutgoingInvites() {
+  const { data } = await api.get(`${ROOT}/api/invites/outgoing`);
+  return (data.invites || []) as InviteDTO[];
+}
+
+export async function acceptInvite(id: string): Promise<AcceptInviteDTO> {
+  const { data } = await api.post(`/api/invites/${id}/accept`);
+  return data as AcceptInviteDTO;
+}
+
+export async function declineInvite(id: string) {
+  const { data } = await api.post(`${ROOT}/api/invites/${id}/decline`);
+  return data.invite as InviteDTO;
+}
+
+export async function cancelInvite(id: string) {
+  const { data } = await api.post(`${ROOT}/api/invites/${id}/cancel`);
+  return data.invite as InviteDTO;
+}

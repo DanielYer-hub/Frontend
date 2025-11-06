@@ -1,0 +1,99 @@
+.register-page {
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  background: #000;
+  color: #fff;
+}
+.register-page .page-body {
+  flex: 1;
+  display: flex;
+}
+.register-page .container {
+  margin: 0 auto;
+  padding: 50px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+.register-page .welcome-page-content {
+  display: flex;
+  justify-content: center;
+  margin: 32px 0 16px;
+}
+.register-page .logo {
+  max-width: 200px; 
+  width: 100%;
+  height: auto;
+  border-radius: 12px;
+}
+.register-page form {
+  width: 100%;
+  max-width: 800px;
+  background: #111;
+  padding: 16px;
+  border-radius: 10px;
+  box-shadow: 0 0 12px rgba(255, 255, 255, 0.08);
+}
+.register-page form label {
+  font-weight: 600;
+}
+.register-page form input {
+  font-size: 14px;
+  padding: 8px;
+}
+.register-page .text-danger {
+  color: #ff4d4f;
+  font-size: 0.85rem;
+  margin: 4px 0;
+  text-transform: capitalize;
+}
+
+.settings-grid {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+  margin-top: 10px;
+}
+.setting-card {
+  flex: 1 1 calc(33% - 10px);
+  min-width: 180px;
+  background-color: #111;
+  border: 2px solid #444;
+  border-radius: 10px;
+  color: #fff;
+  text-align: center;
+  padding: 10px 5px;
+  cursor: pointer;
+  transition: all 0.2s ease-in-out;
+  user-select: none;
+  font-weight: 500;
+}
+.setting-card input {
+  display: none;
+}
+.setting-card:hover {
+  border-color: #ffd000;
+  box-shadow: 0 0 8px #ffd00033;
+}
+.setting-card.selected {
+  background-color: #ffd000;
+  border-color: #ffd000;
+  color: #000;
+  font-weight: 600;
+  box-shadow: 0 0 10px #ffd00055;
+}
+.register-page .submit-btn {
+  width: 100%;
+  margin-top: 10px;
+  font-weight: 700;
+  transition: filter 0.15s ease;
+}
+.register-page .submit-btn:hover {
+  filter: brightness(1.15);
+}
+.register-page .login-footer {
+  background: #0d0d0d;
+  color: #9f9f9f;
+}
+

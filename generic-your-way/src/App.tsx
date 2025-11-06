@@ -7,10 +7,13 @@ import { ToastContainer } from 'react-toastify';
 import Dashboard from './components/Dashboard';
 import PlayerCard from './components/PlayerCard';
 import About from './components/About';
-
 import LayoutRight from './components/Navbar';
 import Players from './components/Players';
 import MatchRoom from './components/MatchRoom';
+import Updates from './components/Updates';
+import WelcomePage from './components/WelcomePage';
+import ProfileEdit from './components/ProfileEdit';
+import AvailabilityEdit from './components/AvailabilityEdit';
 
 
 function App() {
@@ -20,23 +23,21 @@ function App() {
     <ToastContainer/>
     <BrowserRouter>
       <Routes>
-        <Route element={<LayoutRight />}>
-        <Route path="/" element={<Navigate  to="/dashboard" replace />} />
+        <Route path="/" element={<Navigate  to="/welcome-page" replace />} />
+        <Route path='/welcome-page' element={<WelcomePage />} />
          <Route path='/register' element={<Register />} />
          <Route path='/login' element={<Login />} />
+         <Route element={<LayoutRight />}>
          <Route path='about' element={<About />} />
-         
+         <Route path='/updates' element={<Updates />} />
          <Route path='*' element={<PageNotFound/>} />
          <Route path='/player-card' element={<PlayerCard />} />
          <Route path='/dashboard' element={<Dashboard />} />
          <Route path='/players' element={<Players />} />
          <Route path='/match/:battleId' element={<MatchRoom />}/>
+         <Route path="/profile-edit" element={<ProfileEdit/>}/>
+         <Route path="/availability" element={<AvailabilityEdit />} />
         </Route>
-      {/* <Route element={<PrivateRoute />}> */}
-        {/* <Route path='/dashboard' element={<Dashboard />} />
-        <Route path='*' element={<PageNotFound/>} />
-        <Route path='/player-card' element={<PlayerCard />} /> */}
-      {/* </Route>  */}
       </Routes>
      </BrowserRouter>
     </>

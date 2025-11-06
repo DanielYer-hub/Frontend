@@ -2,6 +2,9 @@ import type { unnormalizedUser } from "./unnormalizedUser";
 import type { User } from "./User";
 
 export function normalizeUser(values: unnormalizedUser):User {
+const phone = values.contacts?.phoneE164?.replace(/(?!^\+)\D/g, "");
+const tg = values.contacts?.telegramUsername?.replace(/^@/, "");
+
     return {
         name:{
             first: values.first,
@@ -9,13 +12,15 @@ export function normalizeUser(values: unnormalizedUser):User {
         },
         email: values.email,
         password: values.password,
-        phone: values.phone,
         region: values.region,
         address: {
             country: values.country,
             city: values.city,
-            street: values.street,
         },
-        faction: values.faction 
+        settings: values.settings ?? [],
+        contacts: {
+      ...(phone ? { phoneE164: phone } : {}),
+      ...(tg ? { telegramUsername: tg } : {}),
+    },
     };
 }

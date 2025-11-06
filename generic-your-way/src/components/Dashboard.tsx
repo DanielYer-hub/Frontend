@@ -1,39 +1,52 @@
 import React, { useEffect, useRef, useState } from "react";
 import { toast } from "react-toastify";
-import { getIncoming, getOutgoing, confirmBattle, cancelBattle } from "../services/battleLogService";
-import { useNavigate } from "react-router-dom";
+import {
+  getIncomingInvites,
+  getOutgoingInvites,
+  acceptInvite,
+  declineInvite,
+  cancelInvite
+} from "../services/inviteService";
+
+export type ContactLink = { kind: "whatsapp" | "telegram"; url: string };
+export type ChatInfo = { links?: ContactLink[] };
 
 type MiniUser = {
   name?: { first?: string; last?: string };
-  faction?: string;
   region?: string;
   address?: { city?: string };
+  contacts?: any;
 };
 
-type Battle = {
+type Invite = {
   _id: string;
-  attackerId?: MiniUser;
-  defenderId?: MiniUser;
-  confirmedByAttacker?: boolean;
-  confirmedByDefender?: boolean;
+  setting?: string;
+  fromUser?: MiniUser;
+  toUser?: MiniUser;
   createdAt: string;
+  opponentContact?: { kind: "whatsapp"|"telegram"; url: string } | null;
+  slot?: { day?: number; from?: string | null; to?: string | null } | null;
 };
+
+const DAY_NAMES = ["Sun","Mon","Tue","Wed","Thu","Fri","Sat"];
 
 const Dashboard: React.FC = () => {
-  const [incoming, setIncoming] = useState<Battle[]>([]);
-  const [outgoing, setOutgoing] = useState<Battle[]>([]);
+  const [incoming, setIncoming] = useState<Invite[]>([]);
+  const [outgoing, setOutgoing] = useState<Invite[]>([]);
   const [loading, setLoading] = useState(true);
   const timerRef = useRef<number | null>(null);
-  const navigate = useNavigate();
 
   const refresh = async (silent = false) => {
     if (!silent) setLoading(true);
     try {
-      const [inc, out] = await Promise.all([getIncoming(), getOutgoing()]);
-      setIncoming(inc);
-      setOutgoing(out);
+      const [inc, out] = await Promise.all([
+        getIncomingInvites(),
+        getOutgoingInvites()
+      ]);
+      setIncoming(inc || []);
+      setOutgoing(out || []);
     } catch (e: any) {
-      if (!silent) toast.error(e?.response?.data?.message || "Failed to load battles");
+      if (!silent) toast.error(e?.response?.data?.message || "Failed to load invites");
     } finally {
       if (!silent) setLoading(false);
     }
@@ -41,32 +54,74 @@ const Dashboard: React.FC = () => {
 
   useEffect(() => {
     refresh();
-    timerRef.current = window.setInterval(() => {
-      refresh(true);
-    }, 10000);
+    timerRef.current = window.setInterval(() => refresh(true), 10000);
     return () => {
       if (timerRef.current) window.clearInterval(timerRef.current);
     };
   }, []);
 
-  const onAccept = async (b: Battle) => {
+  const renderSlot = (inv: Invite) => {
+    const d = inv.slot?.day;
+    if (typeof d !== "number" || d < 0 || d > 6) return <span className="text-muted">No day selected</span>;
+    const dayLabel = DAY_NAMES[d];
+    const from = inv.slot?.from || "";
+    const to   = inv.slot?.to || "";
+    const time = from && to ? `${from}–${to}` : (from || to || "");
+    return (
+      <span>
+        <b>📅 {dayLabel}</b>{time ? ` · ${time}` : ""}
+      </span>
+    );
+  };
+
+  const onAccept = async (m: Invite) => {
     try {
-      await confirmBattle(b._id);
-      toast.success("Accepted");
-      navigate(`/match/${b._id}`);
-    } catch (e: any) {
+      const { chat } = (await acceptInvite(m._id)) as { chat?: { links?: ContactLink[] } };
+      const links: ContactLink[] = chat?.links ?? [];
+
+      if (!links.length) {
+        toast.info("Opponent has no contact set");
+        return;
+      }
+      if (links.length === 1) {
+        window.open(links[0].url, "_blank", "noopener,noreferrer");
+      } else {
+        const pickTelegram = window.confirm("Open Telegram? (Cancel = WhatsApp)");
+        const chosen = pickTelegram
+          ? links.find((l) => l.kind === "telegram")
+          : links.find((l) => l.kind === "whatsapp") || links[0];
+        if (chosen) window.open(chosen.url, "_blank", "noopener,noreferrer");
+      }
+      toast.success("Invite accepted");
+      refresh(true);
+    } catch (e:any) {
       toast.error(e?.response?.data?.message || "Failed to accept");
     }
   };
 
-  const onDecline = async (b: Battle) => {
+  const onDecline = async (inv: Invite) => {
     try {
-      await cancelBattle(b._id);
+      await declineInvite(inv._id);
       toast.success("Declined");
       refresh(true);
     } catch (e: any) {
       toast.error(e?.response?.data?.message || "Failed to decline");
     }
+  };
+
+  const onCancel = async (inv: Invite) => {
+    try {
+      await cancelInvite(inv._id);
+      toast.success("Canceled");
+      refresh(true);
+    } catch (e: any) {
+      toast.error(e?.response?.data?.message || "Failed to cancel");
+    }
+  };
+
+  const openOpponentContact = (inv: Invite) => {
+    const url = inv.opponentContact?.url;
+    if (url) window.open(url, "_blank", "noopener,noreferrer");
   };
 
   return (
@@ -78,31 +133,29 @@ const Dashboard: React.FC = () => {
         <div className="col-md-6">
           <div className="card h-100">
             <div className="card-body d-flex flex-column">
-              <h5>Incoming challenges</h5>
+              <h5>Incoming invites</h5>
               {!incoming.length && <div className="text-muted">No incoming.</div>}
               <ul className="list-group list-group-flush mt-2">
-                {incoming.map((m) => (
+                {incoming.map(inv => (
                   <li
-                    key={m._id}
+                    key={inv._id}
                     className="list-group-item d-flex justify-content-between align-items-center"
                     style={{ background: "#1a1b1e", color: "#fff" }}
                   >
                     <div>
                       <div className="fw-bold">
-                        {m.attackerId?.name?.first} {m.attackerId?.name?.last}
+                        {inv.fromUser?.name?.first} {inv.fromUser?.name?.last}
                       </div>
                       <div className="small">
-                        {m.attackerId?.faction || "-"} · {m.attackerId?.region || "-"} ·{" "}
-                        {m.attackerId?.address?.city || "-"}
+                        {inv.setting} · {inv.fromUser?.region || "-"} · {inv.fromUser?.address?.city || "-"}
+                      </div>
+                      <div className="small mt-1">
+                        {renderSlot(inv)}
                       </div>
                     </div>
                     <div className="d-flex gap-2">
-                      <button className="btn btn-accent" onClick={() => onAccept(m)}>
-                        Accept
-                      </button>
-                      <button className="btn btn-accent-outline" onClick={() => onDecline(m)}>
-                        Decline
-                      </button>
+                      <button className="btn btn-accent" onClick={() => onAccept(inv)}>Accept</button>
+                      <button className="btn btn-accent-outline" onClick={() => onDecline(inv)}>Decline</button>
                     </div>
                   </li>
                 ))}
@@ -117,29 +170,31 @@ const Dashboard: React.FC = () => {
               <h5>Outgoing (pending)</h5>
               {!outgoing.length && <div className="text-muted">No outgoing.</div>}
               <ul className="list-group list-group-flush mt-2">
-                {outgoing.map((m) => (
+                {outgoing.map(inv => (
                   <li
-                    key={m._id}
+                    key={inv._id}
                     className="list-group-item d-flex justify-content-between align-items-center"
                     style={{ background: "#1a1b1e", color: "#fff" }}
                   >
                     <div>
                       <div className="fw-bold">
-                        {m.defenderId?.name?.first} {m.defenderId?.name?.last}
+                        {inv.toUser?.name?.first} {inv.toUser?.name?.last}
                       </div>
                       <div className="small">
-                        {m.defenderId?.faction || "-"} · {m.defenderId?.region || "-"} ·{" "}
-                        {m.defenderId?.address?.city || "-"}
+                        {inv.setting} · {inv.toUser?.region || "-"} · {inv.toUser?.address?.city || "-"}
+                      </div>
+                      <div className="small mt-1">
+                        {renderSlot(inv)}
                       </div>
                     </div>
-                   <div className="d-flex gap-2 align-items-center">
-                   <span className="badge text-dark" style={{ background: "#ffd000" }}>
-                    pending
-                   </span>
-                   <button className="btn btn-sm btn-accent-outline" onClick={()=>navigate(`/match/${m._id}`)}>
-                    Open
-                   </button>
-                   </div>
+                    <div className="d-flex gap-2">
+                      {inv.opponentContact?.url && (
+                        <button className="btn btn-outline-light" onClick={() => openOpponentContact(inv)}>
+                          Message
+                        </button>
+                      )}
+                      <button className="btn btn-accent-outline" onClick={() => onCancel(inv)}>Cancel</button>
+                    </div>
                   </li>
                 ))}
               </ul>

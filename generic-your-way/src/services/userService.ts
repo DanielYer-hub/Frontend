@@ -22,13 +22,22 @@ export async function getUserById(id: string) {
   return data;
 }
 
-export async function updateMe(patch: Partial<{ factionText: string }>) {
+export async function updateMe(patch: any) {
   const { data } = await api.patch("http://localhost:8181/api/users/me", patch);
   return data.user; 
 }
 
 export async function getMe() {
   const { data } = await api.get("http://localhost:8181/api/users/me");
+  return data.user;
+}
+
+export async function uploadMyPhoto(file: File) {
+  const fd = new FormData();
+  fd.append("photo", file);
+  const { data } = await api.post("/api/users/me/photo", fd, {
+    headers: { "Content-Type": "multipart/form-data" },
+  });
   return data.user;
 }
 

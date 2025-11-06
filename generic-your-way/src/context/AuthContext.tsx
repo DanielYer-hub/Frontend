@@ -9,15 +9,14 @@ type ApiUser = {
   email: string;
   region: string;
   role: 'player' | 'admin';
-  points: number;
-  faction: string;
   address:{
     city: string;
-    street: string;
-    house: string;
+    country: string;
   };
-  homeland: string;
-  planets: string[];
+  settings: string[];
+  bio?: string | null;
+  image?: { url?: string | null } | null;
+  contacts?: { phoneE164?: string | null; telegramUsername?: string | null } | null;
 };
 
 interface AuthContextType {
@@ -28,6 +27,7 @@ interface AuthContextType {
   logout: () => void;
   registerAndLogin: (payload: any) => Promise<void>;
   refreshMe: () => Promise<void>;
+  updateUserInContext: (patch: Partial<ApiUser>) => void;
 }
 
 const AuthContext = createContext<AuthContextType | undefined>(undefined);
@@ -55,11 +55,8 @@ export const AuthProvider: FunctionComponent<{ children: ReactNode }> = ({ child
     setTok(data.token);
     setToken(data.token);
     setUser(data.user);
-    localStorage.setItem('token', data.token);
-    localStorage.setItem('user', JSON.stringify(data.user));
+    await refreshMe();
   };
-
- 
 
   const registerAndLogin = async (payload: any) => {
     const reg = await registerUser(payload);
@@ -67,8 +64,7 @@ export const AuthProvider: FunctionComponent<{ children: ReactNode }> = ({ child
       setTok(reg.token);
       setToken(reg.token);
       setUser(reg.user);
-      localStorage.setItem('token', reg.token);
-      localStorage.setItem('user', JSON.stringify(reg.user));
+      await refreshMe();
       return;
     }
     await login(payload.email, payload.password);
@@ -80,6 +76,14 @@ export const AuthProvider: FunctionComponent<{ children: ReactNode }> = ({ child
     localStorage.setItem('user', JSON.stringify(me));
   };
 
+  const updateUserInContext = (patch: Partial<ApiUser>) => {
+  setUser(prev => {
+    const next = prev ? { ...prev, ...patch } : (patch as ApiUser);
+    localStorage.setItem("user", JSON.stringify(next));
+    return next;
+  });
+};
+
   const logout = () => {
     setTok(null);
     setUser(null);
@@ -89,7 +93,7 @@ export const AuthProvider: FunctionComponent<{ children: ReactNode }> = ({ child
   };
 
   return (
-    <AuthContext.Provider value={{ user, token, loading, login, logout, registerAndLogin, refreshMe }}>
+    <AuthContext.Provider value={{ user, token, loading, login, logout, registerAndLogin, refreshMe, updateUserInContext }}>
       {children}
     </AuthContext.Provider>
   );

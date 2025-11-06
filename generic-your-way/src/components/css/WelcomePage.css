@@ -1,0 +1,82 @@
+.welcome-page-container {
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  background: #000;           
+  color: #fff;
+}
+.welcome-page-content {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 24px;
+  margin-top: 80px;
+}
+.logo {
+  max-width: 280px;
+  width: 100%;
+  height: auto;
+  border-radius: 16px;       
+  display: block;
+}
+.welcome-page-buttons {
+  display: flex;
+  gap: 12px;
+  justify-content: center;
+  padding: 50px 16px;
+}
+.welcome-page-button {
+  border: none;
+  border-radius: 12px;
+  width: 280px;
+  height: 50px;
+  font-weight: 700;
+  cursor: pointer;
+  transition: filter 0.2s ease, background-color 0.2s ease, transform 0.05s ease;
+}
+.welcome-page-button:active {
+  transform: translateY(1px); 
+}
+.login-button {
+  background-color: #118a0a; 
+  color: #fff;
+}
+.login-button:hover {
+  filter: brightness(1.15);   
+}
+.register-button {
+  background-color: #ffd000;  
+  color: #000;
+}
+.register-button:hover {
+  filter: brightness(1.12);   
+}
+.info-text {
+  text-align: center;
+  padding: 20px 16px 0;
+  color: #d8d8d8;
+  max-width: 900px;
+  margin: 0 auto;
+  font-weight:bold;
+  font-size: 15px;
+}
+.welcome-footer {
+  margin-top: auto;          
+  background: #0d0d0d;
+  color: #9f9f9f;
+}
+@media (max-width: 480px) {
+  .welcome-page-button {
+    width: 100%;
+  }
+  .logo {
+    max-width: 220px;
+  }
+  .info-text {
+    text-align: start;
+  }
+  .welcome-page-content{
+    margin-top: 80px;
+  }
+}
+

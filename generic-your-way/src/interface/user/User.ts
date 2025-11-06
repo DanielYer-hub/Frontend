@@ -5,8 +5,13 @@ export interface User {
     name: UserName;
     email: string;
     password: string;
-    phone: string;
     region: string;   
     address: UserAddress;
-    faction: string; 
+    settings: string[];
+    image?: { url?: string };
+    bio?: string;
+    contacts: {
+    phoneE164?: string;
+    telegramUsername?: string;
+  };
 }

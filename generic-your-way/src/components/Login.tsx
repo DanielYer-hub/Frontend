@@ -3,15 +3,12 @@ import type { FunctionComponent } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import * as yup from "yup";
 import { useAuth } from "../context/AuthContext";
-
-
+import "./css/Login.css";
 
 interface LoginProps {}
- 
 const Login: FunctionComponent<LoginProps> = () => {
 const navigate = useNavigate();
 const { login} = useAuth();
-
 const formik: FormikValues = useFormik<FormikValues>({
     initialValues: {
         email: "",
@@ -29,11 +26,10 @@ const formik: FormikValues = useFormik<FormikValues>({
         .max(50)
         .required()
         .matches(
-            /^(?=.*[A-Z])(?=.*[a-z])(?=.*\d)(?=.*[!@#$%^&*\-"])[A-Za-z\d!@#$%^&*\-"]{8,}$/,
-            'Password must contain at least one uppercase letter, one lowercase letter, one number, and one special character (!@#$%^&*-"), and be at least 8 characters long'
+        /^(?=.*[A-Z])(?=.*[a-z])(?=.*\d)(?=.*[!@#$%^&*\-"])[A-Za-z\d!@#$%^&*\-"]{8,}$/,
+        'Password must contain at least one uppercase letter, one lowercase letter, one number, and one special character (!@#$%^&*-"), and be at least 8 characters long'
         ),
     }),
-
     onSubmit: async (values, { resetForm, setSubmitting }) => {
         try {
           await login(values.email, values.password); 
@@ -46,13 +42,17 @@ const formik: FormikValues = useFormik<FormikValues>({
           setSubmitting(false);
         }
       }
-})
-
+     })
 return (
 <>
+<div className="login-page">
+<div className="page-body">
 <div className="container">
+  <main className="welcome-page-content">
+  <img src="/content/gyw.png" alt="GYW logo" className="logo" />
+  </main>
   <form onSubmit={formik.handleSubmit}>
-  <div className="mb-3">
+  <div className="mb-3 ">
     <label htmlFor="email" className="form-label">Email:</label>
     {formik.touched.email && formik.errors.email && (
       <p className="text-danger">{formik.errors.email}</p>
@@ -73,7 +73,7 @@ return (
   <div className="mb-3">
     <label htmlFor="password" className="form-label">Password:</label>
     {formik.touched.password && formik.errors.password && (
-      <p className="text-danger">{formik.errors.password}</p>
+    <p className="text-danger">{formik.errors.password}</p>
     )}
     <input 
     name="password"
@@ -91,16 +91,22 @@ return (
   <button 
   disabled={!formik.dirty || !formik.isValid || formik.isSubmitting}
   type="submit" 
-  className="btn btn-primary"
+  className="btn btn-success"
   >
-    Submit
+  Submit
   </button>
 </form>
-<span>
+<span className="span-text">
 New Acolyte? Please <Link to="/register">register</Link> first.
 </span>
+</div>
 </div>    
-
+ <footer className="login-footer border-top">
+  <div className="container py-3 text-center small">
+  © {new Date().getFullYear()} Generic Your Way by Daniel Yerema.
+  </div>
+  </footer>
+  </div>
 </>
 );
 }

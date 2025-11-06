@@ -20,7 +20,6 @@ if (saved) {
   api.defaults.headers.common["Authorization"] = `Bearer ${saved}`;
 }
 
-
 api.interceptors.response.use(
   res => res,
   err => {

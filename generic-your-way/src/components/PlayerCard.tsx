@@ -1,27 +1,28 @@
 import type { FunctionComponent } from "react";
 import { useAuth } from "../context/AuthContext";
-import { updateMe } from "../services/userService";
-import { useEffect, useMemo, useState } from "react";
+import {  useEffect, useMemo, useState } from "react";
+import { Link } from "react-router-dom";
+import { getMyAvailability, updateMyAvailability, type Availability, } from "../services/availabilityService";
+import { toast } from "react-toastify";
 
 type UserLike = {
   id: string;
   name: { first: string; last: string };
   email: string;
   region: string;
-  points: number;
-  faction: string;
   address: {
     city: string;
-    street: string;
-    house: string;
+    country: string;
   };
-  homeland: string;
-  planets: string[];
-  factionText?: string;
+  settings?: string[];
+  image?: { url?: string | null } | null;
+  bio?: string | null;
+  
 };
+const AVATAR_FALLBACK = "/content/avatar.webp";
+const DAYS = ["Sun","Mon","Tue","Wed","Thu","Fri","Sat"];
 
 interface PlayerCardProps {}
-
 const PlayerCard: FunctionComponent<PlayerCardProps> = () => {
   const auth = useAuth() as any;
   const u: UserLike | null = useMemo(() => {
@@ -33,45 +34,57 @@ const PlayerCard: FunctionComponent<PlayerCardProps> = () => {
     }
   }, [auth?.user]);
 
-  const [factionText, setFactionText] = useState<string>(u?.factionText || "");
-  const [saving, setSaving] = useState(false);
-  const [savedOnce, setSavedOnce] = useState(false);
-
- 
+  const [av, setAv] = useState<Availability>({ busyAllWeek:false, days:[] });
+  const [loadingAv, setLoadingAv] = useState(true);
   useEffect(() => {
-    setFactionText(u?.factionText || "");
-    setSavedOnce(false);
-  }, [u?.factionText]);
+    (async () => {
+      try {
+        setLoadingAv(true);
+        const a = await getMyAvailability();
+        setAv(a || { busyAllWeek:false, days:[] });
+      } catch (e:any) {
+        toast.error(e?.response?.data?.message || "Failed to load availability");
+      } finally { setLoadingAv(false); }
+    })();
+  }, []);
+
+  const toggleDay = (day: number) => {
+    const exists = av.days.find(d => d.day === day);
+    const days = exists
+      ? av.days.filter(d => d.day !== day)
+      : [...av.days, { day, ranges:[{ from:"18:00", to:"22:00" }] }];
+    setAv({ ...av, days });
+  };
+  const setRange = (day: number, idx: number, key: "from"|"to", val: string) => {
+    const days = av.days.map(d => {
+      if (d.day !== day) return d;
+      const ranges = d.ranges.map((r,i) => i===idx ? { ...r, [key]: val } : r);
+      return { ...d, ranges };
+    });
+    setAv({ ...av, days });
+  };
+  const addRange = (day:number) => {
+    const days = av.days.map(d => d.day===day ? ({ ...d, ranges:[...d.ranges, { from:"18:00", to:"22:00" }] }) : d);
+    setAv({ ...av, days });
+  };
+  const removeRange = (day:number, idx:number) => {
+    const days = av.days.map(d => {
+      if (d.day !== day) return d;
+      const ranges = d.ranges.filter((_,i)=>i!==idx);
+      return { ...d, ranges };
+    });
+    setAv({ ...av, days });
+  };
+  const saveAvailability = async () => {
+    try {
+      await updateMyAvailability(av);
+      toast.success("Availability saved");
+    } catch (e:any) {
+      toast.error(e?.response?.data?.message || "Save failed");
+    }
+  };
 
   if (!u) return <div className="container py-4">Not authenticated</div>;
-
-  const canSave = factionText.trim() !== (u.factionText || "").trim() && !saving;
-
- const onSave = async () => {
-  try {
-    setSaving(true);
-    const updated = await updateMe({ factionText }); 
-    if (typeof auth?.refreshMe === "function") {
-      await auth.refreshMe();
-    } else {
-      try {
-        const userObj = (updated && updated.name && updated) || updated?.user || null;
-        if (userObj) {
-          localStorage.setItem("user", JSON.stringify(userObj));
-        }
-      } catch {}
-    }
-    if (updated?.factionText) {
-      setFactionText(updated.factionText);
-    }
-    setSavedOnce(true);
-  } catch (e: any) {
-    console.error(e);
-    alert(e?.response?.data?.message || "Save failed");
-  } finally {
-    setSaving(false);
-  }
-};
 
   return (
     <div className="container py-4">
@@ -79,93 +92,103 @@ const PlayerCard: FunctionComponent<PlayerCardProps> = () => {
         <div className="card-header">
           <strong>Player Card</strong>
         </div>
-
         <div className="card-body">
           <div className="row gy-3">
+            <div className="col-md-3 d-flex align-items-start">
+             <img
+               src={u.image?.url || AVATAR_FALLBACK}
+               style={{ width: 120, height: 120, borderRadius: "50%", objectFit: "cover" }}
+              />
+           </div>
             <div className="col-md-6">
               <table className="table table-sm mb-0">
                 <tbody>
                   <tr>
-                    <th style={{ width: 160 }}>Name</th>
+                    <th style={{ width: 160 }}>Name:</th>
                     <td>
                       {u.name?.first} {u.name?.last}
                     </td>
                   </tr>
                   <tr>
-                    <th>Region</th>
+                    <th>Email:</th>
+                    <td>{u.email || "-"}</td>
+                  </tr>
+                  <tr>
+                    <th>Region:</th>
                     <td>{u.region || "-"}</td>
                   </tr>
                   <tr>
-                    <th>City</th>
-                    <td>{u.address?.city || "-"}</td>
+                    <th>Country:</th>
+                    <td>{u.address?.country || "-"}</td>
                   </tr>
                   <tr>
-                    <th>Faction</th>
-                    <td>{u.faction || "-"}</td>
+                    <th>Settings:</th>
+                    <td>{u.settings || "-"}</td>
                   </tr>
                 </tbody>
               </table>
+              {u.bio && (
+               <div className="mb-3">
+                <div className="fw-bold">About me</div>
+               <div>{u.bio}</div>
+              </div>
+              )}
+             <Link to="/profile-edit" className="btn btn-outline-light">Edit Profile</Link>
             </div>
+          </div>
 
-            <div className="col-md-6">
-              <table className="table table-sm mb-0">
-                <tbody>
-                  <tr>
-                    <th style={{ width: 160 }}>Points</th>
-                    <td>{u.points ?? 0}</td>
-                  </tr>
-                  <tr>
-                    <th>Homeland</th>
-                    <td>{u.homeland || "-"}</td>
-                  </tr>
-                  <tr>
-                    <th>Planets</th>
-                    <td>
-                      {u.planets && u.planets.length > 0 ? (
-                        <ul className="mb-0">
-                          {u.planets.map((p: string, i: number) => (
-                            <li key={i}>{p}</li>
-                          ))}
-                        </ul>
-                      ) : (
-                        "-"
-                      )}
-                    </td>
-                  </tr>
-                </tbody>
-              </table>
+          <hr className="my-4" />
+          <h5 className="mb-3">Weekly availability:</h5>
+          <div className="form-check form-switch mb-3">
+            <input className="form-check-input" type="checkbox"
+              checked={av.busyAllWeek}
+              onChange={e=>setAv({ ...av, busyAllWeek: e.target.checked })} />
+            <label className="form-check-label">Busy all week</label>
+          </div>
+
+          {!av.busyAllWeek && (
+            <div className="row g-3">
+              {DAYS.map((label, day)=> {
+                const d = av.days.find(x => x.day===day);
+                const on = !!d;
+                return (
+                  <div key={day} className="col-12 col-md-6">
+                    <div className="card">
+                      <div className="card-body">
+                        <div className="form-check mb-2">
+                          <input className="form-check-input" type="checkbox"
+                            checked={on} onChange={()=>toggleDay(day)} id={`day-${day}`} />
+                          <label className="form-check-label" htmlFor={`day-${day}`}>{label}</label>
+                        </div>
+                        {on && (
+                          <>
+                            {(d?.ranges||[]).map((r, i)=>(
+                              <div key={i} className="d-flex align-items-center gap-2 mb-2">
+                                <input type="time" value={r.from} onChange={e=>setRange(day,i,"from",e.target.value)} />
+                                <span>–</span>
+                                <input type="time" value={r.to} onChange={e=>setRange(day,i,"to",e.target.value)} />
+                                <button className="btn btn-sm btn-outline-danger" onClick={()=>removeRange(day,i)}>×</button>
+                              </div>
+                            ))}
+                            <button className="btn btn-sm btn-outline-secondary" onClick={()=>addRange(day)}>+ Add time</button>
+                          </>
+                        )}
+                      </div>
+                    </div>
+                  </div>
+                );
+              })}
             </div>
-          </div>
-          <hr />
-          <div className="mb-2">
-            <b>Faction Notes</b>
-          </div>
-          <textarea
-            className="form-control"
-            rows={6}
-            value={factionText}
-            onChange={(e) => setFactionText(e.target.value)}
-            placeholder="Put your notes about your faction here..."
-          />
-          <div className="mt-2 d-flex align-items-center gap-2">
-            <button className="btn btn-primary" onClick={onSave} disabled={!canSave}>
-              {saving ? "Saving..." : "Save"}
+          )}
+
+          <div className="mt-3">
+            <button className="btn btn-success" onClick={saveAvailability} disabled={loadingAv}>
+              Save availability
             </button>
-            {savedOnce && !saving && <span className="text-success">Saved ✓</span>}
-          </div>
-          <div className="mt-4">
-         <div className="mb-2"><b>Faction Notes — preview</b></div>
-         <div
-           className="p-3 border rounded "
-           style={{ whiteSpace: "pre-wrap", minHeight: 120 }}>
-           {factionText.trim()
-           ? factionText
-           : <span className="text-muted">No notes yet…</span>}
           </div>
          </div>
         </div>
       </div>
-    </div>
   );
 };
 
