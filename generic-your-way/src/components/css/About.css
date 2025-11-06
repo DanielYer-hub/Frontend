@@ -1,0 +1,52 @@
+.about-h1{
+    text-align: center;
+    margin: 15px;
+}
+.about-p{
+    background: #181818;
+    padding: 15px;
+    border-radius: 8px;
+    border: 1px solid rgba(255,255,255,0.15);
+}
+.how-to-use {
+    margin-top: 20px;
+    background: #181818;
+    padding: 15px;
+    border-radius: 8px;
+    border: 1px solid rgba(255,255,255,0.15);
+}
+.how-to-use.clamp {
+  max-height: 480px;        
+  overflow: hidden;
+  position: relative;
+}
+.howto-fade {
+  content: "";
+  position: absolute;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  height: 96px;
+  background: linear-gradient(
+    to bottom,
+    rgba(24,24,24,0) 0%,
+    rgba(24,24,24,0.6) 45%,
+    rgba(24,24,24,1) 100%
+  );
+  pointer-events: none;
+}
+.how-to-use.expanded {
+  max-height: none;
+}
+.btn-how-to {
+    background-color: #ffd000; 
+    color: #000;
+    border: 1px solid rgba(255, 255, 255, 0.15);
+    font-weight: 500;
+    padding: 8px 16px;
+    border-radius: 10px;
+    cursor: pointer;
+}
+.btn-how-to:hover {
+    filter: brightness(1.1);   
+}

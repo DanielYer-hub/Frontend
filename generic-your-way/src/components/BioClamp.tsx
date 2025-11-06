@@ -19,7 +19,7 @@ const BioClamp: React.FC<BioClampProps> = ({ text, maxChars = 140, className }) 
       <div className="bio-text mb-1">{open ? safe : short}</div>
       {isLong && (
         <button type="button" className="btn btn-link p-0 small" onClick={() => setOpen(v => !v)}>
-          {open ? "Close ▲" : "Open ▼"}
+          {open ? "Read Less ▲" : "Read More ▼"}
         </button>
       )}
     </div>
