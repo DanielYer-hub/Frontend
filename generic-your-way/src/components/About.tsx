@@ -11,8 +11,8 @@ const About: FunctionComponent<AboutProps> = () => {
     <>
       <div className="container py-4">
         <div className="about">
-          <h1 className="about-h1">About This Project</h1>
           <div className="about-p">
+            <h1 className="about-h1">About This Project</h1>
             <p>
               This platform was created with one clear goal: to make communication between Warhammer 40,000 <br />
               players around the world easier and more accessible. <br /> <br />
@@ -35,9 +35,10 @@ const About: FunctionComponent<AboutProps> = () => {
           </div>
         </div>
 
-        <h1 className="about-h1">How to Use the Site</h1>
+        
 
         <div className={`how-to-use ${expanded ? "expanded" : "clamp"}`}>
+          <h1 className="about-h1">How to Use the Site</h1>
           <section className="mt-4">
             <h2 className="h4">1) Get Started: Profile</h2>
             <ul>

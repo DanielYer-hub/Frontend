@@ -821,3 +821,16 @@ module.exports = User;
       <p className="small text-muted">
         Have feedback or found a bug? Let us know so we can improve the experience for everyone.
       </p> */
+
+      /* updates campaighn 
+       <li>Special narrative Campaign.</li>
+            <li>Attack and Defend Planets.</li>
+            <li>New Factions.</li>
+            <li>PTS scoring protocol.</li> 
+       <li>Campaign Profile.</li> 
+
+       <li>Player levels/experience tags</li>
+          <li>Game history & simple rating tools</li>
+          <li>Random Warhammer quotes on Dashboard</li>
+          
+      */
