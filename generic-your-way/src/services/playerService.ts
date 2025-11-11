@@ -51,13 +51,16 @@ export async function listPublicPlayers(params: {
   region?: string;
   country?: string;
   city?: string;
+  day?: number;      
+  from?: string;
 }): Promise<PublicPlayer[]> {
   const q = new URLSearchParams();
   if (params.setting) q.set("setting", params.setting);
   if (params.region) q.set("region", params.region);
   if (params.country) q.set("country", params.country);
   if (params.city) q.set("city", params.city);
-
+  if (typeof params.day === "number") q.set("day", String(params.day));
+  if (params.from) q.set("from", params.from);
   const { data } = await api.get(`${ROOT}/api/public/players?${q.toString()}`);
   const players = (data.players || []) as PublicPlayer[];
   return players.map(absolutizeImage);

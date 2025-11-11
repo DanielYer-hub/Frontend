@@ -1,6 +1,7 @@
 import { useEffect, useState } from "react";
 import { useNavigate, useLocation, Link, Outlet, NavLink } from "react-router-dom";
 import { useAuth } from "../context/AuthContext";
+import "./css/Navbar.css";
 
 export default function LayautRight() {
     const { token, logout } = useAuth();
@@ -52,15 +53,14 @@ return (
 </div>
 
 <aside className="d-none d-md-flex flex-column p-3 border-start" style={{ width: '300px', minHeight: '100vh' }}>
-<Link to="/" className="text-decoration-none mb-3 h5 align-self-end">Menu</Link>
-<nav className="nav nav-pills flex-column gap-2">
-<NavLink className="nav-link ms-auto"  to="/dashboard">Home</NavLink>    
-<NavLink className="nav-link ms-auto"  to="/player-card">Profile</NavLink>  
-<NavLink className="nav-link ms-auto" to="/about">About</NavLink>  
-<NavLink className="nav-link ms-auto" to="/updates">Updates</NavLink> 
-<NavLink className="nav-link ms-auto" to="/players">Find Players</NavLink>
-
-
+<Link to="/" className="text-decoration-none mb-2 h5 align-self-center">Generic Your Way</Link>
+<hr />
+<nav className="nav nav-pills flex-column gap-3">
+<NavLink className="btn btn-accent-outline"  to="/dashboard">Home</NavLink>    
+<NavLink className="btn btn-accent-outline"  to="/player-card">Profile</NavLink>  
+<NavLink className="btn btn-accent-outline" to="/about">About</NavLink>  
+<NavLink className="btn btn-accent-outline" to="/updates">Updates</NavLink> 
+<NavLink className="btn btn-accent-outline" to="/players">Find Players</NavLink>
  <div className="card ms-auto mt-2" style={{width:"100%"}}>
     <div className="card-body">
     <div className="fw-bold mb-2">Filter</div>
@@ -87,66 +87,37 @@ return (
     <label className="form-label">City</label>
     <input className="form-control" value={city} onChange={e=>setCity(e.target.value)} placeholder="e.g. London" />
     </div>
-    <button className="btn btn-primary w-100" onClick={applyFilters}>Apply</button>
+    <button className="btn btn-accent-outline w-100" onClick={applyFilters}>Apply</button>
     </div>
     </div>
 </nav>    
-
-<div className="mt-auto d-grid">
+<hr className="offcanvas-footer mt-auto"/>
+<div className="d-grid">
         {token ? (
-      <button onClick={handleLogout} className="btn btn-link">Logout</button>
+      <button onClick={handleLogout} className="btn btn-danger mb-1">Logout</button>
     ) : (
-      <button onClick={() => navigate("/login")} className="btn btn-link">Login</button>
+      <button onClick={() => navigate("/login")} className="btn btn-success ">Login</button>
     )}
     </div>
 </aside>
 
 <div className="offcanvas offcanvas-end" tabIndex={-1} id="mobileRightNav">
 <div className="offcanvas-header">
-    <h5 className="offcanvas-title">Menu</h5>
-    <button type="button" className="btn-close" data-bs-dismiss="offcanvas"/>
+<h5 className="offcanvas-title">Menu</h5>
+<button type="button" className="btn-close" data-bs-dismiss="offcanvas"/>
 </div>
-        <div className="offcanvas-body d-flex flex-column gap-2">
-          <NavLink className="btn btn-light" to="/dashboard" >Home</NavLink>
-          <NavLink className="btn btn-light" to="/player-card" >Profile</NavLink>
-          <NavLink className="btn btn-light" to="/about" >About</NavLink>
-          <NavLink className="btn btn-light" to="/players" >Find Players</NavLink>
-
- <div className="card mt-2">
-            <div className="card-body">
-              <div className="fw-bold mb-2">Filter</div>
-              <div className="mb-2">
-                <label className="form-label">Region</label>
-                <select className="form-select" value={region} onChange={e=>setRegion(e.target.value)}>
-                  <option value="">Any</option>
-                  <option value="North America">North America</option>
-                  <option value="Caribbean">Caribbean</option>
-                  <option value="Central America">Central America</option>
-                  <option value="South America">South America</option>
-                  <option value="Africa">Africa</option>
-                  <option value="Middle East">Middle East</option>
-                  <option value="Europe">Europe</option>
-                  <option value="Asia">Asia</option>
-                  <option value="Australia and Oceania">Australia and Oceania</option>
-                </select>
-              </div>
-              <div className="mb-2">
-                <label className="form-label">Country</label>
-                <input className="form-control" value={country} onChange={e=>setCountry(e.target.value)} placeholder="e.g. England" />
-              </div>
-              <div className="mb-2">
-                <label className="form-label">City</label>
-                <input className="form-control" value={city} onChange={e=>setCity(e.target.value)} placeholder="e.g. London" />
-              </div>
-        <button className="btn btn-accent-outline w-100" onClick={() => { applyFilters(); }} data-bs-dismiss="offcanvas">Apply</button>
-    </div>
-</div>
-
-<div className="mt-auto d-grid">
+<div className="offcanvas-body d-flex flex-column gap-3">
+          <NavLink className="btn btn-accent-outline" to="/dashboard" >Home</NavLink>
+          <NavLink className="btn btn-accent-outline" to="/player-card" >Profile</NavLink>
+          <NavLink className="btn btn-accent-outline" to="/about" >About</NavLink>
+          <NavLink className="btn btn-accent-outline" to="/updates">Updates</NavLink> 
+          <NavLink className="btn btn-accent-outline" to="/players" >Find Players</NavLink>
+<hr className="offcanvas-footer mt-auto"/>
+<div className=" d-grid ">
      {token ? (
-      <button onClick={handleLogout} className="btn btn-link">Logout</button>
+      <button onClick={handleLogout} className="btn btn-danger">Logout</button>
     ) : (
-      <button onClick={() => navigate("/login")} className="btn btn-link">Login</button>
+      <button onClick={() => navigate("/login")} className="btn btn-success">Login</button>
     )}
 </div>
 </div>

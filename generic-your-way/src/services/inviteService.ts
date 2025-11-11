@@ -31,8 +31,12 @@ export type InviteSlot = {
    to?: string | null 
   };
 
-export async function createInvite(targetUserId: string, slot: { day:number; from?:string; to?:string }, message?: string) {
-  const { data } = await api.post(`/api/invites/create`, { targetUserId, slot, ...(message ? { message } : {}) });
+export async function createInvite(
+  targetUserId: string,
+  slot: { day:number; from?:string; to?:string },
+  setting?: string
+) {
+  const { data } = await api.post(`/api/invites/create`, { targetUserId, slot, setting });
   return data.invite;
 }
 

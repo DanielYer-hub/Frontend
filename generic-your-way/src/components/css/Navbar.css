@@ -1,0 +1,19 @@
+.offcanvas{
+    background: #181818;
+}
+.offcanvas-header{
+    border-bottom: 1px solid rgba(255, 255, 255, 0.26);
+    margin:10px 20px 0 20px ;
+}
+.offcanvas-title{
+    color: white;
+}
+.offcanvas-header .btn-close{
+    filter: invert(1);
+}
+.offcanvas-body{
+    margin: 15px;
+}
+.offcanvas-footer{
+    border-top: 1px solid white;
+}

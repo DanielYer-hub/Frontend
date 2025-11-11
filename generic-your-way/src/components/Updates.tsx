@@ -38,6 +38,7 @@ const Updates: FunctionComponent<UpdatesProps> = () => {
                 <li>Forget Password.</li>
                 <li>Pop-up phrases from your favorite Settings.</li>
                 <li>Feedback with the Developers.</li>
+                <li>New Design.</li>
               </ul>
             </div>
             <div className="v-status is-soon">Soon…</div>
@@ -50,16 +51,8 @@ const Updates: FunctionComponent<UpdatesProps> = () => {
               <ul>
                 <li>Player ratings by Settings, Countries, and Cities.</li>
                 <li>Standardized Country/City lists.</li>
-                <li>
-                  Grand narrative of the Warhammer 40000:
-                  <ul>
-                    <li>Attack and Defend Planets.</li>
-                    <li>Faction List.</li>
-                    <li>PTS scoring protocol.</li>
-                    <li>Campaign Profile.</li>
-                    <li>Narrative Rules.</li>
-                  </ul>
-                </li>
+                <li>Status selection: <strong> Novice, Fan, Sportsman.</strong></li>
+                <li>Favourite Players.</li>
               </ul>
             </div>
             <div className="v-status is-soon">Soon…</div>
@@ -73,7 +66,26 @@ const Updates: FunctionComponent<UpdatesProps> = () => {
                 <li>Internal chat with other players.</li>
                 <li>Matching players with similar ratings.</li>
                 <li>Player rating option by other players.</li>
-                <li>Status selection: <strong> Novice, Fan, Sportsman.</strong></li>
+              </ul>
+            </div>
+            <div className="v-status is-soon">Soon…</div>
+          </div>
+
+          <div className="version">
+            <p className="v-month">Version 1.2.0 - July 2026</p>
+            <hr className="v-hr"/>
+            <div className="v-body">
+              <ul>
+              <li>
+                  Grand narrative of the Warhammer 40000:
+                  <ul>
+                    <li>Attack and Defend Planets.</li>
+                    <li>Faction List.</li>
+                    <li>PTS scoring protocol.</li>
+                    <li>Campaign Profile.</li>
+                    <li>Narrative Rules.</li>
+                  </ul>
+                </li>
               </ul>
             </div>
             <div className="v-status is-soon">Soon…</div>

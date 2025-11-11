@@ -834,3 +834,89 @@ module.exports = User;
           <li>Random Warhammer quotes on Dashboard</li>
           
       */
+/* publicRoutes.js old */
+// router.get("/players", async (req, res) => {
+//   try {
+//     const { setting, region, country, city } = req.query;
+//     const criteria = {};
+//     if (setting) criteria.settings = setting;         
+//     if (region) criteria.region = region;
+//     if (country) criteria["address.country"] = country;
+//     if (city) criteria["address.city"] = city;
+
+//     const players = await User.find(criteria)
+//       .select("name email region address settings image bio")
+//       .lean();
+
+//     res.json({ players });
+//   } catch (e) {
+//     res.status(500).json({ message: "Failed to load players", error: e.message });
+//   }
+// }); 
+
+
+/* inviteController.js old*/
+// exports.createInvite = async (req, res) => {
+//   try {
+//     const fromUser = req.user?.id;
+//     const { targetUserId, message, slot } = req.body;
+//     if (!fromUser) return res.status(401).json({ message: "Not authenticated" });
+//     if (!targetUserId) return res.status(400).json({ message: "targetUserId is required" });
+//     if (!slot || typeof slot.day !== "number" || slot.day < 0 || slot.day > 6) {
+//       return res.status(400).json({ message: "slot.day must be 0..6" });
+//     }
+//     if (String(fromUser) === String(targetUserId)) {
+//       return res.status(400).json({ message: "You cannot invite yourself" });
+//     }
+//     const target = await User.findById(targetUserId).select("availability");
+//     if (!target) return res.status(404).json({ message: "Target not found" });
+//     const av = target.availability || { busyAllWeek:false, days:[] };
+//     if (av.busyAllWeek) return res.status(400).json({ message: "Target is busy all week" });
+//     const dayCfg = (av.days || []).find(d => d.day === slot.day);
+//     if (!dayCfg) return res.status(400).json({ message: "Day is not available" });
+//     const conflict = await Invite.findOne({
+//       toUser: targetUserId,
+//       "slot.day": slot.day,
+//       status: { $in: ["pending", "accepted"] }
+//     });
+//     if (conflict) return res.status(409).json({ message: "Day already booked" });
+//     const invite = await Invite.create({
+//       fromUser,
+//       toUser: targetUserId,
+//       message: message || "",
+//       slot: { day: slot.day, from: slot.from || null, to: slot.to || null }
+//     });
+//     res.status(201).json({ invite });
+//   } catch (e) {
+//     console.error("createInvite error:", e);
+//     res.status(500).json({ message: "Failed to create invite" });
+//   }
+// };
+
+/** * front inviteService old
+ // export async function createInvite(targetUserId: string, slot: { day:number; from?:string; to?:string }, message?: string) {
+//   const { data } = await api.post(`/api/invites/create`, { targetUserId, slot, ...(message ? { message } : {}) });
+//   return data.invite;
+// }
+
+ */
+
+/*  *front players old invite code*
+ // const openInvite = async (toUserId: string, name: string) => {
+  //   try {
+  //     setPanel({ open:true, userId: toUserId, name, loading: true });
+  //     const av = await getPublicAvailability(toUserId);
+  //     const firstDay = av?.busyAllWeek ? undefined : av?.days?.[0]?.day;
+  //     setPanel(m => ({
+  //       ...m,
+  //       availability: av,
+  //       day: typeof firstDay === "number" ? firstDay : undefined,
+  //       rangeIdx: 0,
+  //       loading:false
+  //     }));
+  //   } catch (e:any) {
+  //     setPanel(m => ({ ...m, loading:false }));
+  //     toast.error(e?.response?.data?.message || "Failed to load availability");
+  //   }
+  // };
+*/

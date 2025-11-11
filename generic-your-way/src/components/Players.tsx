@@ -13,12 +13,10 @@ const SETTINGS = [
   "The Old World","Underworlds","Warcry","Blood Bowl","Legions Imperialis",
   "Adeptus Titanicus","Aeronautica Imperialis","Warhammer Quest","Middle-Earth",
 ];
-
 const regions = [
   "North America","Caribbean","Central America","South America",
   "Africa","Middle East","Europe","Asia","Australia and Oceania"
 ];
-
 const DAY_NAMES = ["Sun","Mon","Tue","Wed","Thu","Fri","Sat"];
 
 type InvitePanelState = {
@@ -29,6 +27,7 @@ type InvitePanelState = {
   day?: number;
   rangeIdx?: number;
   loading?: boolean;
+  setting?: string;
 };
 
 const Players: React.FC = () => {
@@ -38,10 +37,13 @@ const Players: React.FC = () => {
   const [search, setSearch] = useSearchParams();
   const [panel, setPanel] = useState<InvitePanelState>({ open:false });
   const filters = useMemo(() => ({
-    setting: search.get("setting") || (user?.settings?.[0] ?? ""),
+    // setting: search.get("setting") || (user?.settings?.[0] ?? ""),
+    setting: search.get("setting") ?? "",
     region:  search.get("region")  || "",
     country: search.get("country") || "",
-    city:    search.get("city")    || ""
+    city:    search.get("city")    || "",
+    day:     search.get("day") ? Number(search.get("day")) : undefined,
+    from:    search.get("from") || ""
   }), [search, user?.settings]);
 
   useEffect(() => {
@@ -58,31 +60,48 @@ const Players: React.FC = () => {
       }
     };
     load();
-  }, [filters.setting, filters.region, filters.country, filters.city, user]);
+  }, [filters.setting, filters.region, filters.country, filters.city, filters.day, filters.from, user]);
 
-  const updateFilter = (k: "setting"|"region"|"country"|"city", v: string) => {
+  const updateFilter = (k: "setting"|"region"|"country"|"city"|"day"|"from", v: string) => {
     const next = new URLSearchParams(search);
     if (v) next.set(k, v); else next.delete(k);
     setSearch(next, { replace: true });
   };
 
-  const openInvite = async (toUserId: string, name: string) => {
-    try {
-      setPanel({ open:true, userId: toUserId, name, loading: true });
-      const av = await getPublicAvailability(toUserId);
-      const firstDay = av?.busyAllWeek ? undefined : av?.days?.[0]?.day;
-      setPanel(m => ({
-        ...m,
-        availability: av,
-        day: typeof firstDay === "number" ? firstDay : undefined,
-        rangeIdx: 0,
-        loading:false
-      }));
-    } catch (e:any) {
-      setPanel(m => ({ ...m, loading:false }));
-      toast.error(e?.response?.data?.message || "Failed to load availability");
-    }
-  };
+  const openInvite = async (toUserId: string, name: string, player: PublicPlayer) => {
+  const chosenSetting = pickSettingForInvite(player, filters.setting);
+  if (!chosenSetting) {
+    toast.info("No setting selected");
+    return;
+  }
+  try {
+    setPanel({ open:true, userId: toUserId, name, loading: true, setting: chosenSetting });
+    const av = await getPublicAvailability(toUserId);
+    const firstDay = av?.busyAllWeek ? undefined : av?.days?.[0]?.day;
+    setPanel(m => ({
+      ...m,
+      availability: av,
+      day: typeof firstDay === "number" ? firstDay : undefined,
+      rangeIdx: 0,
+      loading:false
+    }));
+  } catch (e:any) {
+    setPanel(m => ({ ...m, loading:false }));
+    toast.error(e?.response?.data?.message || "Failed to load availability");
+  }
+};
+
+  function pickSettingForInvite(player: PublicPlayer, currentFilterSetting?: string): string | null {
+  const avail = (player.settings || []);
+  if (!avail.length) return null;
+  if (currentFilterSetting && avail.includes(currentFilterSetting)) return currentFilterSetting;
+
+  const choice = window.prompt(`Pick setting:\n${avail.map((s,i)=>`${i+1}. ${s}`).join("\n")}\nType number`, "1");
+  if (choice == null) return null;
+  const idx = Number(choice) - 1;
+  if (idx < 0 || idx >= avail.length) return null;
+  return avail[idx];
+}
 
   const submitInvite = async () => {
     if (!panel.userId || !panel.availability) return;
@@ -99,7 +118,7 @@ const Players: React.FC = () => {
     const rIdx = panel.rangeIdx ?? 0;
     const r = dayConf.ranges?.[rIdx];
     try {
-      await createInvite(panel.userId, { day: d, from: r?.from, to: r?.to });
+      await createInvite(panel.userId, { day: d, from: r?.from, to: r?.to } , panel.setting);
       toast.success("Invite sent");
       setPanel({ open:false });
     } catch (e:any) {
@@ -160,9 +179,29 @@ const Players: React.FC = () => {
                 placeholder="e.g. Haifa"
               />
             </div>
-          </div>
-        </div>
-      </div>
+            <div className="col-12 col-md-2">
+            <label className="form-label">Day:</label>
+       <select
+         className="form-select"
+         value={typeof filters.day === "number" ? String(filters.day) : ""}
+         onChange={(e)=>updateFilter("day", e.target.value ? e.target.value : "")}
+        >
+       <option value="">Any</option>
+    {DAY_NAMES.map((d, i)=> <option key={i} value={i}>{d}</option>)}
+  </select>
+</div>
+<div className="col-12 col-md-2">
+  <label className="form-label">From:</label>
+  <input
+    type="time"
+    className="form-control"
+    value={filters.from}
+    onChange={(e)=>updateFilter("from", e.target.value)}
+  />
+</div>
+</div>
+</div>
+</div>
 
       {loading ? (
         <div>Loading...</div>
@@ -195,7 +234,12 @@ const Players: React.FC = () => {
                       <div><b>Region:</b> {p.region || "-"}</div>
                       <div><b>Country:</b> {p.address?.country || "-"}</div>
                       <div><b>City:</b> {p.address?.city || "-"}</div>
-                      <div><b>Settings:</b> {p.settings?.length ? p.settings.join(", ") : "-"}</div>
+                      <div>
+                        <b>Setting:</b>{" "}
+                        {filters.setting
+                        ? (p.settings?.includes(filters.setting) ? filters.setting : "-")
+                        : (p.settings?.length ? p.settings.join(", ") : "-")}
+                     </div>
                     </div>
 
                     {!isOpen && (
@@ -213,6 +257,11 @@ const Players: React.FC = () => {
                           <div className="small text-muted">No available days</div>
                         ) : (
                           <>
+
+                          <div className="mb-2">
+                          <div className="small"><b>Setting:</b> {panel.setting}</div>
+                          </div>
+
                             <div className="mb-2">
                               <label className="form-label mb-1">Day</label>
                               <select
@@ -267,11 +316,16 @@ const Players: React.FC = () => {
 
                     <div className="mt-auto d-grid">
                       <button
-                        className="btn btn-accent-outline"
-                        onClick={()=>openInvite(p._id, `${p.name?.first||""} ${p.name?.last||""}`.trim())}
+                      className="btn btn-accent-outline"
+                      onClick={()=>openInvite(
+                      p._id,
+                      `${p.name?.first||""} ${p.name?.last||""}`.trim(),
+                      p                                  
+                      )}
                       >
-                        {isOpen ? "Change day/time" : "Invite"}
-                      </button>
+                     {isOpen ? "Change day/time" : "Invite"}
+                     </button>
+
                     </div>
                   </div>
                 </div>
