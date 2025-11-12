@@ -1,7 +1,6 @@
 .update{
   text-align: center;
 }
-
 .updates-list {
   margin-top: 20px;
   display: grid;
@@ -35,6 +34,9 @@
   font-weight: 600;
   letter-spacing: 0.2px;
   border-radius: 0 0 10px 10px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
 }
 .is-complete{
   color: #25ca61; 
@@ -52,6 +54,9 @@
 .v-result,
 .v-result-finish {
   display:none; 
+}
+.icon-success {
+  margin: 0 6px;
 }
 @media (max-width: 992px){
   .updates-list{

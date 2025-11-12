@@ -1,6 +1,5 @@
 import type { FunctionComponent } from "react";
 import "../components/css/Updates.css";
-
 interface UpdatesProps {}
 
 const Updates: FunctionComponent<UpdatesProps> = () => {
@@ -27,7 +26,13 @@ const Updates: FunctionComponent<UpdatesProps> = () => {
                 <li>About Page &amp; How to Use the Site.</li>
               </ul>
             </div>
-            <div className="v-status is-complete">✅ Completed </div>
+            <div className="v-status is-complete">
+               <svg xmlns="http://www.w3.org/2000/svg" 
+               height="23px" viewBox="0 -960 960 960" 
+               width="24px" fill="#25CA61" className="icon-success"> 
+                <path d="M382-240 154-468l57-57 171 171 367-367 57 57-424 424Z"/></svg>
+                Completed 
+                </div>
           </div>
 
           <div className="version">

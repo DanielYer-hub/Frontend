@@ -56,7 +56,7 @@ return (
 <Link to="/" className="text-decoration-none mb-2 h5 align-self-center">Generic Your Way</Link>
 <hr />
 <nav className="nav nav-pills flex-column gap-3">
-<NavLink className="btn btn-accent-outline"  to="/dashboard">Home</NavLink>    
+<NavLink className="btn btn-accent-outline"  to="/dashboard">Invites</NavLink>    
 <NavLink className="btn btn-accent-outline"  to="/player-card">Profile</NavLink>  
 <NavLink className="btn btn-accent-outline" to="/about">About</NavLink>  
 <NavLink className="btn btn-accent-outline" to="/updates">Updates</NavLink> 
@@ -107,7 +107,7 @@ return (
 <button type="button" className="btn-close" data-bs-dismiss="offcanvas"/>
 </div>
 <div className="offcanvas-body d-flex flex-column gap-3">
-          <NavLink className="btn btn-accent-outline" to="/dashboard" >Home</NavLink>
+          <NavLink className="btn btn-accent-outline" to="/dashboard" >Invites</NavLink>
           <NavLink className="btn btn-accent-outline" to="/player-card" >Profile</NavLink>
           <NavLink className="btn btn-accent-outline" to="/about" >About</NavLink>
           <NavLink className="btn btn-accent-outline" to="/updates">Updates</NavLink> 

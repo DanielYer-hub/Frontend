@@ -7,6 +7,7 @@ import {
   declineInvite,
   cancelInvite
 } from "../services/inviteService";
+import "./css/Dashbord.css";
 
 export type ContactLink = { kind: "whatsapp" | "telegram"; url: string };
 export type ChatInfo = { links?: ContactLink[] };
@@ -24,11 +25,11 @@ type Invite = {
   fromUser?: MiniUser;
   toUser?: MiniUser;
   createdAt: string;
-  opponentContact?: { kind: "whatsapp"|"telegram"; url: string } | null;
+  opponentContact?: { kind: "whatsapp" | "telegram"; url: string } | null;
   slot?: { day?: number; from?: string | null; to?: string | null } | null;
 };
 
-const DAY_NAMES = ["Sun","Mon","Tue","Wed","Thu","Fri","Sat"];
+const DAY_NAMES = ["Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat"];
 
 const Dashboard: React.FC = () => {
   const [incoming, setIncoming] = useState<Invite[]>([]);
@@ -65,7 +66,7 @@ const Dashboard: React.FC = () => {
     if (typeof d !== "number" || d < 0 || d > 6) return <span className="text-muted">No day selected</span>;
     const dayLabel = DAY_NAMES[d];
     const from = inv.slot?.from || "";
-    const to   = inv.slot?.to || "";
+    const to = inv.slot?.to || "";
     const time = from && to ? `${from}–${to}` : (from || to || "");
     return (
       <span>
@@ -94,7 +95,7 @@ const Dashboard: React.FC = () => {
       }
       toast.success("Invite accepted");
       refresh(true);
-    } catch (e:any) {
+    } catch (e: any) {
       toast.error(e?.response?.data?.message || "Failed to accept");
     }
   };
@@ -126,14 +127,22 @@ const Dashboard: React.FC = () => {
 
   return (
     <div className="container py-3">
-      <h2 className="mb-3">Dashboard</h2>
+      <h2 className="mb-4 dashbord">Your Invites</h2>
       {loading && <div className="mb-2">Loading...</div>}
 
       <div className="row g-3">
         <div className="col-md-6">
           <div className="card h-100">
             <div className="card-body d-flex flex-column">
-              <h5>Incoming invites</h5>
+              <h5 className="d-flex align-items-center gap-2 ">
+                Incoming Invites
+                <svg xmlns="http://www.w3.org/2000/svg" 
+                height="24px" viewBox="0 -960 960 960" 
+                width="24px" 
+                fill="#EFEFEF">
+                <path d="M200-120q-33 0-56.5-23.5T120-200v-560q0-33 23.5-56.5T200-840h560q33 0 56.5 23.5T840-760v560q0 33-23.5 56.5T760-120H200Zm0-80h560v-120H640q-30 38-71.5 59T480-240q-47 0-88.5-21T320-320H200v120Zm280-120q38 0 69-22t43-58h168v-360H200v360h168q12 36 43 58t69 22Zm0-80L320-560l56-58 64 64v-166h80v166l64-64 56 58-160 160ZM200-200h560-560Z"/></svg>
+              </h5>
+              <hr className="your-invites"/>
               {!incoming.length && <div className="text-muted">No incoming.</div>}
               <ul className="list-group list-group-flush mt-2">
                 {incoming.map(inv => (
@@ -167,7 +176,16 @@ const Dashboard: React.FC = () => {
         <div className="col-md-6">
           <div className="card h-100">
             <div className="card-body d-flex flex-column">
-              <h5>Outgoing (pending)</h5>
+              <h5 className="d-flex align-items-center gap-2">
+                Outgoing Invites
+                <svg xmlns="http://www.w3.org/2000/svg"
+                  height="24px"
+                  viewBox="0 -960 960 960"
+                  width="24px"
+                  fill="#EFEFEF">
+                  <path d="M440-400v-166l-64 64-56-58 160-160 160 160-56 58-64-64v166h-80ZM200-120q-33 0-56.5-23.5T120-200v-560q0-33 23.5-56.5T200-840h560q33 0 56.5 23.5T840-760v560q0 33-23.5 56.5T760-120H200Zm0-80h560v-120H640q-30 38-71.5 59T480-240q-47 0-88.5-21T320-320H200v120Zm280-120q38 0 69-22t43-58h168v-360H200v360h168q12 36 43 58t69 22ZM200-200h560-560Z" /></svg>
+                  </h5>
+                  <hr className="your-invites"/>
               {!outgoing.length && <div className="text-muted">No outgoing.</div>}
               <ul className="list-group list-group-flush mt-2">
                 {outgoing.map(inv => (
