@@ -45,3 +45,15 @@ a:hover, .nav-link.active { color: var(--accent); }
   border: 1px solid rgba(255,255,255,0.15);
 }
 .form-control::placeholder { color: #8f8c8c; }
+
+
+#mobileRightNav .btn.btn-accent-outline:active,
+#mobileRightNav .btn.btn-accent-outline:focus,
+#mobileRightNav .btn.btn-accent-outline:focus-visible,
+#mobileRightNav .btn.btn-accent-outline.active {
+  background-color: transparent;   
+  color: #ffffff !important;              
+  border-color: #ffffff !important;
+  box-shadow: none !important;
+}
+

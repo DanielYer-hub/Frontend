@@ -70,7 +70,15 @@ const Dashboard: React.FC = () => {
     const time = from && to ? `${from}–${to}` : (from || to || "");
     return (
       <span>
-        <b>📅 {dayLabel}</b>{time ? ` · ${time}` : ""}
+        <b>
+          <svg xmlns="http://www.w3.org/2000/svg"
+           height="20px" 
+           viewBox="0 -960 960 960"
+            width="24px" 
+            fill="#F3F3F3">
+            <path d="M200-80q-33 0-56.5-23.5T120-160v-560q0-33 23.5-56.5T200-800h40v-80h80v80h320v-80h80v80h40q33 0 56.5 23.5T840-720v560q0 33-23.5 56.5T760-80H200Zm0-80h560v-400H200v400Zm0-480h560v-80H200v80Zm0 0v-80 80Zm280 240q-17 0-28.5-11.5T440-440q0-17 11.5-28.5T480-480q17 0 28.5 11.5T520-440q0 17-11.5 28.5T480-400Zm-160 0q-17 0-28.5-11.5T280-440q0-17 11.5-28.5T320-480q17 0 28.5 11.5T360-440q0 17-11.5 28.5T320-400Zm320 0q-17 0-28.5-11.5T600-440q0-17 11.5-28.5T640-480q17 0 28.5 11.5T680-440q0 17-11.5 28.5T640-400ZM480-240q-17 0-28.5-11.5T440-280q0-17 11.5-28.5T480-320q17 0 28.5 11.5T520-280q0 17-11.5 28.5T480-240Zm-160 0q-17 0-28.5-11.5T280-280q0-17 11.5-28.5T320-320q17 0 28.5 11.5T360-280q0 17-11.5 28.5T320-240Zm320 0q-17 0-28.5-11.5T600-280q0-17 11.5-28.5T640-320q17 0 28.5 11.5T680-280q0 17-11.5 28.5T640-240Z"/>
+            </svg>
+          {dayLabel}</b>{time ? ` · ${time}` : ""}
       </span>
     );
   };
@@ -143,22 +151,22 @@ const Dashboard: React.FC = () => {
                 <path d="M200-120q-33 0-56.5-23.5T120-200v-560q0-33 23.5-56.5T200-840h560q33 0 56.5 23.5T840-760v560q0 33-23.5 56.5T760-120H200Zm0-80h560v-120H640q-30 38-71.5 59T480-240q-47 0-88.5-21T320-320H200v120Zm280-120q38 0 69-22t43-58h168v-360H200v360h168q12 36 43 58t69 22Zm0-80L320-560l56-58 64 64v-166h80v166l64-64 56 58-160 160ZM200-200h560-560Z"/></svg>
               </h5>
               <hr className="your-invites"/>
-              {!incoming.length && <div className="text-muted">No incoming.</div>}
+              {!incoming.length && <div>No incoming.</div>}
               <ul className="list-group list-group-flush mt-2">
                 {incoming.map(inv => (
                   <li
                     key={inv._id}
-                    className="list-group-item d-flex justify-content-between align-items-center"
+                    className="list-group-item d-flex justify-content-between align-items-center dashbord-players"
                     style={{ background: "#1a1b1e", color: "#fff" }}
                   >
-                    <div>
-                      <div className="fw-bold">
+                    <div className="dashbord-players-bio">
+                      <div className="fw-bold dashbord-players-name">
                         {inv.fromUser?.name?.first} {inv.fromUser?.name?.last}
                       </div>
-                      <div className="small">
+                      <div className="small dashbord-players-info">
                         {inv.setting} · {inv.fromUser?.region || "-"} · {inv.fromUser?.address?.city || "-"}
                       </div>
-                      <div className="small mt-1">
+                      <div className="small mt-1 dashbord-players-slot">
                         {renderSlot(inv)}
                       </div>
                     </div>
@@ -186,22 +194,22 @@ const Dashboard: React.FC = () => {
                   <path d="M440-400v-166l-64 64-56-58 160-160 160 160-56 58-64-64v166h-80ZM200-120q-33 0-56.5-23.5T120-200v-560q0-33 23.5-56.5T200-840h560q33 0 56.5 23.5T840-760v560q0 33-23.5 56.5T760-120H200Zm0-80h560v-120H640q-30 38-71.5 59T480-240q-47 0-88.5-21T320-320H200v120Zm280-120q38 0 69-22t43-58h168v-360H200v360h168q12 36 43 58t69 22ZM200-200h560-560Z" /></svg>
                   </h5>
                   <hr className="your-invites"/>
-              {!outgoing.length && <div className="text-muted">No outgoing.</div>}
+              {!outgoing.length && <div>No outgoing.</div>}
               <ul className="list-group list-group-flush mt-2">
                 {outgoing.map(inv => (
                   <li
                     key={inv._id}
-                    className="list-group-item d-flex justify-content-between align-items-center"
+                    className="list-group-item d-flex justify-content-between align-items-center dashbord-players"
                     style={{ background: "#1a1b1e", color: "#fff" }}
                   >
-                    <div>
-                      <div className="fw-bold">
+                    <div className="dashbord-players-bio">
+                      <div className="fw-bold dashbord-players-name">
                         {inv.toUser?.name?.first} {inv.toUser?.name?.last}
                       </div>
-                      <div className="small">
+                      <div className="small dashbord-players-info">
                         {inv.setting} · {inv.toUser?.region || "-"} · {inv.toUser?.address?.city || "-"}
                       </div>
-                      <div className="small mt-1">
+                      <div className="small mt-1 dashbord-players-slot">
                         {renderSlot(inv)}
                       </div>
                     </div>
