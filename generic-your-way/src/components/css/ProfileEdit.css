@@ -1,0 +1,20 @@
+.edit-page{
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+}
+
+.edit-page h2{
+    text-align: center;
+    margin: 15px;
+}
+
+.edit-page-form{
+    max-width: 800px;
+    margin: 0 auto;
+    background: #111;
+    padding: 16px;
+    border-radius: 10px;
+    box-shadow: 0 0 12px rgba(255, 255, 255, 0.08);
+    border: 1px solid rgba(255,255,255,0.15);
+}

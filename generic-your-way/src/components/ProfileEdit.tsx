@@ -6,6 +6,7 @@ import { updateMe } from "../services/userService";
 import { uploadMyPhoto } from "../services/userService";
 import { toast } from "react-toastify";
 import { useNavigate } from "react-router-dom";
+import "./css/ProfileEdit.css";
 
 const SETTINGS = [ "Warhammer 40k","Age of Sigmar","The Horus Heresy","Kill Team","Necromunda",
   "The Old World","Underworlds","Warcry","Blood Bowl","Legions Imperialis","Adeptus Titanicus",
@@ -93,9 +94,46 @@ const ProfileEdit: React.FC = () => {
   });
 
   return (
-    <div className="container py-3">
+    <div className="container py-3 edit-page">
       <h2>Edit Profile</h2>
-      <form className="row g-3" onSubmit={formik.handleSubmit}>
+      <form className="row g-3 edit-page-form" onSubmit={formik.handleSubmit}>
+
+ 
+        <div className="col-12">
+          <label className="form-label">Profile Photo:</label>
+          {user?.image?.url && (
+            <div className="mt-2">
+              <img
+                src={user.image.url}
+                alt="profile"
+                style={{ maxWidth: 180, borderRadius: 100 }}
+              />
+            </div>
+          )}
+          <input
+            type="file"
+            className="form-control"
+            accept="image/*"
+            onChange={async (e) => {
+              const file = e.currentTarget.files?.[0];
+              if (!file) return;
+              try {
+                await uploadMyPhoto(file);
+                toast.success("Photo uploaded");
+                await refreshMe(); 
+              } catch (err:any) {
+                toast.error(err?.response?.data?.message || "Upload failed");
+              }
+            }}
+          />
+        </div>
+        
+        <div className="col-12">
+          <label className="form-label">About me:</label>
+          <textarea className="form-control" rows={4} name="bio"
+          value={formik.values.bio} onChange={formik.handleChange}/>
+        </div>
+
         <div className="col-md-6">
           <label className="form-label">First name:</label>
           <input className="form-control" name="name.first"
@@ -106,6 +144,22 @@ const ProfileEdit: React.FC = () => {
           <input className="form-control" name="name.last"
           value={formik.values.name.last} onChange={formik.handleChange}/>
         </div>
+
+        <div className="col-md-6">
+          <label className="form-label">WhatsApp:</label>
+          <input className="form-control" name="contacts.phoneE164"
+                 placeholder="Your WhatsApp number."
+                 value={formik.values.contacts.phoneE164}
+                 onChange={formik.handleChange}/>
+        </div>
+        <div className="col-md-6">
+          <label className="form-label">Telegram Username:</label>
+          <input className="form-control" name="contacts.telegramUsername"
+                 placeholder="my_nick (Without @)"
+                 value={formik.values.contacts.telegramUsername}
+                 onChange={formik.handleChange}/>
+        </div>
+
   <div className="col-md-4">
   <label className="form-label">Region:</label>
   <select
@@ -135,54 +189,9 @@ const ProfileEdit: React.FC = () => {
           <input className="form-control" name="address.city"
                  value={formik.values.address.city} onChange={formik.handleChange}/>
         </div>
-        <div className="col-md-6">
-          <label className="form-label">WhatsApp:</label>
-          <input className="form-control" name="contacts.phoneE164"
-                 placeholder="Your WhatsApp number."
-                 value={formik.values.contacts.phoneE164}
-                 onChange={formik.handleChange}/>
-        </div>
-        <div className="col-md-6">
-          <label className="form-label">Telegram username:</label>
-          <input className="form-control" name="contacts.telegramUsername"
-                 placeholder="my_nick (Without @)"
-                 value={formik.values.contacts.telegramUsername}
-                 onChange={formik.handleChange}/>
-        </div>
+
         
-        <div className="col-12">
-          <label className="form-label">Profile Photo:</label>
-          <input
-            type="file"
-            className="form-control"
-            accept="image/*"
-            onChange={async (e) => {
-              const file = e.currentTarget.files?.[0];
-              if (!file) return;
-              try {
-                await uploadMyPhoto(file);
-                toast.success("Photo uploaded");
-                await refreshMe(); 
-              } catch (err:any) {
-                toast.error(err?.response?.data?.message || "Upload failed");
-              }
-            }}
-          />
-          {user?.image?.url && (
-            <div className="mt-2">
-              <img
-                src={user.image.url}
-                alt="profile"
-                style={{ maxWidth: 180, borderRadius: 8 }}
-              />
-            </div>
-          )}
-        </div>
-        <div className="col-12">
-          <label className="form-label">About me:</label>
-          <textarea className="form-control" rows={4} name="bio"
-          value={formik.values.bio} onChange={formik.handleChange}/>
-        </div>
+       
 
 <div className="col-12">
   <label className="form-label">Settings:</label>
