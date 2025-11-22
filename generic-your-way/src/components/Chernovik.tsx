@@ -920,8 +920,3 @@ module.exports = User;
   //   }
   // };
 */
-
-/**
-VITE_AUTH_API="http://localhost:8181/api/auth" 
-VITE_API_ROOT="http://localhost:8181"
- */
