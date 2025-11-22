@@ -922,15 +922,6 @@ module.exports = User;
 */
 
 /**
- SECRET_KEY=secret
-TOKEN_GENERATOR=jwt
-JWT_SECRET=secret_warhammer_key
-DB=mongodb
-ENVIROMENT=development
-MONGO_LOCAL_URI=mongodb://127.0.0.1:27017/GenericYourWay
-MONGO_ATLAS_URI=mongodb+srv://Daniel:QweAsdZxc1231@daniel.wq8aesw.mongodb.net/?retryWrites=true&w=majority&appName=Daniel
-VALIDATOR=Joi
-PORT=8181
-LOGGER=morgan
-CAMPAIGN_ENABLED=false
+VITE_AUTH_API="http://localhost:8181/api/auth" 
+VITE_API_ROOT="http://localhost:8181"
  */
