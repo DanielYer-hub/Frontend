@@ -96,103 +96,134 @@ const ProfileEdit: React.FC = () => {
   return (
     <div className="container py-3 edit-page">
       <h2>Edit Profile</h2>
-      <form className="row g-3 edit-page-form" onSubmit={formik.handleSubmit}>
+      <form className="form-row row g-3" onSubmit={formik.handleSubmit}>
 
- 
-        <div className="col-12">
-          <label className="form-label">Profile Photo:</label>
-          {user?.image?.url && (
-            <div className="mt-2">
-              <img
-                src={user.image.url}
-                alt="profile"
-                style={{ maxWidth: 180, borderRadius: 100 }}
-              />
-            </div>
-          )}
-          <input
-            type="file"
-            className="form-control"
-            accept="image/*"
-            onChange={async (e) => {
-              const file = e.currentTarget.files?.[0];
-              if (!file) return;
-              try {
-                await uploadMyPhoto(file);
-                toast.success("Photo uploaded");
-                await refreshMe(); 
-              } catch (err:any) {
-                toast.error(err?.response?.data?.message || "Upload failed");
-              }
-            }}
-          />
+ <div className="edit-page-form-photo">
+  <div className="edit-photo-wrapper">
+    <div className="edit-photo-frame">
+      {user?.image?.url ? (
+        <img
+          src={user.image.url}
+          alt="profile"
+        />
+      ) : (
+        <div className="edit-photo-placeholder">
+          No Photo
         </div>
-        
-        <div className="col-12">
-          <label className="form-label">About me:</label>
-          <textarea className="form-control" rows={4} name="bio"
-          value={formik.values.bio} onChange={formik.handleChange}/>
-        </div>
+      )}
+    </div>
 
-        <div className="col-md-6">
-          <label className="form-label">First name:</label>
-          <input className="form-control" name="name.first"
-          value={formik.values.name.first} onChange={formik.handleChange}/>
-        </div>
-        <div className="col-md-6">
-          <label className="form-label">Last name:</label>
-          <input className="form-control" name="name.last"
-          value={formik.values.name.last} onChange={formik.handleChange}/>
-        </div>
+<label htmlFor="photo-input" className="edit-photo-fab">
+  <svg xmlns="http://www.w3.org/2000/svg" 
+  height="24px" 
+  viewBox="0 -960 960 960" 
+  width="24px" 
+  fill="#000000">
+  <path d="M440-440ZM120-120q-33 0-56.5-23.5T40-200v-480q0-33 23.5-56.5T120-760h126l74-80h240v80H355l-73 80H120v480h640v-360h80v360q0 33-23.5 56.5T760-120H120Zm640-560v-80h-80v-80h80v-80h80v80h80v80h-80v80h-80ZM440-260q75 0 127.5-52.5T620-440q0-75-52.5-127.5T440-620q-75 0-127.5 52.5T260-440q0 75 52.5 127.5T440-260Zm0-80q-42 0-71-29t-29-71q0-42 29-71t71-29q42 0 71 29t29 71q0 42-29 71t-71 29Z"/></svg>
+</label>
 
-        <div className="col-md-6">
-          <label className="form-label">WhatsApp:</label>
-          <input className="form-control" name="contacts.phoneE164"
-                 placeholder="Your WhatsApp number."
-                 value={formik.values.contacts.phoneE164}
-                 onChange={formik.handleChange}/>
-        </div>
-        <div className="col-md-6">
-          <label className="form-label">Telegram Username:</label>
-          <input className="form-control" name="contacts.telegramUsername"
-                 placeholder="my_nick (Without @)"
-                 value={formik.values.contacts.telegramUsername}
-                 onChange={formik.handleChange}/>
-        </div>
+    <input
+      id="photo-input"
+      type="file"
+      accept="image/*"
+      className="hidden-file-input"
+      onChange={async (e) => {
+        const file = e.currentTarget.files?.[0];
+        if (!file) return;
+        try {
+          await uploadMyPhoto(file);
+          toast.success("Photo uploaded");
+          await refreshMe();
+        } catch (err: any) {
+          toast.error(err?.response?.data?.message || "Upload failed");
+        }
+      }}
+    />
+  </div>
+</div>
 
-  <div className="col-md-4">
-  <label className="form-label">Region:</label>
-  <select
-    className="form-control"
-    name="region"
-    value={formik.values.region}
-    onChange={formik.handleChange}
-    onBlur={formik.handleBlur}
-    required
-  >
-    <option value="" disabled>Select region:</option>
-    {REGIONS.map(r => (
-      <option key={r} value={r}>{r}</option>
-    ))}
-  </select>
-  {formik.touched.region && formik.errors.region && (
-    <p className="text-danger">{formik.errors.region as string}</p>
-  )}
- </div>
-        <div className="col-md-4">
-          <label className="form-label">Country:</label>
-          <input className="form-control" name="address.country"
-                 value={formik.values.address.country} onChange={formik.handleChange}/>
-        </div>
-        <div className="col-md-4">
-          <label className="form-label">City:</label>
-          <input className="form-control" name="address.city"
-                 value={formik.values.address.city} onChange={formik.handleChange}/>
-        </div>
+  <div className="edit-page-form">
+      <textarea
+        className="form-control"
+        rows={6}
+        name="bio"
+        value={formik.values.bio}
+        onChange={formik.handleChange}
+        placeholder="About me info:"
+      />
+</div>
+  
+<div className="edit-page-form">
+  <div className="edit-grid">
+    <div>
+      <label className="form-label">First name:</label>
+      <input className="form-control" name="name.first"
+        value={formik.values.name.first}
+        onChange={formik.handleChange}
+      />
+    </div>
 
-        
-       
+    <div>
+      <label className="form-label">Last name:</label>
+      <input className="form-control" name="name.last"
+        value={formik.values.name.last}
+        onChange={formik.handleChange}
+      />
+    </div>
 
+    <div>
+      <label className="form-label">WhatsApp:</label>
+      <input
+        className="form-control"
+        name="contacts.phoneE164"
+        value={formik.values.contacts.phoneE164}
+        onChange={formik.handleChange}
+      />
+    </div>
+
+    <div>
+      <label className="form-label">Telegram Username:</label>
+      <input
+        className="form-control"
+        name="contacts.telegramUsername"
+        value={formik.values.contacts.telegramUsername}
+        onChange={formik.handleChange}
+        placeholder="Without @"
+      />
+    </div>
+
+    <div>
+      <label className="form-label">Region:</label>
+      <select
+        className="form-control"
+        name="region"
+        value={formik.values.region}
+        onChange={formik.handleChange}
+      >
+        <option value="">Select region</option>
+        {REGIONS.map(r => <option key={r} value={r}>{r}</option>)}
+      </select>
+    </div>
+
+    <div>
+      <label className="form-label">Country:</label>
+      <input className="form-control" name="address.country"
+        value={formik.values.address.country}
+        onChange={formik.handleChange}
+      />
+    </div>
+
+    <div>
+      <label className="form-label">City:</label>
+      <input className="form-control" name="address.city"
+        value={formik.values.address.city}
+        onChange={formik.handleChange}
+      />
+    </div>
+  </div>
+</div>
+    
+<div className="edit-page-form">
 <div className="col-12">
   <label className="form-label">Settings:</label>
   <div className="settings-grid">
@@ -223,10 +254,14 @@ const ProfileEdit: React.FC = () => {
   </div>
 </div>
 
-        <div className="col-12">
-          <button className="btn btn-success" type="submit" disabled={formik.isSubmitting}>
+        <div className="col-12 edit-btn">
+          <button 
+          className=" btn btn-success"
+          type="submit"
+          disabled={formik.isSubmitting}>
             Save
           </button>
+        </div>
         </div>
       </form>
     </div>

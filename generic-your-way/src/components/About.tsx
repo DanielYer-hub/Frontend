@@ -13,6 +13,7 @@ const About: FunctionComponent<AboutProps> = () => {
         <div className="about">
           <div className="about-p">
             <h1 className="about-h1">About This Project</h1>
+            <hr />
             <p>
               This platform was created with one clear goal: to make communication between Warhammer 40,000 <br />
               players around the world easier and more accessible. <br /> <br />
@@ -39,6 +40,7 @@ const About: FunctionComponent<AboutProps> = () => {
 
         <div className={`how-to-use ${expanded ? "expanded" : "clamp"}`}>
           <h1 className="about-h1">How to Use the Site</h1>
+          <hr />
           <section className="mt-4">
             <h2 className="h4">1) Get Started: Profile</h2>
             <ul>

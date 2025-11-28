@@ -6,7 +6,7 @@ const Updates: FunctionComponent<UpdatesProps> = () => {
   return (
     <>
       <div className="container py-4">
-        <h1 className="update mb-4">Updates</h1>
+        <h1 className="update">Updates</h1>
         <div className="updates-list">
          
           <div className="version">
@@ -95,7 +95,6 @@ const Updates: FunctionComponent<UpdatesProps> = () => {
             </div>
             <div className="v-status is-soon">Soon…</div>
           </div>
-
         </div>
       </div>
     </>
