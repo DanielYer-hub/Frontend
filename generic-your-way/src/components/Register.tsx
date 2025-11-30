@@ -94,12 +94,15 @@ const Register: FunctionComponent = () => {
 return ( 
 <>
 <div className="register-page">
-  <div className="page-body">
+<div className="page-body">
 <div className="container">
    <main className="welcome-page-content">
         <img src="/content/gyw.png" alt="GYW logo" className="logo" />
   </main>
 <form className="row g-3" onSubmit={formik.handleSubmit}>
+
+  <div className="register-box">
+  <div className="row g-3">
    <div className="col-md-6">
     <label htmlFor="first" className="form-label">First Name:</label>
     <input 
@@ -266,7 +269,10 @@ return (
     <p className="text-danger">{formik.errors.contacts}</p>
   )}
 </div>
+</div>
+</div>
 
+  <div className="register-box">
    <div className="col-12">
     <label className="form-label">Settings:</label>
     {formik.touched.settings && formik.errors.settings && (
@@ -296,18 +302,21 @@ return (
          })}
         </div>
     </div>
-  
-  <div className="col-12">
+    <div className="col-12 register-btn">
     <button 
     disabled={!formik.dirty || !formik.isValid }
     type="submit" 
     className="btn btn-success">
     REGISTER
     </button>
-  </div>
+    </div>
+    </div>
+  
+  
 </form>
 </div>
 </div>
+
  <footer className="login-footer border-top">
         <div className="container py-3 text-center small">
           © {new Date().getFullYear()} Generic Your Way by Daniel Yerema.
