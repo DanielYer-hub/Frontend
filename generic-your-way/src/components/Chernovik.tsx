@@ -920,3 +920,211 @@ module.exports = User;
   //   }
   // };
 */
+
+
+/*
+ <div className="container py-3">
+      <h2 className="mb-3">Find Players</h2>
+      <div className="card mb-3">
+        <div className="card-body">
+          <div className="row g-2">
+            <div className="col-12 col-md-3">
+              <label className="form-label">Setting:</label>
+              <select
+                className="form-select"
+                value={filters.setting}
+                onChange={(e)=>updateFilter("setting", e.target.value)}
+              >
+                <option value="">All</option>
+                {SETTINGS.map(s => <option key={s} value={s}>{s}</option>)}
+              </select>
+            </div>
+            <div className="col-12 col-md-3">
+              <label className="form-label">Region:</label>
+              <select
+                className="form-select"
+                value={filters.region}
+                onChange={(e)=>updateFilter("region", e.target.value)}
+              >
+                <option value="">All</option>
+                {regions.map(r => <option key={r} value={r}>{r}</option>)}
+              </select>
+            </div>
+            <div className="col-12 col-md-3">
+              <label className="form-label">Country:</label>
+              <input
+                className="form-control"
+                value={filters.country}
+                onChange={(e)=>updateFilter("country", e.target.value)}
+                placeholder="e.g. England"
+              />
+            </div>
+            <div className="col-12 col-md-3">
+              <label className="form-label">City:</label>
+              <input
+                className="form-control"
+                value={filters.city}
+                onChange={(e)=>updateFilter("city", e.target.value)}
+                placeholder="e.g. London"
+              />
+            </div>
+            <div className="col-12 col-md-2">
+            <label className="form-label">Day:</label>
+       <select
+         className="form-select"
+         value={typeof filters.day === "number" ? String(filters.day) : ""}
+         onChange={(e)=>updateFilter("day", e.target.value ? e.target.value : "")}
+        >
+       <option value="">Any</option>
+    {DAY_NAMES.map((d, i)=> <option key={i} value={i}>{d}</option>)}
+  </select>
+</div>
+<div className="col-12 col-md-2">
+  <label className="form-label">From:</label>
+  <input
+    type="time"
+    className="form-control"
+    value={filters.from}
+    onChange={(e)=>updateFilter("from", e.target.value)}
+  />
+</div>
+</div>
+</div>
+</div>
+
+      {loading ? (
+        <div>Loading...</div>
+      ) : (
+        <div className="row g-3">
+          {players.map(p => {
+            const isOpen = panel.open && panel.userId === p._id;
+            const av = isOpen ? panel.availability : undefined;
+            const day = isOpen ? panel.day : undefined;
+            const dayObj = (isOpen && av && typeof day === "number")
+              ? av.days.find(x => x.day === day)
+              : undefined;
+
+            return (
+              <div className="col-12 col-md-6 col-lg-4" key={p._id}>
+                <div className="card h-100">
+                  <div className="card-body d-flex flex-column">
+                    <div className="d-flex align-items-center gap-3">
+                      <img
+                        src={imgUrl(p.image?.url)}
+                        alt=""
+                        style={{ width: 56, height: 56, borderRadius: "50%", objectFit: "cover" }}
+                      />
+                      <div className="fw-bold">
+                        {p.name?.first} {p.name?.last}
+                      </div>
+                    </div>
+                    {!!p.bio && <BioClamp text={p.bio} className="mt-2" maxChars={20} />}
+                    <div className="mt-2 small">
+                      <div><b>Region:</b> {p.region || "-"}</div>
+                      <div><b>Country:</b> {p.address?.country || "-"}</div>
+                      <div><b>City:</b> {p.address?.city || "-"}</div>
+                      <div>
+                        <b>Setting:</b>{" "}
+                        {filters.setting
+                        ? (p.settings?.includes(filters.setting) ? filters.setting : "-")
+                        : (p.settings?.length ? p.settings.join(", ") : "-")}
+                     </div>
+                    </div>
+
+                    {!isOpen && (
+                      <div className="mt-2 small text-muted">
+                        <b>Availability:</b> <i>tap “Invite” to view days</i>
+                      </div>
+                    )}
+                    {isOpen && (
+                      <div className="mt-3 p-2 border rounded">
+                        {panel.loading ? (
+                          <div className="small text-muted">Loading availability…</div>
+                        ) : av?.busyAllWeek ? (
+                          <div className="text-danger small">Player is busy this week</div>
+                        ) : !av?.days?.length ? (
+                          <div className="small text-muted">No available days</div>
+                        ) : (
+                          <>
+
+                          <div className="mb-2">
+                          <div className="small"><b>Setting:</b> {panel.setting}</div>
+                          </div>
+
+                            <div className="mb-2">
+                              <label className="form-label mb-1">Day</label>
+                              <select
+                                className="form-select form-select-sm"
+                                value={typeof day === "number" ? String(day) : ""}
+                                onChange={(e)=>{
+                                  const d = Number(e.target.value);
+                                  setPanel(m => ({ ...m, day: isNaN(d) ? undefined : d, rangeIdx: 0 }));
+                                }}
+                              >
+                                <option value="">Choose…</option>
+                                {av.days.map(d => (
+                                  <option key={d.day} value={d.day}>
+                                    {DAY_NAMES[d.day]}
+                                  </option>
+                                ))}
+                              </select>
+                            </div>
+
+                            {!!dayObj && !!dayObj.ranges?.length && (
+                              <div className="mb-2">
+                                <label className="form-label mb-1">Time</label>
+                                <select
+                                  className="form-select form-select-sm"
+                                  value={String(panel.rangeIdx ?? 0)}
+                                  onChange={(e)=>{
+                                    const idx = Number(e.target.value);
+                                    setPanel(m => ({ ...m, rangeIdx: isNaN(idx) ? 0 : idx }));
+                                  }}
+                                >
+                                  {dayObj.ranges.map((r, i) => (
+                                    <option key={i} value={i}>
+                                      {r.from} – {r.to}
+                                    </option>
+                                  ))}
+                                </select>
+                              </div>
+                            )}
+
+                            <div className="d-flex gap-2">
+                              <button className="btn btn-primary btn-sm" onClick={submitInvite}>
+                                Confirm
+                              </button>
+                              <button className="btn btn-outline-secondary btn-sm" onClick={cancelInvite}>
+                                Cancel
+                              </button>
+                            </div>
+                          </>
+                        )}
+                      </div>
+                    )}
+
+                    <div className="mt-auto d-grid">
+                      <button
+                      className="btn btn-accent-outline"
+                      onClick={()=>openInvite(
+                      p._id,
+                      `${p.name?.first||""} ${p.name?.last||""}`.trim(),
+                      p                                  
+                      )}
+                      >
+                     {isOpen ? "Change day/time" : "Invite"}
+                     </button>
+
+                    </div>
+                  </div>
+                </div>
+              </div>
+            );
+          })}
+          {!players.length && <div className="text-muted">No players found.</div>}
+        </div>
+      )}
+    </div>
+  );
+};
+*/ 

@@ -4,6 +4,7 @@ import {  useEffect, useMemo, useState } from "react";
 import { Link } from "react-router-dom";
 import { getMyAvailability, updateMyAvailability, type Availability, } from "../services/availabilityService";
 import { toast } from "react-toastify";
+import "./css/PlayerCard.css";
 
 type UserLike = {
   id: string;
@@ -92,6 +93,7 @@ const PlayerCard: FunctionComponent<PlayerCardProps> = () => {
         <div className="card-header">
           <strong>Player Card</strong>
         </div>
+        
         <div className="card-body">
           <div className="row gy-3">
             <div className="col-md-3 d-flex align-items-start">
@@ -100,6 +102,7 @@ const PlayerCard: FunctionComponent<PlayerCardProps> = () => {
                style={{ width: 120, height: 120, borderRadius: "50%", objectFit: "cover" }}
               />
            </div>
+
             <div className="col-md-6">
               <table className="table table-sm mb-0">
                 <tbody>

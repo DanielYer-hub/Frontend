@@ -1,0 +1,94 @@
+.player-card-col {
+  display: flex;
+}
+.players-filters-wrapper {
+  transition: max-height 0.2s ease, opacity 0.2s ease,
+    margin-bottom 0.2s ease, border-color 0.2s ease;
+}
+.players-filters-grid {
+  row-gap: 12px;
+}
+.player-card {
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+}
+.player-card .card-body {
+  display: flex;
+  flex-direction: column;
+}
+.player-card-main {
+  display: flex;
+  gap: 50px;
+}
+.player-card-left {
+  width: 120px;
+  max-width: 40%;
+}
+.player-card-photo {
+  border-radius: 16px;
+  overflow: hidden;
+  background: #222;
+}
+.player-card-photo img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+}
+.player-card-name {
+  font-weight: 700;
+  margin-top: 8px;
+}
+.player-card-location {
+  color: #bbbbbb;
+}
+.player-card-right {
+  flex: 1;
+  min-width: 0;
+}
+.player-card-setting {
+  font-weight: 800;
+  letter-spacing: 0.08em;
+  font-size: 0.8rem;
+  margin-bottom: 4px;
+  color: #ffd000;
+  text-transform: uppercase;
+}
+.player-card-bio {
+  margin-bottom: 6px;
+}
+.player-card-meta > div {
+  margin-bottom: 2px;
+}
+.player-card-invite-panel {
+  background: #111;
+}
+@media (max-width: 767.98px) {
+  .players-filters-wrapper.players-filters-closed {
+    max-height: 0;
+    opacity: 0;
+    overflow: hidden;
+    margin-bottom: 0;
+    border-color: transparent;
+  }
+  .players-filters-wrapper.players-filters-open {
+    max-height: 600px; 
+    opacity: 1;
+  }
+}
+@media (max-width: 576px) {
+   .player-card-left {
+    width: 100%;
+    align-items: center;
+    gap: 12px;
+    border-right: 1px solid rgba(255,255,255,0.15);
+  } 
+  .player-card-photo {
+    width: 96px;
+    flex-shrink: 0;
+  }
+  .player-card-main {
+  gap: 20px;
+}
+}

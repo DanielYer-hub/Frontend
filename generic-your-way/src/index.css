@@ -57,3 +57,42 @@ a:hover, .nav-link.active { color: var(--accent); }
   box-shadow: none !important;
 }
 
+
+.bio-clamp {
+  align-items: center;        
+}
+
+.bio-text {
+  font-size: 0.9rem;
+  display: inline;
+}
+
+.bio-toggle-pill {
+  margin-left: 5px;
+  border-radius: 999px;
+  border: 1px solid rgba(255, 255, 255, 0.7);
+  background: transparent;
+  color: #f7f7f7;
+  font-size: 0.75rem;
+  line-height: 1;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  box-sizing: border-box;
+  transition: background 0.15s ease, box-shadow 0.15s ease, transform 0.1s ease;
+}
+.bio-toggle-dots {
+  letter-spacing: 2px;
+}
+.bio-toggle-pill:hover {
+  background: rgba(255, 255, 255, 0.08);
+  box-shadow: 0 0 6px rgba(0, 0, 0, 0.4);
+}
+.bio-toggle-pill:active {
+  transform: scale(0.96);
+}
+.bio-toggle-pill:focus-visible {
+  outline: 2px solid #ffd000;
+  outline-offset: 2px;
+}
