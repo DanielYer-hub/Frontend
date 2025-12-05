@@ -1,0 +1,150 @@
+.card-header{
+ margin: 0 15px;    
+}
+.player-card-layout {
+  display: flex;
+  gap: 24px;
+  align-items: stretch;
+}
+.player-card-left {
+  flex: 0 0 220px;
+  max-width: 220px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+  border-right: 1px solid rgba(255, 255, 255, 0.15);
+}
+.player-card-avatar {
+  width: 180px;
+  max-width: 100%;
+  aspect-ratio: 1 / 1;
+  border-radius: 24px;
+  object-fit: cover;
+  background: #111;
+}
+.player-card-edit-btn {
+  margin-top: 12px;
+  width: 100%;
+  max-width: 180px;
+}
+.player-card-right {
+  flex: 1 1 auto;
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+.player-card-about {
+  background: #111;
+  border-radius: 8px;
+  padding: 10px 12px;
+  border: 1px solid rgba(255, 255, 255, 0.15);
+  font-size: 0.9rem;
+}
+.player-card-about-text {
+  color: #e4e4e4;
+}
+.player-card-info {
+  background: #111;
+  border-radius: 10px;
+  border: 1px solid rgba(255, 255, 255, 0.15);
+  padding: 8px;
+}
+.player-card-about {
+  padding: 10px 14px;
+  margin-bottom: 12px;
+}
+.player-card-about-title {
+  font-weight: 600;
+  margin-bottom: 4px;
+}
+.player-card-about-text {
+  font-size: 0.95rem;
+}
+.pc-info-row {
+  display: flex;
+  padding: 6px 14px;
+  font-size: 0.95rem;
+}
+.pc-info-row:first-child {
+  border-top: none;
+}
+.pc-info-label {
+  width: 110px;
+  font-weight: 600;
+}
+.pc-info-value {
+  flex: 1;
+  
+}
+.pc-weekly-header {
+  display: flex;
+  align-items: center;
+  justify-content: flex-start;
+  gap: 16px;
+}
+.pc-busy-switch .form-check-input {
+  cursor: pointer;
+}
+/* @media (max-width: 768px) {
+  .player-card-left {
+    flex-direction: row;       
+    align-items: center;
+    justify-content: flex-start;
+    border-right: none;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.15);
+    padding-right: 0;
+    padding-bottom: 12px;
+    margin-bottom: 12px;
+  }
+
+  .player-card-avatar {
+    width: 120px;
+    height: 120px;
+  }
+
+  .player-card-right {
+    padding-left: 0;
+  }
+
+  .player-card-about {
+    margin-bottom: 10px;
+  }
+
+  .pc-info-label {
+    width: 90px;
+  }
+
+  .pc-weekly-header {
+    flex-wrap: wrap;         
+    gap: 8px 16px;
+  }
+} */
+/* 
+
+@media (max-width: 768px) {
+  .player-card-layout {
+    flex-direction: column;
+    gap: 16px;
+  }
+
+  .player-card-left {
+    align-items: flex-start;
+    max-width: 100%;
+    flex: 0 0 auto;
+  }
+
+  .player-card-avatar {
+    width: 130px;
+  }
+
+  .player-card-edit-btn {
+    max-width: 140px;
+  }
+
+  .player-card-divider {
+    width: 100%;
+    height: 1px;
+    background: rgba(255, 255, 255, 0.15);
+  }
+} */

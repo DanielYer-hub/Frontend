@@ -88,67 +88,83 @@ const PlayerCard: FunctionComponent<PlayerCardProps> = () => {
   if (!u) return <div className="container py-4">Not authenticated</div>;
 
   return (
-    <div className="container py-4">
-      <div className="card shadow-sm">
-        <div className="card-header">
-          <strong>Player Card</strong>
-        </div>
-        
-        <div className="card-body">
-          <div className="row gy-3">
-            <div className="col-md-3 d-flex align-items-start">
-             <img
-               src={u.image?.url || AVATAR_FALLBACK}
-               style={{ width: 120, height: 120, borderRadius: "50%", objectFit: "cover" }}
-              />
-           </div>
+<div className="container py-4">
+  <div className="card shadow-sm">
+    <div className="card-header">
+      <strong>Player Card</strong>
+    </div>
 
-            <div className="col-md-6">
-              <table className="table table-sm mb-0">
-                <tbody>
-                  <tr>
-                    <th style={{ width: 160 }}>Name:</th>
-                    <td>
-                      {u.name?.first} {u.name?.last}
-                    </td>
-                  </tr>
-                  <tr>
-                    <th>Email:</th>
-                    <td>{u.email || "-"}</td>
-                  </tr>
-                  <tr>
-                    <th>Region:</th>
-                    <td>{u.region || "-"}</td>
-                  </tr>
-                  <tr>
-                    <th>Country:</th>
-                    <td>{u.address?.country || "-"}</td>
-                  </tr>
-                  <tr>
-                    <th>Settings:</th>
-                    <td>{u.settings || "-"}</td>
-                  </tr>
-                </tbody>
-              </table>
-              {u.bio && (
-               <div className="mb-3">
-                <div className="fw-bold">About me</div>
-               <div>{u.bio}</div>
-              </div>
-              )}
-             <Link to="/profile-edit" className="btn btn-outline-light">Edit Profile</Link>
+    <div className="card-body">
+      <div className="row gy-3 player-card-layout">
+        <div className="col-md-3 player-card-left">
+          <img
+            src={u.image?.url || AVATAR_FALLBACK}
+            alt="profile"
+            className="player-card-avatar"
+          />
+          <Link
+            to="/profile-edit"
+            className="btn btn-accent-outline player-card-edit-btn"
+          >
+            Edit Profile
+          </Link>
+        </div>
+
+        <div className="col-md-9 player-card-right">
+          <div className="player-card-about box">
+            <div className="player-card-about-title">About me:</div>
+            <div className="player-card-about-text">
+              {u.bio && u.bio.trim() ? u.bio : "No description yet."}
             </div>
           </div>
 
-          <hr className="my-4" />
-          <h5 className="mb-3">Weekly availability:</h5>
-          <div className="form-check form-switch mb-3">
-            <input className="form-check-input" type="checkbox"
+          <div className="player-card-info box">
+            <div className="pc-info-row">
+              <div className="pc-info-label">Name:</div>
+              <div className="pc-info-value">
+                {u.name?.first} {u.name?.last}
+              </div>
+            </div>
+
+            <div className="pc-info-row">
+              <div className="pc-info-label">Region:</div>
+              <div className="pc-info-value">{u.region || "-"}</div>
+            </div>
+
+            <div className="pc-info-row">
+              <div className="pc-info-label">Country:</div>
+              <div className="pc-info-value">{u.address?.country || "-"}</div>
+            </div>
+
+            <div className="pc-info-row">
+              <div className="pc-info-label">City:</div>
+              <div className="pc-info-value">{u.address?.city || "-"}</div>
+            </div>
+
+            <div className="pc-info-row pc-info-row-last">
+              <div className="pc-info-label">Settings:</div>
+              <div className="pc-info-value">
+                {u.settings?.length ? u.settings.join(", ") : "-"}
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      
+    
+    
+         <hr className="mt-4" />
+          <div className="pc-weekly-header mb-2">
+           <h5 className="mb-0">Weekly availability:</h5>
+            <div className="form-check form-switch mb-0 pc-busy-switch">
+             <input className="form-check-input" type="checkbox"
               checked={av.busyAllWeek}
               onChange={e=>setAv({ ...av, busyAllWeek: e.target.checked })} />
-            <label className="form-check-label">Busy all week</label>
+              <label className="form-check-label" htmlFor="busyAllWeek">
+             Busy all week
+            </label>
+           </div>
           </div>
-
           {!av.busyAllWeek && (
             <div className="row g-3">
               {DAYS.map((label, day)=> {

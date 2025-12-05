@@ -36,7 +36,7 @@ const Updates: FunctionComponent<UpdatesProps> = () => {
           </div>
 
           <div className="version">
-            <p className="v-month">Version 1.1.1 - December 2025</p>
+            <p className="v-month">Version 1.1.1 - Februar 2026</p>
             <hr className="v-hr"/>
             <div className="v-body">
               <ul>

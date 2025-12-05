@@ -1128,3 +1128,80 @@ module.exports = User;
   );
 };
 */ 
+
+/**
+ *<div className="container py-4">
+      <div className="card shadow-sm">
+        <div className="card-header">
+          <strong>Player Card</strong>
+        </div>
+        
+    <div className="card-body">
+     <div className="player-card-layout">
+    
+    <div className="player-card-left">
+      <img
+        src={u.image?.url || AVATAR_FALLBACK}
+        alt="Profile"
+        className="player-card-avatar"
+      />
+
+      <Link
+        to="/profile-edit"
+        className="btn btn-accent-outline player-card-edit-btn"
+      >
+        Edit Profile
+      </Link>
+    </div>
+
+    <div className="player-card-divider" />
+    <div className="player-card-right">
+      <div className="player-card-about">
+        <div className="player-card-about-title">About me</div>
+        <div className="player-card-about-text">
+          {u.bio && u.bio.trim() ? u.bio : "No bio yet."}
+        </div>
+      </div>
+
+      <table className="table table-sm mb-0 table-dark player-card-table">
+        <tbody>
+          <tr>
+            <th style={{ width: 140 }}>Name:</th>
+            <td>
+              {u.name?.first} {u.name?.last}
+            </td>
+          </tr>
+           <div className="pc-info-row">
+              <div className="pc-info-label">Email:</div>
+              <div className="pc-info-value">{u.email || "-"}</div>
+            </div> 
+          <tr>
+            <th>Region:</th>
+            <td>{u.region || "-"}</td>
+          </tr>
+          <tr>
+            <th>Country:</th>
+            <td>{u.address?.country || "-"}</td>
+          </tr>
+          <tr>
+            <th>City:</th>
+            <td>{u.address?.city || "-"}</td>
+          </tr>
+          <tr>
+            <th>Settings:</th>
+            <td>{u.settings?.length ? u.settings.join(", ") : "-"}</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+
+          <hr className="my-4" />
+          <h5 className="mb-3">Weekly availability:</h5>
+          <div className="form-check form-switch mb-3">
+            <input className="form-check-input" type="checkbox"
+              checked={av.busyAllWeek}
+              onChange={e=>setAv({ ...av, busyAllWeek: e.target.checked })} />
+            <label className="form-check-label">Busy all week</label>
+          </div>
+ */
