@@ -95,64 +95,84 @@ const PlayerCard: FunctionComponent<PlayerCardProps> = () => {
     </div>
 
     <div className="card-body">
-      <div className="row gy-3 player-card-layout">
-        <div className="col-md-3 player-card-left">
+      <div className="row gy-3 pc-layout">
+        <div className="col-md-3 pc-left">
           <img
             src={u.image?.url || AVATAR_FALLBACK}
             alt="profile"
-            className="player-card-avatar"
+            className="pc-avatar"
           />
           <Link
             to="/profile-edit"
-            className="btn btn-accent-outline player-card-edit-btn"
+            className="btn btn-accent-outline pc-edit-btn"
           >
             Edit Profile
           </Link>
         </div>
 
-        <div className="col-md-9 player-card-right">
-          <div className="player-card-about box">
-            <div className="player-card-about-title">About me:</div>
-            <div className="player-card-about-text">
+        <div className="col-md-9 pc-right">
+          <div className="pc-about box">
+            <div className="pc-about-title">About me:</div>
+            <div className="pc-about-text">
               {u.bio && u.bio.trim() ? u.bio : "No description yet."}
             </div>
           </div>
 
-          <div className="player-card-info box">
-            <div className="pc-info-row">
-              <div className="pc-info-label">Name:</div>
-              <div className="pc-info-value">
-                {u.name?.first} {u.name?.last}
-              </div>
-            </div>
+  <div className="pc-info box">
+  <div className="pc-info-row">
+    <div className="pc-info-label">Name:</div>
+    <div className="pc-info-value">
+      <span className="pc-pill">
+        {u.name?.first} {u.name?.last}
+      </span>
+    </div>
+  </div>
 
-            <div className="pc-info-row">
-              <div className="pc-info-label">Region:</div>
-              <div className="pc-info-value">{u.region || "-"}</div>
-            </div>
+  <div className="pc-info-row">
+    <div className="pc-info-label">Region:</div>
+    <div className="pc-info-value">
+      <span className="pc-pill">
+        {u.region || "-"}
+      </span>
+    </div>
+  </div>
 
-            <div className="pc-info-row">
-              <div className="pc-info-label">Country:</div>
-              <div className="pc-info-value">{u.address?.country || "-"}</div>
-            </div>
+  <div className="pc-info-row">
+    <div className="pc-info-label">Country:</div>
+    <div className="pc-info-value">
+      <span className="pc-pill">
+        {u.address?.country || "-"}
+      </span>
+    </div>
+  </div>
 
-            <div className="pc-info-row">
-              <div className="pc-info-label">City:</div>
-              <div className="pc-info-value">{u.address?.city || "-"}</div>
-            </div>
+  <div className="pc-info-row">
+    <div className="pc-info-label">City:</div>
+    <div className="pc-info-value">
+      <span className="pc-pill">
+        {u.address?.city || "-"}
+      </span>
+    </div>
+  </div>
 
-            <div className="pc-info-row pc-info-row-last">
-              <div className="pc-info-label">Settings:</div>
-              <div className="pc-info-value">
-                {u.settings?.length ? u.settings.join(", ") : "-"}
-              </div>
-            </div>
-          </div>
-        </div>
-      </div>
-      
-    
-    
+  <div className="pc-info-row pc-info-row-last">
+    <div className="pc-info-label">Settings:</div>
+    <div className="pc-info-value pc-info-settings-list">
+      {u.settings?.length ? (
+        u.settings.map((s: string) => (
+          <span key={s} className="pc-pill pc-pill-setting">
+            {s}
+          </span>
+        ))
+      ) : (
+        <span className="pc-pill">-</span>
+      )}
+    </div>
+  </div>
+</div>
+</div>
+</div>
+
          <hr className="mt-4" />
           <div className="pc-weekly-header mb-2">
            <h5 className="mb-0">Weekly availability:</h5>
@@ -200,7 +220,7 @@ const PlayerCard: FunctionComponent<PlayerCardProps> = () => {
             </div>
           )}
 
-          <div className="mt-3">
+          <div className="av-time mt-3">
             <button className="btn btn-success" onClick={saveAvailability} disabled={loadingAv}>
               Save availability
             </button>

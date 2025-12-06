@@ -1,12 +1,12 @@
 .card-header{
  margin: 0 15px;    
 }
-.player-card-layout {
+.pc-layout {
   display: flex;
   gap: 24px;
   align-items: stretch;
 }
-.player-card-left {
+.pc-left {
   flex: 0 0 220px;
   max-width: 220px;
   display: flex;
@@ -15,7 +15,7 @@
   text-align: center;
   border-right: 1px solid rgba(255, 255, 255, 0.15);
 }
-.player-card-avatar {
+.pc-avatar {
   width: 180px;
   max-width: 100%;
   aspect-ratio: 1 / 1;
@@ -23,38 +23,38 @@
   object-fit: cover;
   background: #111;
 }
-.player-card-edit-btn {
+.pc-edit-btn {
   margin-top: 12px;
   width: 100%;
   max-width: 180px;
 }
-.player-card-right {
+.pc-right {
   flex: 1 1 auto;
   display: flex;
   flex-direction: column;
   gap: 16px;
 }
-.player-card-about {
+.pc-about {
   background: #111;
   border-radius: 8px;
   padding: 10px 12px;
   border: 1px solid rgba(255, 255, 255, 0.15);
   font-size: 0.9rem;
 }
-.player-card-about-text {
+.pc-about-text {
   color: #e4e4e4;
 }
-.player-card-info {
+.pc-info {
   background: #111;
   border-radius: 10px;
   border: 1px solid rgba(255, 255, 255, 0.15);
   padding: 8px;
 }
-.player-card-about {
+.pc-about {
   padding: 10px 14px;
   margin-bottom: 12px;
 }
-.player-card-about-title {
+.pc-about-title {
   font-weight: 600;
   margin-bottom: 4px;
 }
@@ -75,7 +75,26 @@
 }
 .pc-info-value {
   flex: 1;
-  
+}
+.pc-pill {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  padding: 3px 10px;
+  border-radius: 999px;
+  border: 1px solid rgba(255, 255, 255, 0.35);
+  background: #1b1b1b;
+  font-size: 0.9rem;
+  color: #f5f5f5;
+  white-space: nowrap;
+}
+.pc-info-settings-list {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr)); 
+  gap: 6px 8px;
+}
+.pc-pill-setting {
+  background: #222;
 }
 .pc-weekly-header {
   display: flex;
@@ -86,65 +105,32 @@
 .pc-busy-switch .form-check-input {
   cursor: pointer;
 }
-/* @media (max-width: 768px) {
-  .player-card-left {
-    flex-direction: row;       
-    align-items: center;
-    justify-content: flex-start;
-    border-right: none;
-    border-bottom: 1px solid rgba(255, 255, 255, 0.15);
-    padding-right: 0;
-    padding-bottom: 12px;
-    margin-bottom: 12px;
-  }
 
-  .player-card-avatar {
-    width: 120px;
-    height: 120px;
-  }
+@media (max-width: 768px) {
+  
 
-  .player-card-right {
-    padding-left: 0;
-  }
-
-  .player-card-about {
-    margin-bottom: 10px;
+  
+  .pc-info {
+    margin-top: 0;
   }
 
   .pc-info-label {
     width: 90px;
   }
-
-  .pc-weekly-header {
-    flex-wrap: wrap;         
-    gap: 8px 16px;
-  }
-} */
-/* 
-
-@media (max-width: 768px) {
-  .player-card-layout {
-    flex-direction: column;
-    gap: 16px;
+  .pc-info-settings-list {
+    grid-template-columns: repeat(2, minmax(0, 1fr)); 
   }
 
-  .player-card-left {
-    align-items: flex-start;
-    max-width: 100%;
-    flex: 0 0 auto;
-  }
-
-  .player-card-avatar {
-    width: 130px;
-  }
-
-  .player-card-edit-btn {
-    max-width: 140px;
-  }
-
-  .player-card-divider {
+  .av-time button{
     width: 100%;
-    height: 1px;
-    background: rgba(255, 255, 255, 0.15);
   }
-} */
+}
+
+
+@media (max-width: 480px) {
+  .pc-info-settings-list {
+    grid-template-columns: repeat(1, minmax(0, 1fr)); 
+  }
+}
+
+

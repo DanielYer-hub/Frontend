@@ -397,7 +397,7 @@ const Players: React.FC = () => {
                       </div>
                     </div>
 
-                   <div className="mt-auto d-grid">
+                   <div className="mt-3 d-grid">
                       <button
                         className="btn btn-accent-outline w-100"
                         onClick={() =>

@@ -29,6 +29,7 @@
   border-radius: 16px;
   overflow: hidden;
   background: #222;
+  
 }
 .player-card-photo img {
   width: 100%;
@@ -39,6 +40,7 @@
 .player-card-name {
   font-weight: 700;
   margin-top: 8px;
+  text-align: center;
 }
 .player-card-location {
   color: #bbbbbb;
