@@ -78,6 +78,12 @@
     max-height: 600px; 
     opacity: 1;
   }
+  .player-card-name {
+    text-align: start;
+    font-size: 0.85rem;
+    margin-left: 5px;
+    
+  }
 }
 @media (max-width: 576px) {
    .player-card-left {

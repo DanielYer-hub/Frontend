@@ -1,19 +1,31 @@
 .card-header{
- margin: 0 15px;    
+  margin: 0 15px;    
 }
 .pc-layout {
-  display: flex;
-  gap: 24px;
-  align-items: stretch;
+  display: grid;
+  grid-template-columns: 220px 1fr;
+  grid-template-rows: auto auto;
+  grid-template-areas:
+    "avatar about"
+    "avatar info"
+    "edit info"
+    "edit   info";
+  gap: 16px 24px;
 }
-.pc-left {
-  flex: 0 0 220px;
-  max-width: 220px;
+.pc-avatar-area {
+  grid-area: avatar;
   display: flex;
   flex-direction: column;
   align-items: center;
   text-align: center;
   border-right: 1px solid rgba(255, 255, 255, 0.15);
+  padding-right: 16px;
+}
+.pc-about-area {
+  grid-area: about;
+}
+.pc-info-area {
+  grid-area: info;
 }
 .pc-avatar {
   width: 180px;
@@ -23,51 +35,38 @@
   object-fit: cover;
   background: #111;
 }
+.pc-edit-area {
+  border-right: 1px solid rgba(255, 255, 255, 0.15);
+}
 .pc-edit-btn {
-  margin-top: 12px;
+  margin: 5px 12px;
   width: 100%;
   max-width: 180px;
 }
-.pc-right {
-  flex: 1 1 auto;
-  display: flex;
-  flex-direction: column;
-  gap: 16px;
-}
-.pc-about {
+.pc-about-area {
   background: #111;
   border-radius: 8px;
-  padding: 10px 12px;
+  padding: 10px 14px;
   border: 1px solid rgba(255, 255, 255, 0.15);
   font-size: 0.9rem;
-}
-.pc-about-text {
-  color: #e4e4e4;
-}
-.pc-info {
-  background: #111;
-  border-radius: 10px;
-  border: 1px solid rgba(255, 255, 255, 0.15);
-  padding: 8px;
-}
-.pc-about {
-  padding: 10px 14px;
-  margin-bottom: 12px;
 }
 .pc-about-title {
   font-weight: 600;
   margin-bottom: 4px;
 }
-.player-card-about-text {
-  font-size: 0.95rem;
+.pc-about-text {
+  color: #e4e4e4;
+}
+.pc-info-area {
+  background: #111;
+  border-radius: 10px;
+  border: 1px solid rgba(255, 255, 255, 0.15);
+  padding: 8px;
 }
 .pc-info-row {
   display: flex;
   padding: 6px 14px;
   font-size: 0.95rem;
-}
-.pc-info-row:first-child {
-  border-top: none;
 }
 .pc-info-label {
   width: 110px;
@@ -90,7 +89,7 @@
 }
 .pc-info-settings-list {
   display: grid;
-  grid-template-columns: repeat(3, minmax(0, 1fr)); 
+  grid-template-columns: repeat(3, minmax(0, 1fr));
   gap: 6px 8px;
 }
 .pc-pill-setting {
@@ -105,32 +104,99 @@
 .pc-busy-switch .form-check-input {
   cursor: pointer;
 }
-
-@media (max-width: 768px) {
-  
-
-  
-  .pc-info {
-    margin-top: 0;
+@media (max-width: 1270px){
+   .pc-info-settings-list {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
   }
-
+}
+@media (max-width: 1150px){
+   .pc-info-settings-list {
+    grid-template-columns: repeat(1, minmax(0, 1fr));
+  }
+}
+@media (max-width: 900px) {
+  .pc-layout {
+    grid-template-columns: 1fr 1fr;
+    grid-template-rows: auto auto auto;
+    grid-template-areas:
+      "avatar about"
+      "edit about"
+      "info   info";
+    gap: 12px 12px;
+  }
+  .pc-avatar-area {
+    align-items: flex-start;
+    text-align: left;
+    border-right: none;
+    padding-right: 0;
+  }
+  .pc-avatar {
+    width: 110px;
+    border-radius: 18px;
+  }
+  .pc-edit-btn {
+    margin-top: 8px;
+    width: auto;
+  }
+  .pc-about-area {
+    font-size: 0.85rem;
+  }
   .pc-info-label {
     width: 90px;
   }
   .pc-info-settings-list {
-    grid-template-columns: repeat(2, minmax(0, 1fr)); 
+    grid-template-columns: repeat(2, minmax(0, 1fr));
   }
-
-  .av-time button{
+  .av-time button {
     width: 100%;
   }
 }
-
-
-@media (max-width: 480px) {
+@media (max-width: 768px) {
+  .pc-layout {
+    display: grid;
+    grid-template-columns: 120px 1fr;
+    grid-template-rows: auto auto auto;
+    grid-template-areas:
+      "avatar edit"
+      "avatar about"
+      "info info";
+    column-gap: 16px;
+    row-gap: 10px;
+    align-items: start;
+  }
+  .pc-avatar-area {
+    grid-area: avatar;
+    border-right: none;
+    padding-right: 0;
+  }
+  .pc-edit-btn {
+    grid-area: edit;
+    justify-self: start;
+    align-self: start;
+    width: auto;
+    margin-top: 0;
+  }
+  .pc-about-area {
+    grid-area: about;
+    margin-top: 0;
+  }
+  .pc-info-area {
+    grid-area: info;
+    margin-top: 10px;
+  }
+  .pc-avatar {
+    width: 110px;
+    border-radius: 18px;
+  }
   .pc-info-settings-list {
-    grid-template-columns: repeat(1, minmax(0, 1fr)); 
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+  .av-time button {
+    width: 100%;
   }
 }
-
-
+@media (max-width: 480px) {
+  .pc-info-settings-list {
+    grid-template-columns: repeat(1, minmax(0, 1fr));
+  }
+}

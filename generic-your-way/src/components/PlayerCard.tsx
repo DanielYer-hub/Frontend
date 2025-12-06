@@ -94,84 +94,86 @@ const PlayerCard: FunctionComponent<PlayerCardProps> = () => {
       <strong>Player Card</strong>
     </div>
 
-    <div className="card-body">
-      <div className="row gy-3 pc-layout">
-        <div className="col-md-3 pc-left">
-          <img
-            src={u.image?.url || AVATAR_FALLBACK}
-            alt="profile"
-            className="pc-avatar"
-          />
-          <Link
-            to="/profile-edit"
-            className="btn btn-accent-outline pc-edit-btn"
-          >
-            Edit Profile
-          </Link>
+<div className="card-body">
+  <div className="pc-layout">
+    <div className="pc-avatar-area">
+      <img
+        src={u.image?.url || AVATAR_FALLBACK}
+        alt="profile"
+        className="pc-avatar"
+      />
+    </div>
+
+    <div className="pc-edit-area">
+      <Link
+        to="/profile-edit"
+        className="btn btn-accent-outline pc-edit-btn"
+      > Edit Profile </Link>
+    </div>
+
+    <div className="pc-about-area">
+      <div className="pc-about box">
+        <div className="pc-about-title">About me:</div>
+        <div className="pc-about-text">
+          {u.bio && u.bio.trim() ? u.bio : "No description yet."}
+        </div>
+      </div>
+    </div>
+
+    <div className="pc-info-area">
+      <div className="pc-info box">
+        <div className="pc-info-row">
+          <div className="pc-info-label">Name:</div>
+          <div className="pc-info-value">
+            <span className="pc-pill">
+              {u.name?.first} {u.name?.last}
+            </span>
+          </div>
         </div>
 
-        <div className="col-md-9 pc-right">
-          <div className="pc-about box">
-            <div className="pc-about-title">About me:</div>
-            <div className="pc-about-text">
-              {u.bio && u.bio.trim() ? u.bio : "No description yet."}
-            </div>
+        <div className="pc-info-row">
+          <div className="pc-info-label">Region:</div>
+          <div className="pc-info-value">
+            <span className="pc-pill">{u.region || "-"}</span>
           </div>
+        </div>
 
-  <div className="pc-info box">
-  <div className="pc-info-row">
-    <div className="pc-info-label">Name:</div>
-    <div className="pc-info-value">
-      <span className="pc-pill">
-        {u.name?.first} {u.name?.last}
-      </span>
+        <div className="pc-info-row">
+          <div className="pc-info-label">Country:</div>
+          <div className="pc-info-value">
+            <span className="pc-pill">{u.address?.country || "-"}</span>
+          </div>
+        </div>
+
+        <div className="pc-info-row">
+          <div className="pc-info-label">City:</div>
+          <div className="pc-info-value">
+            <span className="pc-pill">{u.address?.city || "-"}</span>
+          </div>
+        </div>
+
+        <div className="pc-info-row pc-info-row-last">
+          <div className="pc-info-label">Settings:</div>
+          <div className="pc-info-value pc-info-settings-list">
+            {u.settings?.length ? (
+              u.settings.map((s: string) => (
+                <span key={s} className="pc-pill pc-pill-setting">
+                  {s}
+                </span>
+              ))
+            ) : (
+              <span className="pc-pill">-</span>
+            )}
+          </div>
+        </div>
+      </div>
     </div>
   </div>
 
-  <div className="pc-info-row">
-    <div className="pc-info-label">Region:</div>
-    <div className="pc-info-value">
-      <span className="pc-pill">
-        {u.region || "-"}
-      </span>
-    </div>
-  </div>
 
-  <div className="pc-info-row">
-    <div className="pc-info-label">Country:</div>
-    <div className="pc-info-value">
-      <span className="pc-pill">
-        {u.address?.country || "-"}
-      </span>
-    </div>
-  </div>
 
-  <div className="pc-info-row">
-    <div className="pc-info-label">City:</div>
-    <div className="pc-info-value">
-      <span className="pc-pill">
-        {u.address?.city || "-"}
-      </span>
-    </div>
-  </div>
 
-  <div className="pc-info-row pc-info-row-last">
-    <div className="pc-info-label">Settings:</div>
-    <div className="pc-info-value pc-info-settings-list">
-      {u.settings?.length ? (
-        u.settings.map((s: string) => (
-          <span key={s} className="pc-pill pc-pill-setting">
-            {s}
-          </span>
-        ))
-      ) : (
-        <span className="pc-pill">-</span>
-      )}
-    </div>
-  </div>
-</div>
-</div>
-</div>
+
 
          <hr className="mt-4" />
           <div className="pc-weekly-header mb-2">

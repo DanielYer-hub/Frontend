@@ -1204,4 +1204,141 @@ module.exports = User;
               onChange={e=>setAv({ ...av, busyAllWeek: e.target.checked })} />
             <label className="form-check-label">Busy all week</label>
           </div>
+
+
+           .card-header{
+ margin: 0 15px;    
+}
+.pc-layout {
+  display: flex;
+  gap: 24px;
+  align-items: stretch;
+}
+.pc-left {
+  flex: 0 0 220px;
+  max-width: 220px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+  border-right: 1px solid rgba(255, 255, 255, 0.15);
+}
+.pc-avatar {
+  width: 180px;
+  max-width: 100%;
+  aspect-ratio: 1 / 1;
+  border-radius: 24px;
+  object-fit: cover;
+  background: #111;
+}
+.pc-edit-btn {
+  margin-top: 12px;
+  width: 100%;
+  max-width: 180px;
+}
+.pc-right {
+  flex: 1 1 auto;
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+.pc-about {
+  background: #111;
+  border-radius: 8px;
+  padding: 10px 12px;
+  border: 1px solid rgba(255, 255, 255, 0.15);
+  font-size: 0.9rem;
+}
+.pc-about-text {
+  color: #e4e4e4;
+}
+.pc-info {
+  background: #111;
+  border-radius: 10px;
+  border: 1px solid rgba(255, 255, 255, 0.15);
+  padding: 8px;
+}
+.pc-about {
+  padding: 10px 14px;
+  margin-bottom: 12px;
+}
+.pc-about-title {
+  font-weight: 600;
+  margin-bottom: 4px;
+}
+.player-card-about-text {
+  font-size: 0.95rem;
+}
+.pc-info-row {
+  display: flex;
+  padding: 6px 14px;
+  font-size: 0.95rem;
+}
+.pc-info-row:first-child {
+  border-top: none;
+}
+.pc-info-label {
+  width: 110px;
+  font-weight: 600;
+}
+.pc-info-value {
+  flex: 1;
+}
+.pc-pill {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  padding: 3px 10px;
+  border-radius: 999px;
+  border: 1px solid rgba(255, 255, 255, 0.35);
+  background: #1b1b1b;
+  font-size: 0.9rem;
+  color: #f5f5f5;
+  white-space: nowrap;
+}
+.pc-info-settings-list {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr)); 
+  gap: 6px 8px;
+}
+.pc-pill-setting {
+  background: #222;
+}
+.pc-weekly-header {
+  display: flex;
+  align-items: center;
+  justify-content: flex-start;
+  gap: 16px;
+}
+.pc-busy-switch .form-check-input {
+  cursor: pointer;
+}
+
+@media (max-width: 768px) {
+  
+
+  
+  .pc-info {
+    margin-top: 0;
+  }
+
+  .pc-info-label {
+    width: 90px;
+  }
+  .pc-info-settings-list {
+    grid-template-columns: repeat(2, minmax(0, 1fr)); 
+  }
+
+  .av-time button{
+    width: 100%;
+  }
+}
+
+
+@media (max-width: 480px) {
+  .pc-info-settings-list {
+    grid-template-columns: repeat(1, minmax(0, 1fr)); 
+  }
+} 
+
  */
