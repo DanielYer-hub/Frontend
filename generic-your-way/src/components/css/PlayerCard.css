@@ -18,7 +18,6 @@
   flex-direction: column;
   align-items: center;
   text-align: center;
-  border-right: 1px solid rgba(255, 255, 255, 0.15);
   padding-right: 16px;
 }
 .pc-about-area {
@@ -34,9 +33,6 @@
   border-radius: 24px;
   object-fit: cover;
   background: #111;
-}
-.pc-edit-area {
-  border-right: 1px solid rgba(255, 255, 255, 0.15);
 }
 .pc-edit-btn {
   margin: 5px 12px;
@@ -114,20 +110,19 @@
     grid-template-columns: repeat(1, minmax(0, 1fr));
   }
 }
-@media (max-width: 900px) {
+@media (max-width: 900px){
   .pc-layout {
     grid-template-columns: 1fr 1fr;
     grid-template-rows: auto auto auto;
     grid-template-areas:
+      "avatar edit"
       "avatar about"
-      "edit about"
-      "info   info";
+      "info info";
     gap: 12px 12px;
   }
   .pc-avatar-area {
     align-items: flex-start;
     text-align: left;
-    border-right: none;
     padding-right: 0;
   }
   .pc-avatar {
