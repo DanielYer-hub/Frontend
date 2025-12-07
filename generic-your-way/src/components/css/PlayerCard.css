@@ -147,13 +147,17 @@
   }
 }
 @media (max-width: 768px) {
+  .card-header{
+  margin: 0 10px;    
+   }
   .pc-layout {
     display: grid;
     grid-template-columns: 120px 1fr;
     grid-template-rows: auto auto auto;
     grid-template-areas:
-      "avatar edit"
+      /* "avatar edit" */
       "avatar about"
+      /* "edit none" */
       "info info";
     column-gap: 16px;
     row-gap: 10px;
@@ -163,17 +167,23 @@
     grid-area: avatar;
     border-right: none;
     padding-right: 0;
+
   }
   .pc-edit-btn {
     grid-area: edit;
     justify-self: start;
     align-self: start;
     width: auto;
-    margin-top: 0;
+    margin: 0;
   }
   .pc-about-area {
     grid-area: about;
     margin-top: 0;
+    height: 100%;
+  }
+  .pc-about-text {
+  color: #e4e4e4;
+  margin-top: 10px;
   }
   .pc-info-area {
     grid-area: info;
@@ -186,6 +196,7 @@
   .pc-info-settings-list {
     grid-template-columns: repeat(2, minmax(0, 1fr));
   }
+  
   .av-time button {
     width: 100%;
   }
@@ -194,4 +205,13 @@
   .pc-info-settings-list {
     grid-template-columns: repeat(1, minmax(0, 1fr));
   }
+}
+@media (max-width: 390px) {
+.pc-weekly-header h5{
+  font-size: 1rem;
+  gap: 16px;
+}
+.pc-busy-switch .form-check-input {
+  cursor: pointer;
+}
 }

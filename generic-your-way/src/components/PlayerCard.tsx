@@ -170,11 +170,6 @@ const PlayerCard: FunctionComponent<PlayerCardProps> = () => {
     </div>
   </div>
 
-
-
-
-
-
          <hr className="mt-4" />
           <div className="pc-weekly-header mb-2">
            <h5 className="mb-0">Weekly availability:</h5>
