@@ -115,8 +115,8 @@
     grid-template-columns: 1fr 1fr;
     grid-template-rows: auto auto auto;
     grid-template-areas:
-      "avatar edit"
       "avatar about"
+      "edit none"
       "info info";
     gap: 12px 12px;
   }
@@ -130,11 +130,12 @@
     border-radius: 18px;
   }
   .pc-edit-btn {
-    margin-top: 8px;
-    width: auto;
+    margin: 8px 0 0 0;
+    width: 110px;
   }
   .pc-about-area {
     font-size: 0.85rem;
+    
   }
   .pc-info-label {
     width: 90px;
