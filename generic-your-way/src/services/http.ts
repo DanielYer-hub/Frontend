@@ -1,13 +1,18 @@
+
 import axios from "axios";
 
+const API_ROOT =
+  import.meta.env.VITE_API_ROOT || "http://localhost:8181/api";
+
 export const api = axios.create({
-  baseURL: import.meta.env.VITE_API_ROOT ,
+  baseURL: API_ROOT,
 });
+
 
 export function setToken(token: string | null) {
   if (token) {
     localStorage.setItem("token", token);
-    api.defaults.headers.common["Authorization"] = `Bearer ${token}`; 
+    api.defaults.headers.common["Authorization"] = `Bearer ${token}`;
     delete api.defaults.headers.common["x-auth-token"];
   } else {
     localStorage.removeItem("token");
@@ -21,8 +26,8 @@ if (saved) {
 }
 
 api.interceptors.response.use(
-  res => res,
-  err => {
+  (res) => res,
+  (err) => {
     if (err.response?.status === 401) {
       setToken(null);
     }
