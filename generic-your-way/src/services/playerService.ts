@@ -1,7 +1,7 @@
 import { api } from "./http";
 
 const ROOT = import.meta.env.VITE_API_ROOT;
-const ENDPOINT = "/api/users"; 
+const ENDPOINT = "/users"; 
 
 export type PlayerDTO = {
   _id: string;
@@ -26,13 +26,19 @@ export type PublicPlayer = {
   bio?: string | null;
 };
 
-function absolutizeImage<T extends { image?: { url?: string | null } | null }>(u: T): T {
+const FILE_ROOT = ROOT.replace(/\/api\/?$/, "");
+
+function absolutizeImage<T extends { image?: { url?: string | null } | null }>(
+  u: T
+): T {
   const url = u.image?.url || null;
   if (!url) return u;
+
   const absolute =
     url.startsWith("http://") || url.startsWith("https://")
       ? url
-      : `${ROOT}${url.startsWith("/") ? "" : "/"}${url}`;
+      : `${FILE_ROOT}${url.startsWith("/") ? "" : "/"}${url}`;
+
   return { ...u, image: { ...(u.image || {}), url: absolute } } as T;
 }
 
@@ -61,7 +67,7 @@ export async function listPublicPlayers(params: {
   if (params.city) q.set("city", params.city);
   if (typeof params.day === "number") q.set("day", String(params.day));
   if (params.from) q.set("from", params.from);
-  const { data } = await api.get(`${ROOT}/api/public/players?${q.toString()}`);
+  const { data } = await api.get(`/public/players?${q.toString()}`);
   const players = (data.players || []) as PublicPlayer[];
   return players.map(absolutizeImage);
 }

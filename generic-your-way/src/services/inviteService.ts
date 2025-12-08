@@ -1,5 +1,5 @@
 import { api } from "./http";
-const ROOT = import.meta.env.VITE_API_ROOT;
+
 
 export type InviteDTO = {
   _id: string;
@@ -36,31 +36,31 @@ export async function createInvite(
   slot: { day:number; from?:string; to?:string },
   setting?: string
 ) {
-  const { data } = await api.post(`/api/invites/create`, { targetUserId, slot, setting });
+  const { data } = await api.post("/invites/create", { targetUserId, slot, setting });
   return data.invite;
 }
 
 export async function getIncomingInvites() {
-  const { data } = await api.get(`${ROOT}/api/invites/incoming`);
+  const { data } = await api.get("/invites/incoming");
   return (data.invites || []) as InviteDTO[];
 }
 
 export async function getOutgoingInvites() {
-  const { data } = await api.get(`${ROOT}/api/invites/outgoing`);
+  const { data } = await api.get("/invites/outgoing");
   return (data.invites || []) as InviteDTO[];
 }
 
 export async function acceptInvite(id: string): Promise<AcceptInviteDTO> {
-  const { data } = await api.post(`/api/invites/${id}/accept`);
+  const { data } = await api.post(`/invites/${id}/accept`);
   return data as AcceptInviteDTO;
 }
 
 export async function declineInvite(id: string) {
-  const { data } = await api.post(`${ROOT}/api/invites/${id}/decline`);
+  const { data } = await api.post(`/invites/${id}/decline`);
   return data.invite as InviteDTO;
 }
 
 export async function cancelInvite(id: string) {
-  const { data } = await api.post(`${ROOT}/api/invites/${id}/cancel`);
+  const { data } = await api.post(`/invites/${id}/cancel`);
   return data.invite as InviteDTO;
 }
