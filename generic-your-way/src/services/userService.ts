@@ -12,7 +12,7 @@ export async function loginUser(email: string, password: string) {
 }
 
 export async function getUserById(id: string) {
-  const { data } = await api.get(`/users/${id}`);
+  const { data } = await api.get(`/${id}`);
   return data;
 }
 
