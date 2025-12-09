@@ -124,15 +124,15 @@ return (
 <button type="button" className="btn-close" data-bs-dismiss="offcanvas"/>
 </div>
 <div className="offcanvas-body d-flex flex-column gap-3">
-          <NavLink className="btn btn-accent-outline" to="/dashboard" >Invites</NavLink>
-          <NavLink className="btn btn-accent-outline" to="/player-card" >Profile</NavLink>
-          <NavLink className="btn btn-accent-outline" to="/about" >About</NavLink>
-          <NavLink className="btn btn-accent-outline" to="/updates">Updates</NavLink> 
-          <NavLink className="btn btn-accent-outline" to="/players" >Find Players</NavLink>
+          <NavLink className="btn btn-accent-outline" to="/dashboard" data-bs-dismiss="offcanvas">Invites</NavLink>
+          <NavLink className="btn btn-accent-outline" to="/player-card" data-bs-dismiss="offcanvas">Profile</NavLink>
+          <NavLink className="btn btn-accent-outline" to="/about" data-bs-dismiss="offcanvas">About</NavLink>
+          <NavLink className="btn btn-accent-outline" to="/updates"data-bs-dismiss="offcanvas">Updates</NavLink> 
+          <NavLink className="btn btn-accent-outline" to="/players" data-bs-dismiss="offcanvas">Find Players</NavLink>
 <hr className="offcanvas-footer mt-auto"/>
 <div className=" d-grid ">
      {token ? (
-      <button onClick={handleLogout} className="btn btn-danger mb-1">
+      <button onClick={handleLogout} className="btn btn-danger mb-1" data-bs-dismiss="offcanvas">
         Logout
       <svg xmlns="http://www.w3.org/2000/svg" 
       height="20px" 
@@ -143,7 +143,7 @@ return (
       </svg>
         </button>
     ) : (
-      <button onClick={() => navigate("/login")} className="btn btn-success">
+      <button onClick={() => navigate("/login")} className="btn btn-success" data-bs-dismiss="offcanvas">
       Login
       <svg xmlns="http://www.w3.org/2000/svg" 
         height="20px"
