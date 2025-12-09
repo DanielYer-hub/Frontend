@@ -3,6 +3,8 @@ import { useNavigate, useLocation, Link, Outlet, NavLink } from "react-router-do
 import { useAuth } from "../context/AuthContext";
 import "./css/Navbar.css";
 
+declare const bootstrap: any;
+
 export default function LayautRight() {
     const { token, logout } = useAuth();
     const navigate = useNavigate();
@@ -10,11 +12,21 @@ export default function LayautRight() {
     const [country, setCountry] = useState('');
     const [region, setRegion] = useState('');
     const [city, setCity] = useState('');
-    const handleLogout = () => {
-        logout();
-        navigate('/login', { replace: true });
+    
+    const closeOffcanvas = () => {
+    const el = document.getElementById("mobileRightNav");
+    if (!el) return;
+    const instance =
+      bootstrap.Offcanvas.getInstance(el) ||
+      bootstrap.Offcanvas.getOrCreateInstance(el);
+    instance?.hide();
     };
-
+    const handleLogout = () => {
+    logout();
+    closeOffcanvas();        
+    navigate("/login", { replace: true });
+  };
+  
 useEffect(() => {
     const q = new URLSearchParams(loc.search);
     setCountry(q.get('country') || '');
@@ -124,15 +136,15 @@ return (
 <button type="button" className="btn-close" data-bs-dismiss="offcanvas"/>
 </div>
 <div className="offcanvas-body d-flex flex-column gap-3">
-          <NavLink className="btn btn-accent-outline" to="/dashboard" data-bs-dismiss="offcanvas">Invites</NavLink>
-          <NavLink className="btn btn-accent-outline" to="/player-card" data-bs-dismiss="offcanvas">Profile</NavLink>
-          <NavLink className="btn btn-accent-outline" to="/about" data-bs-dismiss="offcanvas">About</NavLink>
-          <NavLink className="btn btn-accent-outline" to="/updates"data-bs-dismiss="offcanvas">Updates</NavLink> 
-          <NavLink className="btn btn-accent-outline" to="/players" data-bs-dismiss="offcanvas">Find Players</NavLink>
+          <NavLink className="btn btn-accent-outline" to="/dashboard" onClick={closeOffcanvas}>Invites</NavLink>
+          <NavLink className="btn btn-accent-outline" to="/player-card" onClick={closeOffcanvas}>Profile</NavLink>
+          <NavLink className="btn btn-accent-outline" to="/about" onClick={closeOffcanvas}>About</NavLink>
+          <NavLink className="btn btn-accent-outline" to="/updates" onClick={closeOffcanvas}>Updates</NavLink> 
+          <NavLink className="btn btn-accent-outline" to="/players" onClick={closeOffcanvas}>Find Players</NavLink>
 <hr className="offcanvas-footer mt-auto"/>
 <div className=" d-grid ">
      {token ? (
-      <button onClick={handleLogout} className="btn btn-danger mb-1" data-bs-dismiss="offcanvas">
+      <button onClick={handleLogout} className="btn btn-danger mb-1">
         Logout
       <svg xmlns="http://www.w3.org/2000/svg" 
       height="20px" 
@@ -143,7 +155,7 @@ return (
       </svg>
         </button>
     ) : (
-      <button onClick={() => navigate("/login")} className="btn btn-success" data-bs-dismiss="offcanvas">
+      <button onClick={() => {navigate("/login"); closeOffcanvas();}} className="btn btn-success">
       Login
       <svg xmlns="http://www.w3.org/2000/svg" 
         height="20px"
