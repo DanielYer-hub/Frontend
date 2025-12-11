@@ -38,4 +38,7 @@
     justify-content: flex-start; 
     gap: 10px;
   }
+  .dashbord-players .d-flex.gap-2 button {
+    flex: 1;
+  }
 }

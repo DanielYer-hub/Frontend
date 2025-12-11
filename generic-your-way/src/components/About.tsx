@@ -144,7 +144,7 @@ const About: FunctionComponent<AboutProps> = () => {
         </div>
         <div className="text-center mt-2">
           <button
-            className="btn-how-to"
+            className="btn-how-to btn-accent-outline"
             onClick={() => setExpanded((s) => !s)}
           >
             {expanded ? "Read Less" : "Read More"}

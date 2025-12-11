@@ -151,7 +151,14 @@ const Dashboard: React.FC = () => {
                 <path d="M200-120q-33 0-56.5-23.5T120-200v-560q0-33 23.5-56.5T200-840h560q33 0 56.5 23.5T840-760v560q0 33-23.5 56.5T760-120H200Zm0-80h560v-120H640q-30 38-71.5 59T480-240q-47 0-88.5-21T320-320H200v120Zm280-120q38 0 69-22t43-58h168v-360H200v360h168q12 36 43 58t69 22Zm0-80L320-560l56-58 64 64v-166h80v166l64-64 56 58-160 160ZM200-200h560-560Z"/></svg>
               </h5>
               <hr className="your-invites"/>
-              {!incoming.length && <div>No incoming.</div>}
+              {!incoming.length && 
+              <div className="empty-state">
+              <div className="empty-state-title">No incoming invites yet</div>
+              <div className="empty-state-text">
+               Ask your friends to invite you for a game, or send an invite yourself.
+              </div>
+              </div>
+              }
               <ul className="list-group list-group-flush mt-2">
                 {incoming.map(inv => (
                   <li
@@ -171,8 +178,8 @@ const Dashboard: React.FC = () => {
                       </div>
                     </div>
                     <div className="d-flex gap-2">
-                      <button className="btn btn-accent" onClick={() => onAccept(inv)}>Accept</button>
-                      <button className="btn btn-accent-outline" onClick={() => onDecline(inv)}>Decline</button>
+                      <button className="btn btn-accent-success" onClick={() => onAccept(inv)}>Accept</button>
+                      <button className="btn btn-accent-error" onClick={() => onDecline(inv)}>Decline</button>
                     </div>
                   </li>
                 ))}
@@ -194,7 +201,14 @@ const Dashboard: React.FC = () => {
                   <path d="M440-400v-166l-64 64-56-58 160-160 160 160-56 58-64-64v166h-80ZM200-120q-33 0-56.5-23.5T120-200v-560q0-33 23.5-56.5T200-840h560q33 0 56.5 23.5T840-760v560q0 33-23.5 56.5T760-120H200Zm0-80h560v-120H640q-30 38-71.5 59T480-240q-47 0-88.5-21T320-320H200v120Zm280-120q38 0 69-22t43-58h168v-360H200v360h168q12 36 43 58t69 22ZM200-200h560-560Z" /></svg>
                   </h5>
                   <hr className="your-invites"/>
-              {!outgoing.length && <div>No outgoing.</div>}
+              {!outgoing.length && 
+              <div className="empty-state">
+              <div className="empty-state-title">You haven't invited anyone yet</div>
+              <div className="empty-state-text">
+              Open "Find Players", choose someone and send your first invite.
+              </div>
+              </div>
+              }
               <ul className="list-group list-group-flush mt-2">
                 {outgoing.map(inv => (
                   <li
@@ -215,11 +229,13 @@ const Dashboard: React.FC = () => {
                     </div>
                     <div className="d-flex gap-2">
                       {inv.opponentContact?.url && (
-                        <button className="btn btn-outline-light" onClick={() => openOpponentContact(inv)}>
+                        <button className="btn btn-accent-outline" onClick={() => openOpponentContact(inv)}>
                           Message
                         </button>
                       )}
-                      <button className="btn btn-accent-outline" onClick={() => onCancel(inv)}>Cancel</button>
+                      <button className="btn btn-accent-error" onClick={() => onCancel(inv)}>
+                        Cancel
+                        </button>
                     </div>
                   </li>
                 ))}

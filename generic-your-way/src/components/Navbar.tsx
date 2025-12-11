@@ -144,7 +144,7 @@ return (
 <hr className="offcanvas-footer mt-auto"/>
 <div className=" d-grid ">
      {token ? (
-      <button onClick={handleLogout} className="btn btn-danger mb-1">
+      <button onClick={handleLogout} className="btn btn-danger mb-1"  data-bs-dismiss="offcanvas">
         Logout
       <svg xmlns="http://www.w3.org/2000/svg" 
       height="20px" 

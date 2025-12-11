@@ -3,7 +3,7 @@
 }
 .players-filters-wrapper {
   transition: max-height 0.2s ease, opacity 0.2s ease,
-    margin-bottom 0.2s ease, border-color 0.2s ease;
+  margin-bottom 0.2s ease, border-color 0.2s ease;
 }
 .players-filters-grid {
   row-gap: 12px;
@@ -66,6 +66,25 @@
 .player-card-invite-panel {
   background: #111;
 }
+.empty-state {
+  margin: 24px auto;
+  padding: 16px 20px;
+  border-radius: 12px;
+  border: 1px dashed rgba(255, 255, 255, 0.25);
+  background: rgba(10, 10, 10, 0.9);
+  text-align: center;
+}
+.empty-state-title {
+  font-weight: 600;
+  margin-bottom: 4px;
+}
+.empty-state-text {
+  font-size: 0.9rem;
+  color: #b3b3b3;
+}
+.invite-panel-c button {
+  flex: 1;
+}
 @media (max-width: 767.98px) {
   .players-filters-wrapper.players-filters-closed {
     max-height: 0;
@@ -82,7 +101,14 @@
     text-align: start;
     font-size: 0.85rem;
     margin-left: 5px;
-    
+  }
+  .empty-state {
+  border: 2px dashed rgba(255, 255, 255, 0.25);
+  padding: 16px 18px;
+  
+ }
+  .empty-state-text {
+  font-size: 0.69rem;
   }
 }
 @media (max-width: 576px) {

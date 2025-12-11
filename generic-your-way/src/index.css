@@ -3,6 +3,8 @@
   --text: #ffffff;
   --accent: #ffd000;         
   --text-dark: #111;
+  --success: #28a745;
+  --error: #dc3545;
 }
 
 html, body, #root {
@@ -20,6 +22,26 @@ a:hover, .nav-link.active { color: var(--accent); }
   border: 1px solid rgba(255,255,255,0.08);
 }
 
+.btn-accent-success {
+  border: 2px solid var(--success);
+  color: var(--success);
+  background: transparent;
+}
+
+.btn-accent-success:hover {
+  background: var(--success);
+  color: var(--text-dark);
+}
+
+.btn-accent-error {
+  border: 2px solid var(--error);
+  color: var(--error);
+  background: transparent;
+}
+.btn-accent-error:hover {
+  background: var(--error);
+  color: var(--text-dark);
+}
 .btn-accent-outline {
   border: 2px solid var(--accent);
   color: var(--accent);
@@ -44,7 +66,9 @@ a:hover, .nav-link.active { color: var(--accent); }
   color: var(--text);
   border: 1px solid rgba(255,255,255,0.15);
 }
-.form-control::placeholder { color: #8f8c8c; }
+.form-control::placeholder {
+   color: #8f8c8c; 
+  }
 
 
 #mobileRightNav .btn.btn-accent-outline:active,

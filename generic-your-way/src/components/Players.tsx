@@ -138,10 +138,10 @@ const Players: React.FC = () => {
     <div className="container py-4 players-page">
         <button
           type="button"
-          className="btn btn-accent-outline d-md-none"
+          className="btn btn-accent-outline d-md-none mb-2"
           onClick={() => setFiltersOpen((o) => !o)}
         >
-          {filtersOpen ? "Hide filters" : "Show filters"}
+          {filtersOpen ? "Hide Filters" : "Show Filters"}
         </button>
       
       <div
@@ -376,15 +376,15 @@ const Players: React.FC = () => {
                                   </div>
                                 )}
 
-                                <div className="d-flex gap-2">
+                                <div className="d-flex gap-2 invite-panel-c">
                                   <button
-                                    className="btn btn-primary btn-sm"
+                                    className="btn btn-accent-success btn-sm"
                                     onClick={submitInvite}
                                   >
                                     Confirm
                                   </button>
                                   <button
-                                    className="btn btn-outline-secondary btn-sm"
+                                    className="btn btn-accent-error btn-sm"
                                     onClick={cancelInvite}
                                   >
                                     Cancel
@@ -420,8 +420,13 @@ const Players: React.FC = () => {
           })}
 
           {!players.length && (
-            <div className="text-muted">No players found.</div>
-          )}
+          <div className="empty-state">
+          <div className="empty-state-title">No players found</div>
+          <div className="empty-state-text">
+          Try changing filters.
+          </div>
+          </div>
+         )}
         </div>
       )}
     </div>
