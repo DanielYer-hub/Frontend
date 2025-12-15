@@ -1,15 +1,20 @@
 import { api } from "./http";
 
 
+export type ContactLink = { kind: "whatsapp" | "telegram"; url: string };
+
 export type InviteDTO = {
   _id: string;
   fromUser?: any;
   toUser?: any;
+  setting?: string | null;
   message?: string;
-  status: "pending"|"accepted"|"declined"|"canceled";
+  status: "pending" | "accepted" | "declined" | "canceled";
   createdAt: string;
   slot?: InviteSlot | null;
   slotReadable?: string | null;
+  opponentContact?: ContactLink | null;
+  opponentContacts?: ContactLink[]; 
 };
 
 export type ChatInfo = {
@@ -62,5 +67,10 @@ export async function declineInvite(id: string) {
 
 export async function cancelInvite(id: string) {
   const { data } = await api.post(`/invites/${id}/cancel`);
+  return data.invite as InviteDTO;
+}
+
+export async function closeInvite(id: string) {
+  const { data } = await api.post(`/invites/${id}/close`);
   return data.invite as InviteDTO;
 }
