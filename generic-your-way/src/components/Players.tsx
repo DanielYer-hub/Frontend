@@ -1,5 +1,5 @@
 import React, { useEffect, useMemo, useState } from "react";
-import { useSearchParams } from "react-router-dom";
+import { useNavigate, useSearchParams } from "react-router-dom";
 import { toast } from "react-toastify";
 import { useAuth } from "../context/AuthContext";
 import { listPublicPlayers, type PublicPlayer } from "../services/playerService";
@@ -38,7 +38,7 @@ const Players: React.FC = () => {
   const [search, setSearch] = useSearchParams();
   const [panel, setPanel] = useState<InvitePanelState>({ open:false });
   const [filtersOpen, setFiltersOpen] = useState(false);
-  
+  const navigate = useNavigate();
   const filters = useMemo(() => ({
     setting: search.get("setting") ?? "",
     region:  search.get("region")  || "",
@@ -47,6 +47,47 @@ const Players: React.FC = () => {
     day:     search.get("day") ? Number(search.get("day")) : undefined,
     from:    search.get("from") || ""
   }), [search, user?.settings]);
+
+    const missingMine = useMemo(() => {
+    const m: string[] = [];
+    if (!user?.region) m.push("region");
+    if (!user?.address?.country) m.push("country");
+    if (!user?.address?.city) m.push("city");
+    if (!user?.settings?.length) m.push("settings");
+    const phone = user?.contacts?.phoneE164?.trim?.();
+    const tg = user?.contacts?.telegramUsername?.trim?.();
+    if (!phone && !tg) m.push("contacts");
+    return m;
+  }, [user]);
+
+  const canInvite = missingMine.length === 0;
+
+  const goFixProfile = () => {
+  const labelMap: Record<string, string> = {
+    region: "Region",
+    country: "Country",
+    city: "City",
+    settings: "Game settings",
+  };
+
+  const missingNice = missingMine.map(k => labelMap[k] || k);
+
+  toast.info(
+    <>
+      <b>Complete your profile to send invites</b>
+      <br />
+      Missing: {missingNice.join(", ")}
+      <br />
+      <span style={{ fontSize: "0.85em", opacity: 0.8 }}>
+        This helps other players find and contact you.
+      </span>
+    </>
+  );
+
+  navigate("/profile-edit"); 
+};
+
+
 
   useEffect(() => {
     const load = async () => {
@@ -106,32 +147,49 @@ const Players: React.FC = () => {
 }
 
   const submitInvite = async () => {
-    if (!panel.userId || !panel.availability) return;
-    if (panel.availability.busyAllWeek) {
-      toast.info("Player is busy this week"); return;
+  if (!panel.userId || !panel.availability) return;
+  if (!canInvite) {
+  goFixProfile();
+  return;
+  }
+  if (panel.availability.busyAllWeek) {
+    toast.info("Player is busy this week");
+    return;
+  }
+  const d = panel.day;
+  if (typeof d !== "number") {
+    toast.error("Choose day");
+    return;
+  }
+  const dayConf = panel.availability.days.find((x) => x.day === d);
+  if (!dayConf) {
+    toast.error("Day not available");
+    return;
+  }
+  const rIdx = panel.rangeIdx ?? 0;
+  const r = dayConf.ranges?.[rIdx];
+  try {
+    await createInvite(panel.userId, { day: d, from: r?.from, to: r?.to }, panel.setting);
+    toast.success("Invite sent");
+    setPanel({ open: false });
+  } catch (e: any) {
+    const status = e?.response?.status;
+    const code = e?.response?.data?.code;
+    const missing = e?.response?.data?.missing as string[] | undefined;
+    if (status === 409 && code === "PROFILE_INCOMPLETE") {
+      const missingText = missing?.length ? missing.join(", ") : "required fields";
+      toast.info(`Finish your profile to send invites: ${missingText}`);
+      return;
     }
-    const d = panel.day;
-    if (typeof d !== "number") {
-      toast.error("Choose day"); return;
+    if (status === 409) {
+      toast.info(e?.response?.data?.message || "Day already booked");
+      return;
     }
-    const dayConf = panel.availability.days.find(x => x.day===d);
-    if (!dayConf) { toast.error("Day not available"); return; }
+    const msg = e?.response?.data?.message || "Failed to send invite";
+    toast.error(msg);
+  }
+};
 
-    const rIdx = panel.rangeIdx ?? 0;
-    const r = dayConf.ranges?.[rIdx];
-    try {
-      await createInvite(panel.userId, { day: d, from: r?.from, to: r?.to } , panel.setting);
-      toast.success("Invite sent");
-      setPanel({ open:false });
-    } catch (e:any) {
-      const msg = e?.response?.data?.message || "Failed to send invite";
-      if (e?.response?.status === 409) {
-        toast.info("Day already booked");
-      } else {
-        toast.error(msg);
-      }
-    }
-  };
   const cancelInvite = () => setPanel({ open:false });
 
   return (
@@ -398,20 +456,19 @@ const Players: React.FC = () => {
                     </div>
 
                    <div className="mt-3 d-grid">
-                      <button
-                        className="btn btn-accent-outline w-100"
-                        onClick={() =>
-                          openInvite(
-                            p._id,
-                            `${p.name?.first || ""} ${
-                              p.name?.last || ""
-                            }`.trim(),
-                            p
-                          )
-                        }
-                      >
-                        {isOpen ? "Change day/time" : "Invite"}
-                      </button>
+                   <button
+                   className="btn btn-accent-outline w-100"
+                   onClick={() => {
+                   if (!canInvite) {
+                   goFixProfile();
+                  return;
+                   }
+                   openInvite(p._id,`${p.name?.first || ""} ${p.name?.last || ""}`.trim(),p);
+                  }}
+                   >
+                 {isOpen ? "Change day/time" : "Invite"}
+                 </button>
+
                     </div>
                   </div>
                 </div>

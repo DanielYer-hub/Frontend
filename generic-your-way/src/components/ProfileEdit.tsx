@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useMemo } from "react";
 import { useFormik } from "formik";
 import * as yup from "yup";
 import { useAuth } from "../context/AuthContext";
@@ -56,6 +56,18 @@ const schema = yup.object({
 
 const ProfileEdit: React.FC = () => {
   const { user, refreshMe } = useAuth(); 
+
+
+
+  const missingMine = useMemo(() => {
+    const m: string[] = [];
+    if (!user?.region) m.push("Region");
+    if (!user?.address?.country) m.push("Country");
+    if (!user?.address?.city) m.push("City");
+    if (!user?.settings?.length) m.push("Game settings");
+    return m;
+  }, [user]);
+
   const navigate = useNavigate();
   const formik = useFormik({
     enableReinitialize: true,
@@ -96,6 +108,21 @@ const ProfileEdit: React.FC = () => {
   return (
     <div className="container py-3 edit-page">
       <h2>Edit Profile</h2>
+
+{missingMine.length > 0 && (
+      <div className="alert alert-info mb-4">
+        <b>Almost done!</b>
+        <div className="mt-1">
+          To send invites, please complete:
+          <ul className="mb-0 mt-2">
+            {missingMine.map((item) => (
+              <li key={item}>{item}</li>
+            ))}
+          </ul>
+        </div>
+      </div>
+    )}
+
       <form className="form-row row g-3" onSubmit={formik.handleSubmit}>
 
  <div className="edit-page-form-photo">
