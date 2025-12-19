@@ -31,19 +31,20 @@ export type AcceptInviteDTO = {
 };
 
 export type InviteSlot = {
-   day: number; 
-   from?: string | null; 
-   to?: string | null 
-  };
+  date: string;
+  from?: string | null;
+  to?: string | null;
+};
 
 export async function createInvite(
   targetUserId: string,
-  slot: { day:number; from?:string; to?:string },
+  slot: { date: string; from?: string; to?: string },
   setting?: string
 ) {
   const { data } = await api.post("/invites/create", { targetUserId, slot, setting });
   return data.invite;
 }
+
 
 export async function getIncomingInvites() {
   const { data } = await api.get("/invites/incoming");

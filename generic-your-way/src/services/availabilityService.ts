@@ -2,8 +2,8 @@ import { api } from "./http";
 
 
 export type AvRange = { from: string; to: string };
-export type AvDay = { day: number; ranges: AvRange[] };
-export type Availability = { busyAllWeek: boolean; days: AvDay[] };
+export type AvSlot = { date: string; ranges: AvRange[] };
+export type Availability = { busyAllWeek: boolean; slots: AvSlot[] };
 
 export async function getMyAvailability() {
   const { data } = await api.get("/availability/me");

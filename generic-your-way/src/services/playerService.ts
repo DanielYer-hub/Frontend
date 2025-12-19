@@ -33,12 +33,10 @@ function absolutizeImage<T extends { image?: { url?: string | null } | null }>(
 ): T {
   const url = u.image?.url || null;
   if (!url) return u;
-
   const absolute =
     url.startsWith("http://") || url.startsWith("https://")
       ? url
       : `${FILE_ROOT}${url.startsWith("/") ? "" : "/"}${url}`;
-
   return { ...u, image: { ...(u.image || {}), url: absolute } } as T;
 }
 
@@ -57,7 +55,7 @@ export async function listPublicPlayers(params: {
   region?: string;
   country?: string;
   city?: string;
-  day?: number;      
+  date?: string;      
   from?: string;
 }): Promise<PublicPlayer[]> {
   const q = new URLSearchParams();
@@ -65,7 +63,7 @@ export async function listPublicPlayers(params: {
   if (params.region) q.set("region", params.region);
   if (params.country) q.set("country", params.country);
   if (params.city) q.set("city", params.city);
-  if (typeof params.day === "number") q.set("day", String(params.day));
+  if (params.date) q.set("date", params.date);
   if (params.from) q.set("from", params.from);
   const { data } = await api.get(`/public/players?${q.toString()}`);
   const players = (data.players || []) as PublicPlayer[];

@@ -29,11 +29,9 @@ type Invite = {
   toUser?: MiniUser;
   opponentContact?: ContactLink | null;     
   opponentContacts?: ContactLink[];         
-  slot?: { day?: number; from?: string | null; to?: string | null } | null;
+  slot?: { date: string; from?: string | null; to?: string | null } | null;
   slotReadable?: string | null;
 };
-
-const DAY_NAMES = ["Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat"];
 
 const Dashboard: React.FC = () => {
   const [incoming, setIncoming] = useState<Invite[]>([]);
@@ -80,15 +78,14 @@ const Dashboard: React.FC = () => {
 
  
   const renderSlot = (inv: Invite) => {
-    if (inv.slotReadable) return <span>{inv.slotReadable}</span>;
+  if (inv.slotReadable) return <span>{inv.slotReadable}</span>;
 
-    const d = inv.slot?.day;
-    if (typeof d !== "number" || d < 0 || d > 6) return <span className="text-muted">No day selected</span>;
+  const date = inv.slot?.date;
+  if (!date) return <span className="text-muted">No date selected</span>;
 
-    const dayLabel = DAY_NAMES[d];
-    const from = inv.slot?.from || "";
-    const to = inv.slot?.to || "";
-    const time = from && to ? `${from}–${to}` : (from || to || "");
+  const from = inv.slot?.from || "";
+  const to = inv.slot?.to || "";
+  const time = from && to ? `${from}–${to}` : (from || to || "");
 
     return (
       <span>
@@ -102,7 +99,7 @@ const Dashboard: React.FC = () => {
           >
             <path d="M200-80q-33 0-56.5-23.5T120-160v-560q0-33 23.5-56.5T200-800h40v-80h80v80h320v-80h80v80h40q33 0 56.5 23.5T840-720v560q0 33-23.5 56.5T760-80H200Zm0-80h560v-400H200v400Zm0-480h560v-80H200v80Zm0 0v-80 80Zm280 240q-17 0-28.5-11.5T440-440q0-17 11.5-28.5T480-480q17 0 28.5 11.5T520-440q0 17-11.5 28.5T480-400Zm-160 0q-17 0-28.5-11.5T280-440q0-17 11.5-28.5T320-480q17 0 28.5 11.5T360-440q0 17-11.5 28.5T320-400Zm320 0q-17 0-28.5-11.5T600-440q0-17 11.5-28.5T640-480q17 0 28.5 11.5T680-440q0 17-11.5 28.5T640-400ZM480-240q-17 0-28.5-11.5T440-280q0-17 11.5-28.5T480-320q17 0 28.5 11.5T520-280q0 17-11.5 28.5T480-240Zm-160 0q-17 0-28.5-11.5T280-280q0-17 11.5-28.5T320-320q17 0 28.5 11.5T360-280q0 17-11.5 28.5T320-240Zm320 0q-17 0-28.5-11.5T600-280q0-17 11.5-28.5T640-320q17 0 28.5 11.5T680-280q0 17-11.5 28.5T640-240Z" />
           </svg>
-          {dayLabel}
+          {date}
         </b>
         {time ? ` · ${time}` : ""}
       </span>
