@@ -35,4 +35,6 @@ export async function uploadMyPhoto(file: File) {
   return data.user;
 }
 
-
+export async function deleteMe(): Promise<void> {
+  await api.delete("/users/me");
+}

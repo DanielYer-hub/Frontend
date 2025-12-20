@@ -7,6 +7,7 @@ import { uploadMyPhoto } from "../services/userService";
 import { toast } from "react-toastify";
 import { useNavigate } from "react-router-dom";
 import "./css/ProfileEdit.css";
+import DeleteAccountModal from "../components/DeleteAccountBlock";
 
 const SETTINGS = [ "Warhammer 40k","Age of Sigmar","The Horus Heresy","Kill Team","Necromunda",
   "The Old World","Underworlds","Warcry","Blood Bowl","Legions Imperialis","Adeptus Titanicus",
@@ -56,9 +57,6 @@ const schema = yup.object({
 
 const ProfileEdit: React.FC = () => {
   const { user, refreshMe } = useAuth(); 
-
-
-
   const missingMine = useMemo(() => {
     const m: string[] = [];
     if (!user?.region) m.push("Region");
@@ -280,6 +278,17 @@ const ProfileEdit: React.FC = () => {
     })}
   </div>
 </div>
+
+<div className="card mt-4">
+      <div className="card-body">
+        <h5 className="mb-2">Danger zone</h5>
+        <div className="text-muted small mb-3">
+          Delete your account permanently.
+        </div>
+
+        <DeleteAccountModal buttonClassName="btn btn-outline-danger" />
+      </div>
+    </div>
 
         <div className="col-12 edit-btn">
           <button 
