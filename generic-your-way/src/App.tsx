@@ -14,13 +14,24 @@ import Updates from './components/Updates';
 import WelcomePage from './components/WelcomePage';
 import ProfileEdit from './components/ProfileEdit';
 import AvailabilityEdit from './components/AvailabilityEdit';
+import "./components/css/toast.css";
 
 
 function App() {
  
   return (
     <>
-    <ToastContainer/>
+    <ToastContainer
+        position="top-center"
+        autoClose={2500}
+        hideProgressBar={false}
+        newestOnTop
+        closeOnClick
+        pauseOnHover
+        draggable
+        theme="dark"
+        limit={3}
+    />
     <BrowserRouter>
       <Routes>
         <Route path="/" element={<Navigate  to="/welcome-page" replace />} />

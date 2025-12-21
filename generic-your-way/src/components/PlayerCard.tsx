@@ -249,7 +249,7 @@ const PlayerCard: FunctionComponent<PlayerCardProps> = () => {
                     <div className="card">
                       <div className="card-body">
                         <div className="d-flex justify-content-between align-items-center mb-2">
-                          <div className="small fw-bold">Date</div>
+                          <div className="small fw-bold">Date:</div>
                           <button
                             className="btn btn-sm btn-outline-danger"
                             onClick={() => removeSlot(slotIdx)}
@@ -274,7 +274,7 @@ const PlayerCard: FunctionComponent<PlayerCardProps> = () => {
                               type="time"
                               value={r.from}
                               onChange={(e) =>
-                                setRange(slotIdx, rangeIdx, "from", e.target.value)
+                              setRange(slotIdx, rangeIdx, "from", e.target.value)
                               }
                             />
                             <span>–</span>

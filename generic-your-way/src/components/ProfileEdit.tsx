@@ -112,16 +112,17 @@ const ProfileEdit: React.FC = () => {
         <b>Almost done!</b>
         <div className="mt-1">
           To send invites, please complete:
-          <ul className="mb-0 mt-2">
+          <ul className="mb-2 mt-2">
             {missingMine.map((item) => (
               <li key={item}>{item}</li>
             ))}
           </ul>
+          This helps other players find and contact you.
         </div>
       </div>
     )}
 
-      <form className="form-row row g-3" onSubmit={formik.handleSubmit}>
+  <form className="form-row row g-3" onSubmit={formik.handleSubmit}>
 
  <div className="edit-page-form-photo">
   <div className="edit-photo-wrapper">
@@ -285,7 +286,6 @@ const ProfileEdit: React.FC = () => {
         <div className="text-muted small mb-3">
           Delete your account permanently.
         </div>
-
         <DeleteAccountModal buttonClassName="btn btn-outline-danger" />
       </div>
     </div>

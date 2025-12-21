@@ -87,27 +87,14 @@ const Players: React.FC = () => {
 
   const canInvite = missingMine.length === 0;
 
-  const goFixProfile = () => {
-    const labelMap: Record<string, string> = {
-      region: "Region",
-      country: "Country",
-      city: "City",
-      settings: "Game settings",
-    };
-    const missingNice = missingMine.map((k) => labelMap[k] || k);
-    toast.info(
-      <>
-        <b>Complete your profile to send invites</b>
-        <br />
-        Missing: {missingNice.join(", ")}
-        <br />
-        <span style={{ fontSize: "0.85em", opacity: 0.8 }}>
-          This helps other players find and contact you.
-        </span>
-      </>
-    );
-    navigate("/profile-edit");
-  };
+const goFixProfile = () => {
+  toast.info(
+    <>
+      <b>Complete your profile to send invites</b>
+    </>
+  );
+  navigate("/profile-edit");
+};
 
   useEffect(() => {
     const load = async () => {
@@ -213,12 +200,12 @@ const submitInvite = async () => {
   } catch (e: any) {
     const status = e?.response?.status;
     const code = e?.response?.data?.code;
-    const missing = e?.response?.data?.missing as string[] | undefined;
     if (status === 409 && code === "PROFILE_INCOMPLETE") {
-      const missingText = missing?.length ? missing.join(", ") : "required fields";
-      toast.info(`Finish your profile to send invites: ${missingText}`);
-      return;
-    }
+    toast.info("Complete your profile to send invites");
+    navigate("/profile-edit");
+    return;
+   } 
+
     if (status === 409) {
       toast.info(e?.response?.data?.message || "Date already booked");
       return;
