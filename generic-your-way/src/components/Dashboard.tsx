@@ -9,7 +9,7 @@ import {
   closeInvite, 
 } from "../services/inviteService";
 import "./css/Dashbord.css";
-import Seo from "./Seo"
+
 
 export type ContactLink = { kind: "whatsapp" | "telegram"; url: string };
 
@@ -176,11 +176,6 @@ const Dashboard: React.FC = () => {
 
   return (
     <div className="container py-3">
-    <Seo
-      title="Generic Your Way"
-      description="Search for local tabletop players by region, date and game system."
-      url="https://generic-your-way.onrender.com/dashboard"
-    />
 
       <h2 className="mb-4 dashbord">Your Invites</h2>
       {loading && <div className="mb-2">Loading...</div>}

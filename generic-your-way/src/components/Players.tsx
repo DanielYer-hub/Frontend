@@ -11,7 +11,7 @@ import {
   type Availability,
 } from "../services/availabilityService";
 import "./css/Players.css";
-import Seo from "./Seo";
+
 
 const SETTINGS = [
   "Warhammer 40k",
@@ -219,11 +219,7 @@ const submitInvite = async () => {
 
   return (
     <div className="container py-4 players-page">
-         <Seo
-            title="Generic Your Way"
-            description="Search for local tabletop players by region, date and game system."
-            url="https://generic-your-way.onrender.com/players"
-          />
+
       <button
         type="button"
         className="btn btn-accent-outline d-md-none mb-2"

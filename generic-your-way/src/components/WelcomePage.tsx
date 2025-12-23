@@ -1,18 +1,14 @@
 import type { FunctionComponent } from "react";
 import { useNavigate } from "react-router-dom";
 import "./css/WelcomePage.css";
-import Seo from "./Seo";
+
 
 const WelcomePage: FunctionComponent = () => {
   const navigate = useNavigate();
 
   return (
     <div className="welcome-page-container">
-         <Seo
-            title="Generic Your Way"
-            description="Search for local tabletop players by region, date and game system."
-            url="https://generic-your-way.onrender.com/welcome-page"
-          />
+
       <main className="welcome-page-content">
         <img src="/content/gyw.png" alt="GYW logo" className="logo" />
       </main>

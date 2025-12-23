@@ -8,7 +8,7 @@ import { toast } from "react-toastify";
 import { useNavigate } from "react-router-dom";
 import "./css/ProfileEdit.css";
 import DeleteAccountModal from "../components/DeleteAccountBlock";
-import Seo from "./Seo";
+
 
 const SETTINGS = [ "Warhammer 40k","Age of Sigmar","The Horus Heresy","Kill Team","Necromunda",
   "The Old World","Underworlds","Warcry","Blood Bowl","Legions Imperialis","Adeptus Titanicus",
@@ -106,11 +106,7 @@ const ProfileEdit: React.FC = () => {
 
   return (
     <div className="container py-3 edit-page">
-         <Seo
-            title="Generic Your Way"
-            description="Search for local tabletop players by region, date and game system."
-            url="https://generic-your-way.onrender.com/profile-edit"
-          />
+
       <h2>Edit Profile</h2>
 
 {missingMine.length > 0 && (

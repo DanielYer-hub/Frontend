@@ -7,7 +7,7 @@ import { useAuth } from "../context/AuthContext";
 import "./css/Register.css";
 import { contactsSchema } from "../validation/contactsValidation";
 import { useState } from "react";
-import Seo from "./Seo";
+
 
 const Register: FunctionComponent = () => {
   const navigate = useNavigate();
@@ -79,11 +79,7 @@ const Register: FunctionComponent = () => {
 
   return (
     <div className="register-page">
-         <Seo
-            title="Generic Your Way"
-            description="Search for local tabletop players by region, date and game system."
-            url="https://generic-your-way.onrender.com/register"
-          />
+
       <div className="page-body">
         <div className="container">
           <main className="welcome-page-content">

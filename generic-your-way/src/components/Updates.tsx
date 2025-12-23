@@ -1,17 +1,13 @@
 import type { FunctionComponent } from "react";
 import "../components/css/Updates.css";
-import Seo from "./Seo";
+
 interface UpdatesProps {}
 
 const Updates: FunctionComponent<UpdatesProps> = () => {
   return (
     <>
       <div className="container py-4">
-           <Seo
-              title="Generic Your Way"
-              description="Search for local tabletop players by region, date and game system."
-              url="https://generic-your-way.onrender.com/updates"
-            />
+
         <h1 className="update">Updates</h1>
         <div className="updates-list">
          

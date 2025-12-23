@@ -1,7 +1,7 @@
 import  { useState, type FunctionComponent } from "react";
 import { Link } from "react-router-dom";
 import "./css/About.css";
-import Seo from "./Seo";
+
 
 interface AboutProps {}
 
@@ -11,11 +11,7 @@ const About: FunctionComponent<AboutProps> = () => {
   return (
     <>
       <div className="container py-4">
-           <Seo
-              title="Generic Your Way"
-              description="Search for local tabletop players by region, date and game system."
-              url="https://generic-your-way.onrender.com/about"
-            />
+
         <div className="about">
           <div className="about-p">
             <h1 className="about-h1">About This Project</h1>
