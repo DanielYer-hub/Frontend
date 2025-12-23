@@ -36,12 +36,31 @@ const Updates: FunctionComponent<UpdatesProps> = () => {
           </div>
 
           <div className="version">
-            <p className="v-month">Version 1.1.1 - Februar 2026</p>
+            <p className="v-month">Version 1.1.1 - December 2025</p>
+            <hr className="v-hr"/>
+            <div className="v-body">
+              <ul>
+                <li>Delete User.</li>
+                <li>Calendar dates.</li>
+                <li>Complete player profile for send invites.</li>
+                <li>New Register form.</li>
+              </ul>
+            </div>
+             <div className="v-status is-complete">
+               <svg xmlns="http://www.w3.org/2000/svg" 
+               height="23px" viewBox="0 -960 960 960" 
+               width="24px" fill="#25CA61" className="icon-success"> 
+                <path d="M382-240 154-468l57-57 171 171 367-367 57 57-424 424Z"/></svg>
+                Completed 
+              </div>
+          </div>
+
+          <div className="version">
+            <p className="v-month">Version 1.1.2 - Februar 2026</p>
             <hr className="v-hr"/>
             <div className="v-body">
               <ul>
                 <li>Forget Password.</li>
-                <li>Pop-up phrases from your favorite Settings.</li>
                 <li>Feedback with the Developers.</li>
                 <li>New Design.</li>
               </ul>
@@ -50,7 +69,7 @@ const Updates: FunctionComponent<UpdatesProps> = () => {
           </div>
 
           <div className="version">
-            <p className="v-month">Version 1.1.2 - March 2026</p>
+            <p className="v-month">Version 1.1.3 - March 2026</p>
             <hr className="v-hr"/>
             <div className="v-body">
               <ul>
@@ -64,7 +83,7 @@ const Updates: FunctionComponent<UpdatesProps> = () => {
           </div>
 
            <div className="version">
-            <p className="v-month">Version 1.1.3 - May 2026</p>
+            <p className="v-month">Version 1.1.4 - May 2026</p>
             <hr className="v-hr"/>
             <div className="v-body">
               <ul>
