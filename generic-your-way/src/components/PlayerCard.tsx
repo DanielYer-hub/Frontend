@@ -10,6 +10,7 @@ import {
 } from "../services/availabilityService";
 import { toast } from "react-toastify";
 import "./css/PlayerCard.css";
+import Seo from "./Seo";
 
 type UserLike = {
   id: string;
@@ -144,6 +145,11 @@ const PlayerCard: FunctionComponent<PlayerCardProps> = () => {
 
   return (
     <div className="container py-4">
+         <Seo
+            title="Generic Your Way"
+            description="Search for local tabletop players by region, date and game system."
+            url="https://generic-your-way.onrender.com/player-card"
+          />
       <div className="card shadow-sm">
         <div className="card-header">
           <strong>Player Card</strong>

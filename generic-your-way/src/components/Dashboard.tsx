@@ -9,7 +9,7 @@ import {
   closeInvite, 
 } from "../services/inviteService";
 import "./css/Dashbord.css";
-import Seo from "../components/Seo"
+import Seo from "./Seo"
 
 export type ContactLink = { kind: "whatsapp" | "telegram"; url: string };
 

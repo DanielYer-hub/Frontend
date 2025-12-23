@@ -4,6 +4,7 @@ import { Link, useNavigate } from "react-router-dom";
 import * as yup from "yup";
 import { useAuth } from "../context/AuthContext";
 import "./css/Login.css";
+import Seo from "./Seo";
 
 interface LoginProps {}
 const Login: FunctionComponent<LoginProps> = () => {
@@ -46,6 +47,11 @@ const formik: FormikValues = useFormik<FormikValues>({
 return (
 <>
 <div className="login-page">
+     <Seo
+        title="Generic Your Way"
+        description="Search for local tabletop players by region, date and game system."
+        url="https://generic-your-way.onrender.com/login"
+      />
 <div className="page-body">
 <div className="container">
   <main className="welcome-page-content">
