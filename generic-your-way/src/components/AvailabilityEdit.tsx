@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { getMyAvailability, updateMyAvailability, type Availability } from "../services/availabilityService";
 import { toast } from "react-toastify";
+import { track } from "../utils/analytics";
 
 const AvailabilityEdit: React.FC = () => {
   const [av, setAv] = useState<Availability>({ busyAllWeek:false, slots:[] });
@@ -81,6 +82,13 @@ const addRange = (slotIdx:number) => {
         slots: (av.slots || []).filter((s) => !!s.date),
       };
       await updateMyAvailability(payload);
+      track("Availability: Saved", {
+      busyAllWeek: !!payload.busyAllWeek,
+      slotsCount: Array.isArray(payload.slots) ? payload.slots.length : 0,
+      });
+      if (payload.busyAllWeek) {
+      track("Availability: Busy All Week");
+      }
       toast.success("Availability saved");
       setAv(payload);
     } catch (e: any) {

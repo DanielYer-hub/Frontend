@@ -9,7 +9,7 @@ import {
   closeInvite, 
 } from "../services/inviteService";
 import "./css/Dashbord.css";
-
+import { track } from "../utils/analytics";
 
 export type ContactLink = { kind: "whatsapp" | "telegram"; url: string };
 
@@ -137,6 +137,7 @@ const Dashboard: React.FC = () => {
   const onAccept = async (inv: Invite) => {
     try {
       await acceptInvite(inv._id);
+      track("Invite: Accept", { setting: inv.setting || "" });
       toast.success("Invite accepted");
       await refresh(true);
     } catch (e: any) {
@@ -147,6 +148,7 @@ const Dashboard: React.FC = () => {
   const onDecline = async (inv: Invite) => {
     try {
       await declineInvite(inv._id);
+      track("Invite: Decline", { setting: inv.setting || "" });
       toast.success("Declined");
       await refresh(true);
     } catch (e: any) {
@@ -157,6 +159,7 @@ const Dashboard: React.FC = () => {
   const onCancel = async (inv: Invite) => {
     try {
       await cancelInvite(inv._id);
+      track("Invite: Cancel", { setting: inv.setting || "" });
       toast.success("Canceled");
       await refresh(true);
     } catch (e: any) {
@@ -167,6 +170,7 @@ const Dashboard: React.FC = () => {
   const onClose = async (inv: Invite) => {
     try {
       await closeInvite(inv._id);
+      track("Invite: Close", { setting: inv.setting || "" });
       toast.success("Session closed");
       await refresh(true);
     } catch (e: any) {

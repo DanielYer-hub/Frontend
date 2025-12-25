@@ -3,6 +3,7 @@ import { toast } from "react-toastify";
 import { useNavigate } from "react-router-dom";
 import { deleteMe } from "../services/userService";
 import { useAuth } from "../context/AuthContext";
+import { track } from "../utils/analytics";
 
 type Props = {
   buttonClassName?: string; 
@@ -19,6 +20,7 @@ const DeleteAccountModal: React.FC<Props> = ({ buttonClassName }) => {
     try {
       setLoading(true);
       await deleteMe();
+      track("Auth: Delete Account");
       localStorage.removeItem("token");
       localStorage.removeItem("user");
       if (auth?.logout) auth.logout();

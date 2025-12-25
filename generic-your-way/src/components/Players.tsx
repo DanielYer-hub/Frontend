@@ -11,7 +11,7 @@ import {
   type Availability,
 } from "../services/availabilityService";
 import "./css/Players.css";
-
+import { track } from "../utils/analytics";
 
 const SETTINGS = [
   "Warhammer 40k",
@@ -154,7 +154,12 @@ const goFixProfile = () => {
     if (!chosenSetting) {
       toast.info("No setting selected");
       return;
-    }
+    }  track("Invite: Open Panel", {
+    setting: chosenSetting,
+    regionFilter: filters.region || "any",
+    countryFilter: filters.country || "any",
+    cityFilter: filters.city || "any",
+    });
     try {
       setPanel({ open: true, userId: toUserId, name, loading: true, setting: chosenSetting });
       const av = await getPublicAvailability(toUserId);
@@ -196,6 +201,12 @@ const submitInvite = async () => {
   const r = slot.ranges?.[rIdx];
   try {
     await createInvite(panel.userId, { date: slot.date, from: r?.from, to: r?.to }, panel.setting);
+  track("Invite: Sent", {
+  setting: panel.setting || "unknown",
+  date: slot.date,
+  from: r?.from || "",
+  to: r?.to || "",
+  });
     toast.success("Invite sent");
     setPanel({ open: false });
   } catch (e: any) {

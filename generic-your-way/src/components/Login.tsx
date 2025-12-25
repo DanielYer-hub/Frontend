@@ -35,6 +35,7 @@ const formik: FormikValues = useFormik<FormikValues>({
         try {
           track("Login Attempt");
           await login(values.email, values.password); 
+          track("Auth: Login Success");
           navigate("/dashboard");
           resetForm();
         } catch (error: any) {

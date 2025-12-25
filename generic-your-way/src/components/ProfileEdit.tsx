@@ -8,6 +8,7 @@ import { toast } from "react-toastify";
 import { useNavigate } from "react-router-dom";
 import "./css/ProfileEdit.css";
 import DeleteAccountModal from "../components/DeleteAccountBlock";
+import { track } from "../utils/analytics";
 
 
 const SETTINGS = [ "Warhammer 40k","Age of Sigmar","The Horus Heresy","Kill Team","Necromunda",
@@ -93,6 +94,7 @@ const ProfileEdit: React.FC = () => {
           }
         };
         await updateMe(patch);
+        track("Profile: Updated");
         toast.success("Profile updated");
         await refreshMe();
         navigate("/player-card");
@@ -106,10 +108,8 @@ const ProfileEdit: React.FC = () => {
 
   return (
     <div className="container py-3 edit-page">
-
       <h2>Edit Profile</h2>
-
-{missingMine.length > 0 && (
+      {missingMine.length > 0 && (
       <div className="alert alert-info mb-4">
         <b>Almost done!</b>
         <div className="mt-1">
@@ -160,6 +160,7 @@ const ProfileEdit: React.FC = () => {
         if (!file) return;
         try {
           await uploadMyPhoto(file);
+          track("Profile: Photo Uploaded");
           toast.success("Photo uploaded");
           await refreshMe();
         } catch (err: any) {

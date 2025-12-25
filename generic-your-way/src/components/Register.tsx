@@ -65,6 +65,7 @@ const Register: FunctionComponent = () => {
         };
 
         await registerAndLogin(payload);
+        track("Auth: Register Completed");
         sucessMassage(`${payload.email} registered successfully`);
         navigate("/dashboard");
         resetForm();

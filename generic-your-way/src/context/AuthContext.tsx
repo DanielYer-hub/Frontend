@@ -55,14 +55,11 @@ export const AuthProvider: FunctionComponent<{ children: ReactNode }> = ({ child
   const login = async (email: string, password: string) => {
   try {
     const data = await loginUser(email, password);
-
     setTok(data.token);
     setToken(data.token);
     localStorage.setItem("token", data.token); 
     setUser(data.user);
-
     await refreshMe();
-
     track("Login Success", { method: "password" });
   } catch (e: any) {
     track("Login Failed", {
@@ -96,7 +93,6 @@ export const AuthProvider: FunctionComponent<{ children: ReactNode }> = ({ child
   }
 };
 
-
   const refreshMe = async () => {
     const me = await getMe();
     setUser(me);
@@ -112,6 +108,7 @@ export const AuthProvider: FunctionComponent<{ children: ReactNode }> = ({ child
 };
 
   const logout = () => {
+    track("Auth: Logout");
     setTok(null);
     setUser(null);
     setToken(null);
