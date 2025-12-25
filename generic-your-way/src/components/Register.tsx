@@ -7,7 +7,7 @@ import { useAuth } from "../context/AuthContext";
 import "./css/Register.css";
 import { contactsSchema } from "../validation/contactsValidation";
 import { useState } from "react";
-
+import { track } from "../utils/analytics";
 
 const Register: FunctionComponent = () => {
   const navigate = useNavigate();
@@ -49,9 +49,11 @@ const Register: FunctionComponent = () => {
     onSubmit: async (values, { resetForm, setSubmitting }) => {
       try {
         if (step === 1) {
+          track("Signup Step 1 Completed");
           setStep(2);
           return;
         }
+        track("Signup Attempt");
         const payload = {
           name: { first: values.first, last: values.last },
           email: values.email,

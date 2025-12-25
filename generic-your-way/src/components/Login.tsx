@@ -4,7 +4,7 @@ import { Link, useNavigate } from "react-router-dom";
 import * as yup from "yup";
 import { useAuth } from "../context/AuthContext";
 import "./css/Login.css";
-
+import { track } from "../utils/analytics";
 
 interface LoginProps {}
 const Login: FunctionComponent<LoginProps> = () => {
@@ -33,6 +33,7 @@ const formik: FormikValues = useFormik<FormikValues>({
     }),
     onSubmit: async (values, { resetForm, setSubmitting }) => {
         try {
+          track("Login Attempt");
           await login(values.email, values.password); 
           navigate("/dashboard");
           resetForm();

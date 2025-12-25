@@ -1,6 +1,8 @@
 import { createContext, useState, useContext, useEffect, type FunctionComponent, type ReactNode } from 'react';
 import { getMe, loginUser, registerUser } from '../services/userService';
 import { setToken } from '../services/http';
+import { track } from "../utils/analytics";
+
 
 type ApiName = { first: string; last: string };
 type ApiUser = {
@@ -51,24 +53,49 @@ export const AuthProvider: FunctionComponent<{ children: ReactNode }> = ({ child
   }, []);
 
   const login = async (email: string, password: string) => {
-    const data = await loginUser(email, password); 
+  try {
+    const data = await loginUser(email, password);
+
     setTok(data.token);
     setToken(data.token);
+    localStorage.setItem("token", data.token); 
     setUser(data.user);
-    await refreshMe();
-  };
 
-  const registerAndLogin = async (payload: any) => {
+    await refreshMe();
+
+    track("Login Success", { method: "password" });
+  } catch (e: any) {
+    track("Login Failed", {
+      status: e?.response?.status,
+      reason: e?.response?.data?.message || "unknown",
+    });
+    throw e;
+  }
+};
+
+ const registerAndLogin = async (payload: any) => {
+  try {
     const reg = await registerUser(payload);
     if (reg?.token && reg?.user) {
       setTok(reg.token);
       setToken(reg.token);
+      localStorage.setItem("token", reg.token); 
       setUser(reg.user);
       await refreshMe();
+      track("Signup Success", { method: "email" });
       return;
     }
     await login(payload.email, payload.password);
-  };
+    track("Signup Success", { method: "email_fallback_login" });
+  } catch (e: any) {
+    track("Signup Failed", {
+      status: e?.response?.status,
+      reason: e?.response?.data?.message || "unknown",
+    });
+    throw e;
+  }
+};
+
 
   const refreshMe = async () => {
     const me = await getMe();
