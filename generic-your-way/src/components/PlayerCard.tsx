@@ -252,68 +252,73 @@ const PlayerCard: FunctionComponent<PlayerCardProps> = () => {
 
           {!av.busyAllWeek && (
             <>
-              <div className="row g-3">
-                {av.slots.map((s: AvSlot, slotIdx: number) => (
-                  <div key={slotIdx} className="col-12 col-md-6">
-                    <div className="card">
-                      <div className="card-body">
-                        <div className="d-flex justify-content-between align-items-center mb-2">
-                          <div className="small fw-bold">Date:</div>
-                          <button
-                            className="btn btn-sm btn-outline-danger"
-                            onClick={() => removeSlot(slotIdx)}
-                          >
-                            Remove
-                          </button>
-                        </div>
+             <div className="row g-3">
+  {av.slots.map((s: AvSlot, slotIdx: number) => (
+    <div key={slotIdx} className="col-12 col-md-6">
+      <div className="card">
+        <div className="card-body">
+          <div className="d-flex align-items-center gap-2 mb-2 av-date-row">
+            <div className="small fw-bold av-date-label">Date:</div>
+            <input
+              type="date"
+              className="form-control av-date-input"
+              value={s.date || ""}
+              onChange={(e) => setSlotDate(slotIdx, e.target.value)}
+            />
+          </div>
 
-                        <input
-                          type="date"
-                          className="form-control mb-2"
-                          value={s.date || ""}
-                          onChange={(e) => setSlotDate(slotIdx, e.target.value)}
-                        />
+          {(s.ranges || []).map((r, rangeIdx) => (
+            <div
+              key={rangeIdx}
+              className="d-flex align-items-center gap-2 mb-2 av-watch"
+            >
+              <input
+                type="time"
+                value={r.from}
+                onChange={(e) =>
+                  setRange(slotIdx, rangeIdx, "from", e.target.value)
+                }
+              />
+              <span>–</span>
+              <input
+                type="time"
+                value={r.to}
+                onChange={(e) =>
+                  setRange(slotIdx, rangeIdx, "to", e.target.value)
+                }
+              />
+              <button
+                className="btn btn-sm btn-outline-danger"
+                onClick={() => removeRange(slotIdx, rangeIdx)}
+                title="Remove time"
+              >
+                ×
+              </button>
+            </div>
+          ))}
 
-                        {(s.ranges || []).map((r, rangeIdx) => (
-                          <div
-                            key={rangeIdx}
-                            className="d-flex align-items-center gap-2 mb-2"
-                          >
-                            <input
-                              type="time"
-                              value={r.from}
-                              onChange={(e) =>
-                              setRange(slotIdx, rangeIdx, "from", e.target.value)
-                              }
-                            />
-                            <span>–</span>
-                            <input
-                              type="time"
-                              value={r.to}
-                              onChange={(e) =>
-                                setRange(slotIdx, rangeIdx, "to", e.target.value)
-                              }
-                            />
-                            <button
-                              className="btn btn-sm btn-outline-danger"
-                              onClick={() => removeRange(slotIdx, rangeIdx)}
-                            >
-                              ×
-                            </button>
-                          </div>
-                        ))}
+          <hr />
+          <div className="d-flex gap-2 mt-2 av-actions">
+            <button
+              className="btn btn-sm btn-outline-secondary"
+              onClick={() => addRange(slotIdx)}
+            >
+              + Add time
+            </button>
 
-                        <button
-                          className="btn btn-sm btn-outline-secondary"
-                          onClick={() => addRange(slotIdx)}
-                        >
-                          + Add time
-                        </button>
-                      </div>
-                    </div>
-                  </div>
-                ))}
-              </div>
+            <button
+              className="btn btn-sm btn-outline-danger"
+              onClick={() => removeSlot(slotIdx)}
+            >
+              Remove
+            </button>
+          </div>
+
+        </div>
+      </div>
+    </div>
+  ))}
+</div>
 
               <div className="mt-3 d-flex gap-2">
                 <button className="btn btn-outline-secondary" onClick={addSlot}>

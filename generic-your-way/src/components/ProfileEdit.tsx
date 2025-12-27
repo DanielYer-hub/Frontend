@@ -283,16 +283,6 @@ const ProfileEdit: React.FC = () => {
   </div>
 </div>
 
-<div className="card mt-4">
-      <div className="card-body">
-        <h5 className="mb-2">Danger zone</h5>
-        <div className="text-muted small mb-3">
-          Delete your account permanently.
-        </div>
-        <DeleteAccountModal buttonClassName="btn btn-outline-danger" />
-      </div>
-    </div>
-
         <div className="col-12 edit-btn">
           <button 
           className=" btn btn-success"
@@ -303,6 +293,19 @@ const ProfileEdit: React.FC = () => {
         </div>
         </div>
       </form>
+
+ <div className="card mt-4 dzone">
+  <div className="card-body dzone-row">
+    <div className="dzone-text">
+      <h5 className="mb-0">Danger zone:</h5>
+    </div>
+
+    <div className="dzone-actions">
+      <DeleteAccountModal buttonClassName="btn btn-outline-danger" />
+    </div>
+  </div>
+</div>
+
     </div>
   );
 };

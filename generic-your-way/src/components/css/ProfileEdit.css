@@ -89,6 +89,22 @@
   margin-top: 15px;
   width: 100%;
 }
+.dzone {
+  max-width: 800px;
+  margin: 20px auto;
+  border: 1px solid rgba(255, 80, 80, 0.35) !important;
+}
+
+.dzone-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+}
+
+.dzone-text h5 {
+  white-space: nowrap; 
+}
 
 @media (max-width: 768px) {
  .form-row{

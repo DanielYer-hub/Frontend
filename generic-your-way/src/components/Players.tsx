@@ -335,7 +335,8 @@ const submitInvite = async () => {
            : undefined;
  
             return (
-              <div className="col-12 col-md-6 col-lg-4 player-card-col" key={p._id}>
+              <div className="col-12 col-lg-6 col-xxl-4 player-card-col" key={p._id}>
+
                 <div className="card player-card">
                   <div className="card-body d-flex flex-column">
                     <div className="player-card-main">
