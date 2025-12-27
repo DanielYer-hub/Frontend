@@ -94,10 +94,18 @@ export const AuthProvider: FunctionComponent<{ children: ReactNode }> = ({ child
 };
 
   const refreshMe = async () => {
+  try {
     const me = await getMe();
     setUser(me);
-    localStorage.setItem('user', JSON.stringify(me));
-  };
+    localStorage.setItem("user", JSON.stringify(me));
+  } catch (e: any) {
+    if (e?.response?.status === 401) {
+      logout(); 
+      return;
+    }
+    throw e;
+  }
+};
 
   const updateUserInContext = (patch: Partial<ApiUser>) => {
   setUser(prev => {

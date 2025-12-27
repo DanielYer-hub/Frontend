@@ -27,6 +27,7 @@ const REGIONS = [
 ];
 const e164 = /^\+?[1-9]\d{6,14}$/;
 const tgUser = /^[a-zA-Z0-9_]{5,32}$/;
+
 const schema = yup.object({
   name: yup.object({
     first: yup.string().min(2).max(256).required(),
