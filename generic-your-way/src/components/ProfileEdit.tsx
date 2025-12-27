@@ -79,20 +79,35 @@ const ProfileEdit: React.FC = () => {
       settings: user?.settings || [],
       bio: user?.bio || "",
       contacts: {
-        phoneE164: user?.contacts?.phoneE164 || "",
+        phoneE164:
+          user?.contacts?.phoneE164 === "+"
+            ? ""
+            : user?.contacts?.phoneE164 || "",
         telegramUsername: user?.contacts?.telegramUsername || ""
       }
     },
     validationSchema: schema,
     onSubmit: async (values, { setSubmitting }) => {
       try {
+        const tg = (values.contacts.telegramUsername || "")
+          .replace(/^@/, "")
+          .trim();
+
+        
+        const rawPhone = (values.contacts.phoneE164 || "").trim();
+        const digits = rawPhone.replace(/\D/g, "");
+        const phoneE164 = digits ? `+${digits}` : "";
+
         const patch = {
-          ...values,
+          name: values.name,
+          region: values.region,
+          address: values.address,
+          settings: values.settings,
+          bio: values.bio,
           contacts: {
-            ...values.contacts,
-            phoneE164: values.contacts.phoneE164?.replace(/(?!^\+)\D/g, "") || "",
-            telegramUsername: values.contacts.telegramUsername?.replace(/^@/, "") || ""
-          }
+            phoneE164,
+            telegramUsername: tg,
+          },
         };
         await updateMe(patch);
         track("Profile: Updated");
