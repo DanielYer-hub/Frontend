@@ -46,7 +46,7 @@ return (
 <div className="flex-grow-1 d-flex flex-column" style={{ minHeight: '100vh' }}>
 <header className="d-md-none border-bottom">
     <div className="container d-flex align-items-center justify-content-between py-2">
-    <Link to="/" className="text-decoration-none h5 m-0">GYW</Link>    
+    <Link to="/" className="text-decoration-none h5 m-0">FORGE</Link>    
      <button className="btn btn-outline-secondary" data-bs-toggle="offcanvas" data-bs-target="#mobileRightNav">
       ☰
      </button>
@@ -59,13 +59,13 @@ return (
 
 <footer className="border-top">
 <div className="container py-3 text-center small">
-  © {new Date().getFullYear()} Generic Your Way by Daniel Yerema.
+  © {new Date().getFullYear()}  Forge Your Path by Daniel Yerema.
 </div>
 </footer>
 </div>
 
 <aside className="d-none d-md-flex flex-column p-3 border-start" style={{ width: '300px', minHeight: '100vh' }}>
-<Link to="/" className="text-decoration-none mb-2 h5 align-self-center">Generic Your Way</Link>
+<Link to="/" className="text-decoration-none mb-2 h5 align-self-center">Forge Your Path</Link>
 <hr />
 <nav className="nav nav-pills flex-column gap-3">
 <NavLink className="btn btn-accent-outline"  to="/dashboard">Invites</NavLink>    

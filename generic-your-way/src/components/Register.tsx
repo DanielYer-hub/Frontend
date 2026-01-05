@@ -86,7 +86,7 @@ const Register: FunctionComponent = () => {
       <div className="page-body">
         <div className="container">
           <main className="welcome-page-content">
-            <img src="/content/gyw.png" alt="GYW logo" className="logo" />
+            <img src="/content/Forge.jpg" alt="FORGE logo" className="logo" />
           </main>
 
           <form className="row g-3" onSubmit={formik.handleSubmit}>
@@ -224,7 +224,7 @@ const Register: FunctionComponent = () => {
 
       <footer className="login-footer border-top">
         <div className="container py-3 text-center small">
-          © {new Date().getFullYear()} Generic Your Way by Daniel Yerema.
+          © {new Date().getFullYear()} Forge Your Path by Daniel Yerema.
         </div>
       </footer>
     </div>

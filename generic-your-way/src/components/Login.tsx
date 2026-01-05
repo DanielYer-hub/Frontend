@@ -53,7 +53,7 @@ return (
 <div className="page-body">
 <div className="container">
   <main className="welcome-page-content">
-  <img src="/content/gyw.png" alt="GYW logo" className="logo" />
+  <img src="/content/Forge.jpg" alt="Forge logo" className="logo" />
   </main>
   <form onSubmit={formik.handleSubmit}>
   <div className="mb-3 ">
@@ -107,7 +107,7 @@ New Acolyte? Please <Link to="/register">register</Link> first.
 </div>    
  <footer className="login-footer border-top">
   <div className="container py-3 text-center small">
-  © {new Date().getFullYear()} Generic Your Way by Daniel Yerema.
+  © {new Date().getFullYear()} Forge Your Path by Daniel Yerema.
   </div>
   </footer>
   </div>

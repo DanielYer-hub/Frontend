@@ -10,7 +10,7 @@ const WelcomePage: FunctionComponent = () => {
     <div className="welcome-page-container">
 
       <main className="welcome-page-content">
-        <img src="/content/gyw.png" alt="GYW logo" className="logo" />
+        <img src="/content/Forge.jpg" alt="FORGE logo" className="logo" />
       </main>
 
       <div className="welcome-page-buttons">
@@ -30,14 +30,14 @@ const WelcomePage: FunctionComponent = () => {
 
       <div className="info-text">
         <p>
-          Welcome to Generic Your Way (GYW), your ultimate platform for connecting with players worldwide! <br></br>
-          Whether you want to find teammates, join matches, or explore new gaming opportunities — GYW has you covered.
+          Welcome to Forge Your Path (Forge), your ultimate platform for connecting with players worldwide! <br></br>
+          Whether you want to find teammates, join matches, or explore new gaming opportunities — Forge has you covered.
         </p>
       </div>
 
       <footer className="welcome-footer border-top">
         <div className="container py-3 text-center small">
-          © {new Date().getFullYear()} Generic Your Way by Daniel Yerema.
+          © {new Date().getFullYear()} Forge Your Path by Daniel Yerema.
         </div>
       </footer>
     </div>
