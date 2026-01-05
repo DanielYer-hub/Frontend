@@ -81,6 +81,7 @@ const Updates: FunctionComponent<UpdatesProps> = () => {
                 <li>Standardized Country/City lists.</li>
                 <li>Status selection: <strong> Novice, Fan, Sportsman.</strong></li>
                 <li>Favourite Players.</li>
+                <li>Send Notifications by Bot on your divice.</li>
               </ul>
             </div>
             <div className="v-status is-soon">Soon…</div>
