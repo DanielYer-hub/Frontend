@@ -64,7 +64,9 @@ const Updates: FunctionComponent<UpdatesProps> = () => {
               <ul>
                 <li>Forget Password.</li>
                 <li>Feedback with the Developers.</li>
-                <li>New Design.</li>
+                <li>Play Location selection (home / local club / TTS).</li>
+                <li>Location-based filters for player search.</li>
+                <li>Improved match compatibility.</li>
               </ul>
             </div>
             <div className="v-status is-soon">Soon…</div>
