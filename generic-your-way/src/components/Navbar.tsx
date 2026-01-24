@@ -1,5 +1,5 @@
-import { useEffect, useState } from "react";
-import { useNavigate, useLocation, Link, Outlet, NavLink } from "react-router-dom";
+// import { useEffect, useState } from "react";
+import { useNavigate, Link, Outlet, NavLink } from "react-router-dom";
 import { useAuth } from "../context/AuthContext";
 import "./css/Navbar.css";
 
@@ -8,11 +8,7 @@ declare const bootstrap: any;
 export default function LayautRight() {
     const { token, logout } = useAuth();
     const navigate = useNavigate();
-    const loc = useLocation();
-    const [country, setCountry] = useState('');
-    const [region, setRegion] = useState('');
-    const [city, setCity] = useState('');
-    
+   
     const closeOffcanvas = () => {
     const el = document.getElementById("mobileRightNav");
     if (!el) return;
@@ -27,20 +23,6 @@ export default function LayautRight() {
     navigate("/login", { replace: true });
   };
   
-useEffect(() => {
-    const q = new URLSearchParams(loc.search);
-    setCountry(q.get('country') || '');
-    setRegion(q.get('region') || '');
-    setCity(q.get('city') || '');
-}, [loc.search]);
-
-const applyFilters = () => {
-    const q = new URLSearchParams();
-    if (country) q.set('country', country);
-    if (region) q.set('region', region);
-    if (city) q.set('city', city);
-    navigate(`/players?${q.toString()}`);
-};
 return (
 <div className="d-flex">
 <div className="flex-grow-1 d-flex flex-column" style={{ minHeight: '100vh' }}>
@@ -73,35 +55,7 @@ return (
 <NavLink className="btn btn-accent-outline" to="/about">About</NavLink>  
 <NavLink className="btn btn-accent-outline" to="/updates">Updates</NavLink> 
 <NavLink className="btn btn-accent-outline" to="/players">Find Players</NavLink>
- <div className="card ms-auto mt-2" style={{width:"100%"}}>
-    <div className="card-body">
-    <div className="fw-bold mb-2">Filter</div>
-    <div className="mb-2">
-    <label className="form-label">Region</label>
-    <select className="form-select" value={region} onChange={e=>setRegion(e.target.value)}>
-        <option value="">Any</option>
-        <option value="North America">North America</option>
-        <option value="Caribbean">Caribbean</option>
-        <option value="Central America">Central America</option>
-        <option value="South America">South America</option>
-        <option value="Africa">Africa</option>
-        <option value="Middle East">Middle East</option>
-        <option value="Europe">Europe</option>
-        <option value="Asia">Asia</option>
-        <option value="Australia and Oceania">Australia and Oceania</option>
-    </select>
- </div>
- <div className="mb-2">
-    <label className="form-label">Country</label>
-    <input className="form-control" value={country} onChange={e=>setCountry(e.target.value)} placeholder="e.g. England" />
-    </div>
-    <div className="mb-2">
-    <label className="form-label">City</label>
-    <input className="form-control" value={city} onChange={e=>setCity(e.target.value)} placeholder="e.g. London" />
-    </div>
-    <button className="btn btn-accent-outline w-100" onClick={applyFilters}>Apply</button>
-    </div>
-    </div>
+
 </nav>    
 <hr className="offcanvas-footer mt-auto"/>
 <div className="d-grid">
