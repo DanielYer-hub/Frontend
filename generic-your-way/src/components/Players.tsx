@@ -1,4 +1,4 @@
-import React, { useEffect, useMemo, useState } from "react";
+import React, { useEffect, useMemo, useRef, useState } from "react";
 import { useNavigate, useSearchParams } from "react-router-dom";
 import { toast } from "react-toastify";
 import { useAuth } from "../context/AuthContext";
@@ -12,6 +12,7 @@ import {
 } from "../services/availabilityService";
 import "./css/Players.css";
 import { track } from "../utils/analytics";
+import { listCitiesByCountry, listCountries } from "../services/locationService";
 
 const SETTINGS = [
   "Warhammer 40k",
@@ -53,6 +54,107 @@ type InvitePanelState = {
   setting?: string;
 };
 
+type SearchableSelectProps = {
+  value: string;
+  options: string[];
+  placeholder: string;
+  disabled?: boolean;
+  errorLabel?: string | null;
+  emptyLabel: string;
+  onChange: (value: string) => void;
+};
+
+const SearchableSelect: React.FC<SearchableSelectProps> = ({
+  value,
+  options,
+  placeholder,
+  disabled,
+  errorLabel,
+  emptyLabel,
+  onChange,
+}) => {
+  const [open, setOpen] = useState(false);
+  const [query, setQuery] = useState(value);
+  const containerRef = useRef<HTMLDivElement | null>(null);
+
+  useEffect(() => {
+    setQuery(value);
+  }, [value]);
+
+  useEffect(() => {
+    if (!open) return;
+    const handleClickOutside = (event: MouseEvent) => {
+      if (!containerRef.current?.contains(event.target as Node)) {
+        setOpen(false);
+      }
+    };
+    document.addEventListener("mousedown", handleClickOutside);
+    return () => document.removeEventListener("mousedown", handleClickOutside);
+  }, [open]);
+
+  const filtered = useMemo(() => {
+    const q = query.trim().toLowerCase();
+    if (q.length < 3) return options;
+    return options.filter((opt) => opt.toLowerCase().startsWith(q));
+  }, [options, query]);
+
+  return (
+    <div className="position-relative" ref={containerRef}>
+      <input
+        className="form-control"
+        value={query}
+        disabled={disabled}
+        placeholder={placeholder}
+        onChange={(e) => {
+          setQuery(e.target.value);
+          setOpen(true);
+        }}
+        onFocus={() => setOpen(true)}
+      />
+      {open && !disabled && (
+        <div
+          className="list-group position-absolute w-100"
+          style={{ zIndex: 5, maxHeight: 220, overflowY: "auto" }}
+        >
+          <button
+            type="button"
+            className="list-group-item list-group-item-action"
+            onClick={() => {
+              setQuery("");
+              onChange("");
+              setOpen(false);
+            }}
+          >
+            {emptyLabel}
+          </button>
+          {errorLabel && (
+            <div className="list-group-item text-danger">{errorLabel}</div>
+          )}
+          {filtered.map((opt) => (
+            <button
+              key={opt}
+              type="button"
+              className={`list-group-item list-group-item-action${
+                opt === value ? " active" : ""
+              }`}
+              onClick={() => {
+                setQuery(opt);
+                onChange(opt);
+                setOpen(false);
+              }}
+            >
+              {opt}
+            </button>
+          ))}
+          {!errorLabel && filtered.length === 0 && (
+            <div className="list-group-item text-muted">No matches</div>
+          )}
+        </div>
+      )}
+    </div>
+  );
+};
+
 const Players: React.FC = () => {
   const { user } = useAuth();
   const [players, setPlayers] = useState<PublicPlayer[]>([]);
@@ -60,6 +162,13 @@ const Players: React.FC = () => {
   const [search, setSearch] = useSearchParams();
   const [panel, setPanel] = useState<InvitePanelState>({ open: false });
   const [filtersOpen, setFiltersOpen] = useState(false);
+  const [countries, setCountries] = useState<string[]>([]);
+  const [cities, setCities] = useState<string[]>([]);
+  const [countriesLoading, setCountriesLoading] = useState(false);
+  const [citiesLoading, setCitiesLoading] = useState(false);
+  const [countriesError, setCountriesError] = useState<string | null>(null);
+  const [citiesError, setCitiesError] = useState<string | null>(null);
+  const prevCountryRef = useRef<string | null>(null);
   const navigate = useNavigate();
 
   const filters = useMemo(
@@ -130,6 +239,79 @@ const goFixProfile = () => {
     else next.delete(k);
     setSearch(next, { replace: true });
   };
+
+  const countryOptions = useMemo(() => {
+    const current = filters.country;
+    if (current && !countries.includes(current)) {
+      return [current, ...countries];
+    }
+    return countries;
+  }, [countries, filters.country]);
+
+  const cityOptions = useMemo(() => {
+    const current = filters.city;
+    if (current && !cities.includes(current)) {
+      return [current, ...cities];
+    }
+    return cities;
+  }, [cities, filters.city]);
+
+  useEffect(() => {
+    let active = true;
+    setCountriesLoading(true);
+    setCountriesError(null);
+    listCountries()
+      .then((list) => {
+        if (active) setCountries(list);
+      })
+      .catch((err: any) => {
+        if (!active) return;
+        setCountriesError(err?.message || "Failed to load countries");
+        toast.error("Failed to load countries");
+      })
+      .finally(() => {
+        if (active) setCountriesLoading(false);
+      });
+    return () => {
+      active = false;
+    };
+  }, []);
+
+  useEffect(() => {
+    const country = filters.country;
+    const prev = prevCountryRef.current;
+    if (prev && prev !== country) {
+      updateFilter("city", "");
+    }
+    prevCountryRef.current = country;
+  }, [filters.country]);
+
+  useEffect(() => {
+    const country = filters.country;
+    if (!country) {
+      setCities([]);
+      setCitiesError(null);
+      return;
+    }
+    let active = true;
+    setCitiesLoading(true);
+    setCitiesError(null);
+    listCitiesByCountry(country)
+      .then((list) => {
+        if (active) setCities(list);
+      })
+      .catch((err: any) => {
+        if (!active) return;
+        setCitiesError(err?.message || "Failed to load cities");
+        toast.error("Failed to load cities");
+      })
+      .finally(() => {
+        if (active) setCitiesLoading(false);
+      });
+    return () => {
+      active = false;
+    };
+  }, [filters.country]);
 
   function pickSettingForInvite(
     player: PublicPlayer,
@@ -281,21 +463,27 @@ const submitInvite = async () => {
 
             <div className="col-12 col-md-4">
               <label className="form-label">Country:</label>
-              <input
-                className="form-control"
+              <SearchableSelect
                 value={filters.country}
-                onChange={(e) => updateFilter("country", e.target.value)}
-                placeholder="e.g. England"
+                options={countryOptions}
+                placeholder={countriesLoading ? "Loading countries..." : "All countries"}
+                disabled={countriesLoading}
+                errorLabel={countriesError}
+                emptyLabel="All countries"
+                onChange={(value) => updateFilter("country", value)}
               />
             </div>
 
             <div className="col-12 col-md-4">
               <label className="form-label">City:</label>
-              <input
-                className="form-control"
+              <SearchableSelect
                 value={filters.city}
-                onChange={(e) => updateFilter("city", e.target.value)}
-                placeholder="e.g. London"
+                options={cityOptions}
+                placeholder={citiesLoading ? "Loading cities..." : "All cities"}
+                disabled={!filters.country || citiesLoading}
+                errorLabel={citiesError}
+                emptyLabel="All cities"
+                onChange={(value) => updateFilter("city", value)}
               />
             </div>
 

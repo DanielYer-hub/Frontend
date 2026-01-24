@@ -1,4 +1,4 @@
-import React, { useMemo } from "react";
+import React, { useEffect, useMemo, useRef, useState } from "react";
 import { useFormik } from "formik";
 import * as yup from "yup";
 import { useAuth } from "../context/AuthContext";
@@ -9,6 +9,7 @@ import { useNavigate } from "react-router-dom";
 import "./css/ProfileEdit.css";
 import DeleteAccountModal from "../components/DeleteAccountBlock";
 import { track } from "../utils/analytics";
+import { listCitiesByCountry, listCountries } from "../services/locationService";
 
 
 const SETTINGS = [ "Warhammer 40k","Age of Sigmar","The Horus Heresy","Kill Team","Necromunda",
@@ -58,8 +59,116 @@ const schema = yup.object({
   })
 });
 
+type SearchableSelectProps = {
+  value: string;
+  options: string[];
+  placeholder: string;
+  disabled?: boolean;
+  errorLabel?: string | null;
+  emptyLabel: string;
+  onChange: (value: string) => void;
+};
+
+const SearchableSelect: React.FC<SearchableSelectProps> = ({
+  value,
+  options,
+  placeholder,
+  disabled,
+  errorLabel,
+  emptyLabel,
+  onChange,
+}) => {
+  const [open, setOpen] = useState(false);
+  const [query, setQuery] = useState(value);
+  const containerRef = useRef<HTMLDivElement | null>(null);
+
+  useEffect(() => {
+    setQuery(value);
+  }, [value]);
+
+  useEffect(() => {
+    if (!open) return;
+    const handleClickOutside = (event: MouseEvent) => {
+      if (!containerRef.current?.contains(event.target as Node)) {
+        setOpen(false);
+      }
+    };
+    document.addEventListener("mousedown", handleClickOutside);
+    return () => document.removeEventListener("mousedown", handleClickOutside);
+  }, [open]);
+
+  const filtered = useMemo(() => {
+    const q = query.trim().toLowerCase();
+    if (q.length < 3) return options;
+    return options.filter((opt) => opt.toLowerCase().startsWith(q));
+  }, [options, query]);
+
+  return (
+    <div className="position-relative" ref={containerRef}>
+      <input
+        className="form-control"
+        value={query}
+        disabled={disabled}
+        placeholder={placeholder}
+        onChange={(e) => {
+          setQuery(e.target.value);
+          setOpen(true);
+        }}
+        onFocus={() => setOpen(true)}
+      />
+      {open && !disabled && (
+        <div
+          className="list-group position-absolute w-100"
+          style={{ zIndex: 5, maxHeight: 220, overflowY: "auto" }}
+        >
+          <button
+            type="button"
+            className="list-group-item list-group-item-action"
+            onClick={() => {
+              setQuery("");
+              onChange("");
+              setOpen(false);
+            }}
+          >
+            {emptyLabel}
+          </button>
+          {errorLabel && (
+            <div className="list-group-item text-danger">{errorLabel}</div>
+          )}
+          {filtered.map((opt) => (
+            <button
+              key={opt}
+              type="button"
+              className={`list-group-item list-group-item-action${
+                opt === value ? " active" : ""
+              }`}
+              onClick={() => {
+                setQuery(opt);
+                onChange(opt);
+                setOpen(false);
+              }}
+            >
+              {opt}
+            </button>
+          ))}
+          {!errorLabel && filtered.length === 0 && (
+            <div className="list-group-item text-muted">No matches</div>
+          )}
+        </div>
+      )}
+    </div>
+  );
+};
+
 const ProfileEdit: React.FC = () => {
   const { user, refreshMe } = useAuth(); 
+  const [countries, setCountries] = useState<string[]>([]);
+  const [cities, setCities] = useState<string[]>([]);
+  const [countriesLoading, setCountriesLoading] = useState(false);
+  const [citiesLoading, setCitiesLoading] = useState(false);
+  const [countriesError, setCountriesError] = useState<string | null>(null);
+  const [citiesError, setCitiesError] = useState<string | null>(null);
+  const prevCountryRef = useRef<string | null>(null);
   const missingMine = useMemo(() => {
     const m: string[] = [];
     if (!user?.region) m.push("Region");
@@ -68,7 +177,6 @@ const ProfileEdit: React.FC = () => {
     if (!user?.settings?.length) m.push("Game settings");
     return m;
   }, [user]);
-
   const navigate = useNavigate();
   const formik = useFormik({
     enableReinitialize: true,
@@ -121,6 +229,77 @@ const ProfileEdit: React.FC = () => {
       }
     }
   });
+  const countryOptions = useMemo(() => {
+    const current = formik.values.address.country;
+    if (current && !countries.includes(current)) {
+      return [current, ...countries];
+    }
+    return countries;
+  }, [countries, formik.values.address.country]);
+  const cityOptions = useMemo(() => {
+    const current = formik.values.address.city;
+    if (current && !cities.includes(current)) {
+      return [current, ...cities];
+    }
+    return cities;
+  }, [cities, formik.values.address.city]);
+
+  useEffect(() => {
+    let active = true;
+    setCountriesLoading(true);
+    setCountriesError(null);
+    listCountries()
+      .then((list) => {
+        if (active) setCountries(list);
+      })
+      .catch((err: any) => {
+        if (!active) return;
+        setCountriesError(err?.message || "Failed to load countries");
+        toast.error("Failed to load countries");
+      })
+      .finally(() => {
+        if (active) setCountriesLoading(false);
+      });
+    return () => {
+      active = false;
+    };
+  }, []);
+
+  useEffect(() => {
+    const country = formik.values.address.country;
+    const prev = prevCountryRef.current;
+    if (prev && prev !== country) {
+      formik.setFieldValue("address.city", "");
+    }
+    prevCountryRef.current = country;
+  }, [formik.values.address.country]);
+
+  useEffect(() => {
+    const country = formik.values.address.country;
+    if (!country) {
+      setCities([]);
+      setCitiesError(null);
+      return;
+    }
+    let active = true;
+    setCitiesLoading(true);
+    setCitiesError(null);
+    listCitiesByCountry(country)
+      .then((list) => {
+        if (active) setCities(list);
+      })
+      .catch((err: any) => {
+        if (!active) return;
+        setCitiesError(err?.message || "Failed to load cities");
+        toast.error("Failed to load cities");
+      })
+      .finally(() => {
+        if (active) setCitiesLoading(false);
+      });
+    return () => {
+      active = false;
+    };
+  }, [formik.values.address.country]);
 
   return (
     <div className="container py-3 edit-page">
@@ -252,17 +431,27 @@ const ProfileEdit: React.FC = () => {
 
     <div>
       <label className="form-label">Country:</label>
-      <input className="form-control" name="address.country"
+      <SearchableSelect
         value={formik.values.address.country}
-        onChange={formik.handleChange}
+        options={countryOptions}
+        placeholder={countriesLoading ? "Loading countries..." : "Select country"}
+        disabled={countriesLoading}
+        errorLabel={countriesError}
+        emptyLabel="Select country"
+        onChange={(value) => formik.setFieldValue("address.country", value)}
       />
     </div>
 
     <div>
       <label className="form-label">City:</label>
-      <input className="form-control" name="address.city"
+      <SearchableSelect
         value={formik.values.address.city}
-        onChange={formik.handleChange}
+        options={cityOptions}
+        placeholder={citiesLoading ? "Loading cities..." : "Select city"}
+        disabled={!formik.values.address.country || citiesLoading}
+        errorLabel={citiesError}
+        emptyLabel="Select city"
+        onChange={(value) => formik.setFieldValue("address.city", value)}
       />
     </div>
   </div>
