@@ -62,6 +62,7 @@ const Updates: FunctionComponent<UpdatesProps> = () => {
             <hr className="v-hr"/>
             <div className="v-body">
               <ul>
+                <li>Standardized Country/City lists.</li>
                 <li>Forget Password.</li>
                 <li>Feedback with the Developers.</li>
                 <li>Play Location selection (home / local club / TTS).</li>
@@ -78,7 +79,6 @@ const Updates: FunctionComponent<UpdatesProps> = () => {
             <div className="v-body">
               <ul>
                 <li>Player ratings by Settings, Countries, and Cities.</li>
-                <li>Standardized Country/City lists.</li>
                 <li>Status selection: <strong> Novice, Fan, Sportsman.</strong></li>
                 <li>Favourite Players.</li>
                 <li>Send Notifications by Bot on your divice.</li>
