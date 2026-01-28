@@ -11,11 +11,19 @@ interface ForgetPasswordProps {}
 
 const ForgetPassword: FunctionComponent<ForgetPasswordProps> = () => {
   const navigate = useNavigate();
-  const [emailVerified, setEmailVerified] = useState(false);
+  const [step, setStep] = useState<"email" | "code" | "password">("email");
   const [email, setEmail] = useState("");
+  const [code, setCode] = useState("");
 
   const emailSchema = yup.object({
     email: yup.string().email().min(5).required(),
+  });
+
+  const codeSchema = yup.object({
+    code: yup
+      .string()
+      .required()
+      .matches(/^\d{6}$/, "Enter the 6-digit code"),
   });
 
   const passwordSchema = yup.object({
@@ -43,11 +51,31 @@ const ForgetPassword: FunctionComponent<ForgetPasswordProps> = () => {
       try {
         await authService.requestPasswordReset(values.email);
         setEmail(values.email);
-        setEmailVerified(true);
-        sucessMassage("Email verified. Please enter your new password.");
+        setStep("code");
+        sucessMassage("Code sent. Please check your email.");
       } catch (error: any) {
         console.error("Email verification failed:", error);
         alert(error?.response?.data?.message || "Email not found. Please try again.");
+      } finally {
+        setSubmitting(false);
+      }
+    },
+  });
+
+  const codeFormik: FormikValues = useFormik<FormikValues>({
+    initialValues: {
+      code: "",
+    },
+    validationSchema: codeSchema,
+    onSubmit: async (values, { setSubmitting }) => {
+      try {
+        await authService.verifyResetCode(email, values.code);
+        setCode(values.code);
+        setStep("password");
+        sucessMassage("Code verified. Set your new password.");
+      } catch (error: any) {
+        console.error("Code verification failed:", error);
+        alert(error?.response?.data?.message || "Invalid code. Please try again.");
       } finally {
         setSubmitting(false);
       }
@@ -62,7 +90,7 @@ const ForgetPassword: FunctionComponent<ForgetPasswordProps> = () => {
     validationSchema: passwordSchema,
     onSubmit: async (values, { resetForm, setSubmitting }) => {
       try {
-        await authService.resetPassword(email, values.newPassword);
+        await authService.resetPassword(email, code, values.newPassword);
         sucessMassage("Password updated successfully!");
         navigate("/login");
         resetForm();
@@ -84,7 +112,7 @@ const ForgetPassword: FunctionComponent<ForgetPasswordProps> = () => {
               <img src="/content/Forge.jpg" alt="Forge logo" className="logo" />
             </main>
 
-            {!emailVerified ? (
+            {step === "email" ? (
               <form onSubmit={emailFormik.handleSubmit}>
                 <div className="mb-3">
                   <label htmlFor="email" className="form-label">Email:</label>
@@ -111,6 +139,47 @@ const ForgetPassword: FunctionComponent<ForgetPasswordProps> = () => {
                 >
                   Verify Email
                 </button>
+              </form>
+            ) : step === "code" ? (
+              <form onSubmit={codeFormik.handleSubmit}>
+                <div className="mb-3">
+                  <label htmlFor="code" className="form-label">6-digit code:</label>
+                  {codeFormik.touched.code && codeFormik.errors.code && (
+                    <p className="text-danger">{codeFormik.errors.code}</p>
+                  )}
+                  <input
+                    name="code"
+                    type="text"
+                    inputMode="numeric"
+                    className="form-control"
+                    id="code"
+                    autoComplete="one-time-code"
+                    placeholder="123456"
+                    onChange={codeFormik.handleChange}
+                    onBlur={codeFormik.handleBlur}
+                    value={codeFormik.values.code}
+                    required
+                  />
+                </div>
+                <button
+                  disabled={!codeFormik.dirty || !codeFormik.isValid || codeFormik.isSubmitting}
+                  type="submit"
+                  className="btn btn-success"
+                >
+                  Verify code
+                </button>
+                <div className="mt-3">
+                  <button
+                    type="button"
+                    className="btn btn-outline-secondary"
+                    onClick={() => {
+                      setStep("email");
+                      setCode("");
+                    }}
+                  >
+                    Back
+                  </button>
+                </div>
               </form>
             ) : (
               <form onSubmit={passwordFormik.handleSubmit}>

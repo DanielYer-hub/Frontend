@@ -31,8 +31,13 @@ export const authService = {
     return response.data;
   },
 
-  async resetPassword(email: string, newPassword: string) {
-    const response = await axios.post(`${API_URL}/auth/reset-password`, { email, newPassword });
+  async verifyResetCode(email: string, code: string) {
+    const response = await axios.post(`${API_URL}/auth/forget-password/verify`, { email, code });
+    return response.data;
+  },
+
+  async resetPassword(email: string, code: string, newPassword: string) {
+    const response = await axios.post(`${API_URL}/auth/reset-password`, { email, code, newPassword });
     return response.data;
   }
 };
