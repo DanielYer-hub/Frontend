@@ -101,10 +101,14 @@ return (
   </button>
 </form>
 <span className="span-text">
-New Acolyte? Please <Link to="/register">register</Link> first.
+New Acolyte ? Please <Link to="/register">register</Link> first.
+</span>
+<span className="span-text">
+Forgot Password ? <Link to="/forget-password">Tech-Priest</Link> will help you.
 </span>
 </div>
 </div>    
+
  <footer className="login-footer border-top">
   <div className="container py-3 text-center small">
   © {new Date().getFullYear()} Forge Your Path by Daniel Yerema.

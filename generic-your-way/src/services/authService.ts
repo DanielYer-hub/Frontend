@@ -24,5 +24,15 @@ export const authService = {
 
   getToken() {
     return getFromStorage('token'); 
+  },
+
+  async requestPasswordReset(email: string) {
+    const response = await axios.post(`${API_URL}/auth/forget-password`, { email });
+    return response.data;
+  },
+
+  async resetPassword(email: string, newPassword: string) {
+    const response = await axios.post(`${API_URL}/auth/reset-password`, { email, newPassword });
+    return response.data;
   }
 };

@@ -15,6 +15,7 @@ import WelcomePage from './components/WelcomePage';
 import ProfileEdit from './components/ProfileEdit';
 import AvailabilityEdit from './components/AvailabilityEdit';
 import "./components/css/toast.css";
+import ForgetPassword from './components/ForgetPassword';
 
 
 function App() {
@@ -38,6 +39,7 @@ function App() {
         <Route path='/welcome-page' element={<WelcomePage />} />
          <Route path='/register' element={<Register />} />
          <Route path='/login' element={<Login />} />
+         <Route path='/forget-password' element={<ForgetPassword />} />
          <Route element={<LayoutRight />}>
          <Route path='about' element={<About />} />
          <Route path='/updates' element={<Updates />} />
