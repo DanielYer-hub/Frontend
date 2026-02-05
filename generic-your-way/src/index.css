@@ -120,3 +120,18 @@ a:hover, .nav-link.active { color: var(--accent); }
   outline: 2px solid #ffd000;
   outline-offset: 2px;
 }
+
+.modal-backdrop{
+  position: fixed; inset: 0;
+  background: rgba(0,0,0,0.6);
+  display:flex; align-items:center; justify-content:center;
+  z-index: 9999;
+}
+.modal-card{
+  width: min(560px, 92vw);
+  background: #111;
+  border: 1px solid rgba(255,255,255,0.15);
+  border-radius: 12px;
+  padding: 16px;
+}
+

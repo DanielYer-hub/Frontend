@@ -258,7 +258,6 @@ const PlayerCard: FunctionComponent<PlayerCardProps> = () => {
       <div className="card">
         <div className="card-body">
           <div className="d-flex align-items-center gap-2 mb-2 av-date-row">
-            <div className="small fw-bold av-date-label">Date:</div>
             <input
               type="date"
               className="form-control av-date-input"
@@ -273,18 +272,20 @@ const PlayerCard: FunctionComponent<PlayerCardProps> = () => {
               className="d-flex align-items-center gap-2 mb-2 av-watch"
             >
               <input
+                className="form-control av-watch-input"
                 type="time"
                 value={r.from}
                 onChange={(e) =>
-                  setRange(slotIdx, rangeIdx, "from", e.target.value)
+                setRange(slotIdx, rangeIdx, "from", e.target.value)
                 }
               />
               <span>–</span>
               <input
+                className="form-control av-watch-input"
                 type="time"
                 value={r.to}
                 onChange={(e) =>
-                  setRange(slotIdx, rangeIdx, "to", e.target.value)
+                setRange(slotIdx, rangeIdx, "to", e.target.value)
                 }
               />
               <button

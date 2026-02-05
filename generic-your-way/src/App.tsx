@@ -18,6 +18,7 @@ import "./components/css/toast.css";
 import ForgetPassword from './components/ForgetPassword';
 
 
+
 function App() {
  
   return (
@@ -50,6 +51,7 @@ function App() {
          <Route path='/match/:battleId' element={<MatchRoom />}/>
          <Route path="/profile-edit" element={<ProfileEdit/>}/>
          <Route path="/availability" element={<AvailabilityEdit />} />
+         
         </Route>
       </Routes>
      </BrowserRouter>

@@ -1,13 +1,18 @@
-// import { useEffect, useState } from "react";
 import { useNavigate, Link, Outlet, NavLink } from "react-router-dom";
 import { useAuth } from "../context/AuthContext";
 import "./css/Navbar.css";
+import FeedbackModal from "./Feedbeck";
+import { useState } from "react";
+
 
 declare const bootstrap: any;
+
+
 
 export default function LayautRight() {
     const { token, logout } = useAuth();
     const navigate = useNavigate();
+    const [open, setOpen] = useState(false);
    
     const closeOffcanvas = () => {
     const el = document.getElementById("mobileRightNav");
@@ -55,8 +60,14 @@ return (
 <NavLink className="btn btn-accent-outline" to="/about">About</NavLink>  
 <NavLink className="btn btn-accent-outline" to="/updates">Updates</NavLink> 
 <NavLink className="btn btn-accent-outline" to="/players">Find Players</NavLink>
+<button className="btn btn-accent-outline" onClick={() => setOpen(true)}>
+  Feedback
+  </button>
+  <FeedbackModal isOpen={open} onClose={() => setOpen(false)} /> 
+</nav>  
 
-</nav>    
+   
+
 <hr className="offcanvas-footer mt-auto"/>
 <div className="d-grid">
         {token ? (
@@ -95,6 +106,10 @@ return (
           <NavLink className="btn btn-accent-outline" to="/about" onClick={closeOffcanvas}>About</NavLink>
           <NavLink className="btn btn-accent-outline" to="/updates" onClick={closeOffcanvas}>Updates</NavLink> 
           <NavLink className="btn btn-accent-outline" to="/players" onClick={closeOffcanvas}>Find Players</NavLink>
+          <button className="btn btn-accent-outline" onClick={() => setOpen(true)}>
+          Feedback
+          </button>
+          <FeedbackModal isOpen={open} onClose={() => setOpen(false)} /> 
 <hr className="offcanvas-footer mt-auto"/>
 <div className=" d-grid ">
      {token ? (

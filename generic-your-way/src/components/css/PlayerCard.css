@@ -114,6 +114,10 @@
 .av-watch {
   flex-wrap: wrap;  
 }
+.av-watch-input {
+  flex: 1;          
+  min-width: 0;
+}
 
 @media (max-width: 1270px){
    .pc-info-settings-list {
