@@ -2,11 +2,15 @@ import { useFormik } from "formik";
 import * as yup from "yup";
 import { sendFeedback, type FeedbackType } from "../services/feedback";
 import { toast } from "react-toastify";
+import { useAuth } from "../context/AuthContext";
+
 
 type Props = {
   isOpen: boolean;
   onClose: () => void;
 };
+
+const { user } = useAuth();
 
 const schema = yup.object({
   type: yup.mixed<FeedbackType>().oneOf(["problem", "suggestion"]).required(),
@@ -24,11 +28,13 @@ export default function FeedbackModal({ isOpen, onClose }: Props) {
     validationSchema: schema,
     onSubmit: async (values, { resetForm, setSubmitting }) => {
       try {
-        await sendFeedback({
-          type: values.type,
-          title: values.title || undefined,
-          description: values.description,
-        });
+       await sendFeedback({
+  type: values.type,
+  title: values.title || undefined,
+  description: values.description,
+  fromEmail: user?.email,      
+  fromName: `${user?.name?.first || ""} ${user?.name?.last || ""}`.trim(),
+});
         toast.success("Thanks! Feedback sent.");
         resetForm();
         onClose();
