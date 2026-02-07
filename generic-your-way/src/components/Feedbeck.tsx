@@ -10,7 +10,7 @@ type Props = {
   onClose: () => void;
 };
 
-const { user } = useAuth();
+
 
 const schema = yup.object({
   type: yup.mixed<FeedbackType>().oneOf(["problem", "suggestion"]).required(),
@@ -19,6 +19,7 @@ const schema = yup.object({
 });
 
 export default function FeedbackModal({ isOpen, onClose }: Props) {
+  const { user } = useAuth();
   const formik = useFormik({
     initialValues: {
       type: "problem" as FeedbackType,
