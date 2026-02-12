@@ -327,7 +327,7 @@ const PlayerCard: FunctionComponent<PlayerCardProps> = () => {
                                 </button>
                               </div>
 
-                              <div className="d-flex gap-2 mt-2 flex-wrap">
+                              <div className="d-flex gap-2 mt-3 flex-wrap">
                                 {(["tts", "home", "club"] as Place[]).map((p) => {
                                   const active = place === p;
                                   return (

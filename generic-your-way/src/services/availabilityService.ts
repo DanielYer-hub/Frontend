@@ -1,5 +1,4 @@
 import { api } from "./http";
-// export type Place = "tts" | "home" | "club";
 
 export type AvRange = { from: string; to: string; place: Place };
 export type AvSlot = { date: string; ranges: AvRange[] };

@@ -127,6 +127,7 @@
   border-radius: 10px;
   font-size: 0.85rem;
   line-height: 1;
+  width: 190px;
 }
 .place-btn.active{
   background: #ffd000;
@@ -139,10 +140,16 @@
    .pc-info-settings-list {
     grid-template-columns: repeat(2, minmax(0, 1fr));
   }
+  .place-btn{
+    width: 120px;
+  }
 }
 @media (max-width: 1150px){
    .pc-info-settings-list {
     grid-template-columns: repeat(1, minmax(0, 1fr));
+  }
+   .place-btn{
+    width: 107px;
   }
 }
 @media (max-width: 900px){
@@ -181,6 +188,7 @@
   .av-time button {
     width: 100%;
   }
+   
 }
 @media (max-width: 768px) {
   .card-header{
@@ -230,14 +238,19 @@
   .pc-info-settings-list {
     grid-template-columns: repeat(2, minmax(0, 1fr));
   }
-  
   .av-time button {
     width: 100%;
+  }
+   .place-btn{
+    width: 107px;
   }
 }
 @media (max-width: 480px) {
   .pc-info-settings-list {
     grid-template-columns: repeat(1, minmax(0, 1fr));
+  }
+   .place-btn{
+    width: 107px;
   }
 }
 @media (max-width: 390px) {
