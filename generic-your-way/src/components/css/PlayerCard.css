@@ -118,7 +118,11 @@
   flex: 1;          
   min-width: 0;
 }
-
+.place-row {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 8px;
+}
 .place-btn{
   border: 1px solid #ffd000;
   background: transparent;
@@ -127,7 +131,7 @@
   border-radius: 10px;
   font-size: 0.85rem;
   line-height: 1;
-  width: 190px;
+  
 }
 .place-btn.active{
   background: #ffd000;
@@ -140,17 +144,13 @@
    .pc-info-settings-list {
     grid-template-columns: repeat(2, minmax(0, 1fr));
   }
-  .place-btn{
-    width: 120px;
-  }
+  
 }
 @media (max-width: 1150px){
    .pc-info-settings-list {
     grid-template-columns: repeat(1, minmax(0, 1fr));
   }
-   .place-btn{
-    width: 107px;
-  }
+  
 }
 @media (max-width: 900px){
   .pc-layout {
@@ -241,16 +241,11 @@
   .av-time button {
     width: 100%;
   }
-   .place-btn{
-    width: 107px;
-  }
+  
 }
 @media (max-width: 480px) {
   .pc-info-settings-list {
     grid-template-columns: repeat(1, minmax(0, 1fr));
-  }
-   .place-btn{
-    width: 107px;
   }
 }
 @media (max-width: 390px) {
@@ -261,4 +256,5 @@
 .pc-busy-switch .form-check-input {
   cursor: pointer;
 }
+ 
 }
