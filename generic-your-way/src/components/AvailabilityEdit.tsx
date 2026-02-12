@@ -3,6 +3,13 @@ import { getMyAvailability, updateMyAvailability, type Availability } from "../s
 import { toast } from "react-toastify";
 import { track } from "../utils/analytics";
 
+type Place = "tts" | "home" | "club";
+const PLACE_LABEL: Record<Place, string> = {
+  tts: "TTS",
+  home: "Home Play",
+  club: "Local Club",
+};
+
 const AvailabilityEdit: React.FC = () => {
   const [av, setAv] = useState<Availability>({ busyAllWeek:false, slots:[] });
   const [loading, setLoading] = useState(true);
@@ -30,7 +37,7 @@ const addSlot = () => {
   }
   setAv(prev => ({
     ...prev,
-    slots: [...prev.slots, { date: "", ranges: [{ from: "18:00", to: "22:00" }] }]
+    slots: [...prev.slots, { date: "", ranges: [{ from: "18:00", to: "22:00", place: "club" }] }]
   }));
 };
 
@@ -55,11 +62,22 @@ const addSlot = () => {
   }));
 };
 
+const setPlace = (slotIdx: number, rangeIdx: number, place: Place) => {
+    setAv((prev) => ({
+      ...prev,
+      slots: prev.slots.map((s, i) => i !== slotIdx 
+      ? s : { ...s, ranges: (s.ranges || [])
+        .map((r, j) => j === rangeIdx ? { ...r, place } : r),
+       }
+      ),
+    }));
+  };
+
 const addRange = (slotIdx:number) => {
   setAv(prev => ({
     ...prev,
     slots: prev.slots.map((s,i)=> i===slotIdx
-      ? ({ ...s, ranges: [...s.ranges, { from:"18:00", to:"22:00" }] })
+      ? ({ ...s, ranges: [...s.ranges, { from:"18:00", to:"22:00", place: "club" }] })
       : s
     )
   }));
@@ -79,7 +97,15 @@ const addRange = (slotIdx:number) => {
     try {
      const payload: Availability = {
         busyAllWeek: av.busyAllWeek,
-        slots: (av.slots || []).filter((s) => !!s.date),
+        slots: (av.slots || []).filter((s) => !!s.date)
+        .map((s) => ({
+            ...s,
+            ranges: (s.ranges || []).map((r: any) => ({
+              from: r.from,
+              to: r.to,
+              place: (["tts", "home", "club"].includes(String(r.place)) ? r.place : "club") as Place,
+            })),
+          })),
       };
       await updateMyAvailability(payload);
       track("Availability: Saved", {
@@ -131,15 +157,52 @@ const addRange = (slotIdx:number) => {
                 onChange={(e)=>setSlotDate(slotIdx, e.target.value)}
               />
 
-              {(s.ranges || []).map((r, rangeIdx) => (
-                <div key={rangeIdx} className="d-flex align-items-center gap-2 mb-2">
-                  <input type="time" value={r.from} onChange={e=>setRange(slotIdx, rangeIdx, "from", e.target.value)} />
-                  <span>–</span>
-                  <input type="time" value={r.to} onChange={e=>setRange(slotIdx, rangeIdx, "to", e.target.value)} />
-                  <button className="btn btn-sm btn-outline-danger" onClick={()=>removeRange(slotIdx, rangeIdx)}>×</button>
-                </div>
-              ))}
+              {(s.ranges || []).map((r: any, rangeIdx: number) => {
+                      const place = (r.place || "club") as Place;
 
+                      return (
+                        <div key={rangeIdx} className="mb-2">
+                          <div className="d-flex align-items-center gap-2">
+                            <input
+                              type="time"
+                              value={r.from}
+                              onChange={(e) => setRange(slotIdx, rangeIdx, "from", e.target.value)}
+                            />
+                            <span>–</span>
+                            <input
+                              type="time"
+                              value={r.to}
+                              onChange={(e) => setRange(slotIdx, rangeIdx, "to", e.target.value)}
+                            />
+                            <button
+                              className="btn btn-sm btn-outline-danger"
+                              onClick={() => removeRange(slotIdx, rangeIdx)}
+                              type="button"
+                            >
+                              ×
+                            </button>
+                          </div>
+
+                          
+                          <div className="d-flex gap-2 mt-2 flex-wrap">
+                            {(["tts", "home", "club"] as Place[]).map((p) => {
+                              const active = place === p;
+                              return (
+                                <button
+                                  key={p}
+                                  type="button"
+                                  className={`place-btn ${active ? "active" : ""}`}
+                                  onClick={() => setPlace(slotIdx, rangeIdx, p)}
+                                >
+                                  {PLACE_LABEL[p]}
+                                </button>
+                              );
+                            })}
+                          </div>
+                        </div>
+                      );
+                    })}
+              
               <button className="btn btn-sm btn-outline-secondary" onClick={()=>addRange(slotIdx)}>
                 + Add time
               </button>

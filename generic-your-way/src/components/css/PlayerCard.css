@@ -119,6 +119,22 @@
   min-width: 0;
 }
 
+.place-btn{
+  border: 1px solid #ffd000;
+  background: transparent;
+  color: #ffd000;
+  padding: 6px 10px;
+  border-radius: 10px;
+  font-size: 0.85rem;
+  line-height: 1;
+}
+.place-btn.active{
+  background: #ffd000;
+  color: #111;
+  font-weight: 700;
+}
+
+
 @media (max-width: 1270px){
    .pc-info-settings-list {
     grid-template-columns: repeat(2, minmax(0, 1fr));

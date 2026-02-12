@@ -12,6 +12,14 @@ import { toast } from "react-toastify";
 import "./css/PlayerCard.css";
 import { track } from "../utils/analytics";
 
+type Place = "tts" | "home" | "club";
+
+const PLACE_LABEL: Record<Place, string> = {
+  tts: "TTS",
+  home: "Home Play",
+  club: "Local Club",
+};
+
 type UserLike = {
   id: string;
   name: { first: string; last: string };
@@ -65,7 +73,7 @@ const PlayerCard: FunctionComponent<PlayerCardProps> = () => {
       ...prev,
       slots: [
         ...prev.slots,
-        { date: "", ranges: [{ from: "18:00", to: "22:00" }] },
+        { date: "", ranges: [{ from: "18:00", to: "22:00", place: "club" as Place }] },
       ],
     }));
   };
@@ -89,7 +97,7 @@ const PlayerCard: FunctionComponent<PlayerCardProps> = () => {
       ...prev,
       slots: prev.slots.map((s, i) =>
         i === slotIdx
-          ? { ...s, ranges: [...s.ranges, { from: "18:00", to: "22:00" }] }
+          ? { ...s, ranges: [...s.ranges, { from: "18:00", to: "22:00", place: "club" as Place }] }
           : s
       ),
     }));
@@ -116,6 +124,17 @@ const PlayerCard: FunctionComponent<PlayerCardProps> = () => {
     }));
   };
 
+  const setPlace = (slotIdx: number, rangeIdx: number, place: Place) => {
+    setAv((prev) => ({
+      ...prev,
+      slots: prev.slots.map((s, i) => i !== slotIdx 
+      ? s : { ...s, ranges: (s.ranges || [])
+        .map((r, j) => j === rangeIdx ? { ...r, place } : r),
+       }
+      ),
+    }));
+  };
+
   const removeRange = (slotIdx: number, rangeIdx: number) => {
     setAv((prev) => ({
       ...prev,
@@ -131,8 +150,17 @@ const PlayerCard: FunctionComponent<PlayerCardProps> = () => {
     try {
       const payload: Availability = {
         busyAllWeek: av.busyAllWeek,
-        slots: (av.slots || []).filter((s) => !!s.date),
+        slots: (av.slots || []).filter((s) => !!s.date)
+        .map((s) => ({
+            ...s,
+            ranges: (s.ranges || []).map((r: any) => ({
+              from: r.from,
+              to: r.to,
+              place: (["tts", "home", "club"].includes(String(r.place)) ? r.place : "club") as Place,
+            })),
+          })),
       };
+
       await updateMyAvailability(payload);
       track("Availability: Saved", {
       busyAllWeek: !!payload.busyAllWeek,
@@ -266,37 +294,57 @@ const PlayerCard: FunctionComponent<PlayerCardProps> = () => {
             />
           </div>
 
-          {(s.ranges || []).map((r, rangeIdx) => (
-            <div
-              key={rangeIdx}
-              className="d-flex align-items-center gap-2 mb-2 av-watch"
-            >
-              <input
-                className="form-control av-watch-input"
-                type="time"
-                value={r.from}
-                onChange={(e) =>
-                setRange(slotIdx, rangeIdx, "from", e.target.value)
-                }
-              />
-              <span>–</span>
-              <input
-                className="form-control av-watch-input"
-                type="time"
-                value={r.to}
-                onChange={(e) =>
-                setRange(slotIdx, rangeIdx, "to", e.target.value)
-                }
-              />
-              <button
-                className="btn btn-sm btn-outline-danger"
-                onClick={() => removeRange(slotIdx, rangeIdx)}
-                title="Remove time"
-              >
-                ×
-              </button>
-            </div>
-          ))}
+          {(((s as any).ranges || []) as any[]).map((r: any, rangeIdx: number) => {
+                          const place = (["tts", "home", "club"].includes(String(r.place)) ? r.place : "club") as Place;
+
+                          return (
+                            <div key={rangeIdx} className="mb-2">
+                              <div className="d-flex align-items-center gap-2 av-watch">
+                                <input
+                                  className="form-control av-watch-input"
+                                  type="time"
+                                  value={r.from}
+                                  onChange={(e) =>
+                                    setRange(slotIdx, rangeIdx, "from", e.target.value)
+                                  }
+                                />
+                                <span>–</span>
+                                <input
+                                  className="form-control av-watch-input"
+                                  type="time"
+                                  value={r.to}
+                                  onChange={(e) =>
+                                    setRange(slotIdx, rangeIdx, "to", e.target.value)
+                                  }
+                                />
+                                <button
+                                  className="btn btn-sm btn-outline-danger"
+                                  onClick={() => removeRange(slotIdx, rangeIdx)}
+                                  title="Remove time"
+                                  type="button"
+                                >
+                                  ×
+                                </button>
+                              </div>
+
+                              <div className="d-flex gap-2 mt-2 flex-wrap">
+                                {(["tts", "home", "club"] as Place[]).map((p) => {
+                                  const active = place === p;
+                                  return (
+                                    <button
+                                      key={p}
+                                      type="button"
+                                      className={`place-btn ${active ? "active" : ""}`}
+                                      onClick={() => setPlace(slotIdx, rangeIdx, p)}
+                                    >
+                                      {PLACE_LABEL[p]}
+                                    </button>
+                                  );
+                                })}
+                              </div>
+                            </div>
+                          );
+                        })}
 
           <hr />
           <div className="d-flex gap-2 mt-2 av-actions">
