@@ -14,6 +14,13 @@ import "./css/Players.css";
 import { track } from "../utils/analytics";
 import { listCitiesByCountry, listCountries } from "../services/locationService";
 
+type Place = "tts" | "home" | "club";
+const PLACE_LABEL: Record<Place, string> = {
+  tts: "TTS",
+  home: "Home Play",
+  club: "Local Club",
+};
+
 const SETTINGS = [
   "Warhammer 40k",
   "Age of Sigmar",
@@ -31,17 +38,17 @@ const SETTINGS = [
   "Middle-Earth",
 ];
 
-const regions = [
-  "North America",
-  "Caribbean",
-  "Central America",
-  "South America",
-  "Africa",
-  "Middle East",
-  "Europe",
-  "Asia",
-  "Australia and Oceania",
-];
+// const regions = [
+//   "North America",
+//   "Caribbean",
+//   "Central America",
+//   "South America",
+//   "Africa",
+//   "Middle East",
+//   "Europe",
+//   "Asia",
+//   "Australia and Oceania",
+// ];
 
 type InvitePanelState = {
   open: boolean;
@@ -174,11 +181,11 @@ const Players: React.FC = () => {
   const filters = useMemo(
     () => ({
       setting: search.get("setting") ?? "",
-      region: search.get("region") || "",
       country: search.get("country") || "",
       city: search.get("city") || "",
       date: search.get("date") || "",
       from: search.get("from") || "",
+      place: (search.get("place") ?? "") as "" | Place,
     }),
     [search, user?.settings]
   );
@@ -222,16 +229,16 @@ const goFixProfile = () => {
     load();
   }, [
     filters.setting,
-    filters.region,
     filters.country,
     filters.city,
     filters.date,
     filters.from,
+    filters.place,
     user,
   ]);
 
   const updateFilter = (
-    k: "setting" | "region" | "country" | "city" | "date" | "from",
+    k: "setting" | "country" | "city" | "date" | "from" | "place",
     v: string
   ) => {
     const next = new URLSearchParams(search);
@@ -338,9 +345,9 @@ const goFixProfile = () => {
       return;
     }  track("Invite: Open Panel", {
     setting: chosenSetting,
-    regionFilter: filters.region || "any",
     countryFilter: filters.country || "any",
     cityFilter: filters.city || "any",
+    placeFilter: filters.place || "any",
     });
     try {
       setPanel({ open: true, userId: toUserId, name, loading: true, setting: chosenSetting });
@@ -382,7 +389,7 @@ const submitInvite = async () => {
   const rIdx = panel.rangeIdx ?? 0;
   const r = slot.ranges?.[rIdx];
   try {
-    await createInvite(panel.userId, { date: slot.date, from: r?.from, to: r?.to }, panel.setting);
+  await createInvite(panel.userId, { date: slot.date, from: r?.from, to: r?.to }, panel.setting);
   track("Invite: Sent", {
   setting: panel.setting || "unknown",
   date: slot.date,
@@ -446,19 +453,17 @@ const submitInvite = async () => {
             </div>
 
             <div className="col-12 col-md-4">
-              <label className="form-label">Region:</label>
-              <select
-                className="form-select"
-                value={filters.region}
-                onChange={(e) => updateFilter("region", e.target.value)}
-              >
-                <option value="">All</option>
-                {regions.map((r) => (
-                  <option key={r} value={r}>
-                    {r}
-                  </option>
-                ))}
-              </select>
+            <label className="form-label">Place:</label>
+            <select
+            className="form-select"
+            value={filters.place}
+            onChange={(e) => updateFilter("place", e.target.value)}
+            >
+            <option value="">All</option>
+            <option value="tts">TTS</option>
+            <option value="home">Home Play</option>
+            <option value="club">Local Club</option>
+            </select>
             </div>
 
             <div className="col-12 col-md-4">
@@ -576,11 +581,11 @@ const submitInvite = async () => {
                         {isOpen && (
                           <div className="mt-3 p-2 border rounded player-card-invite-panel">
                             {panel.loading ? (
-                              <div className="small text-muted">Loading availability…</div>
+                              <div className="small">Loading availability…</div>
                             ) : av?.busyAllWeek ? (
                               <div className="text-danger small">Player is busy this week</div>
                             ) : !av?.slots?.length ? (
-                              <div className="small text-muted">No available dates</div>
+                              <div className="small">No available dates</div>
                             ) : (
                               <>
                                 <div className="mb-2 small">
@@ -630,6 +635,19 @@ const submitInvite = async () => {
                             </option>
                             ))}
                           </select>
+                          {(() => {
+                          const rIdx = panel.rangeIdx ?? 0;
+                          const r = (slotObj.ranges as any[])?.[rIdx];
+                          const place =
+                          r?.place && ["tts", "home", "club"].includes(String(r.place))
+                          ? (r.place as Place)
+                          : ("club" as Place);
+                          return (
+                          <div className="small mt-1">
+                          <b>Place:</b> {PLACE_LABEL[place]}
+                          </div>
+                          );
+                          })()}
                           </div>
                           )}
 

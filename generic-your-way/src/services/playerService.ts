@@ -50,21 +50,23 @@ export async function listPlayers(params: { region?: string; country?: string; c
   return (Array.isArray(data) ? data : data?.players ?? []) as PlayerDTO[];
 }
 
+export type Place = "tts" | "home" | "club";
+
 export async function listPublicPlayers(params: {
   setting?: string;
-  region?: string;
   country?: string;
   city?: string;
   date?: string;      
   from?: string;
+  place?: Place | "";
 }): Promise<PublicPlayer[]> {
   const q = new URLSearchParams();
   if (params.setting) q.set("setting", params.setting);
-  if (params.region) q.set("region", params.region);
   if (params.country) q.set("country", params.country);
   if (params.city) q.set("city", params.city);
   if (params.date) q.set("date", params.date);
   if (params.from) q.set("from", params.from);
+  if (params.place) q.set("place", params.place);
   const { data } = await api.get(`/public/players?${q.toString()}`);
   const players = (data.players || []) as PublicPlayer[];
   return players.map(absolutizeImage);
