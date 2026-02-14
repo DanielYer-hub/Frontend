@@ -2,14 +2,11 @@ import React, { useEffect, useMemo, useRef, useState } from "react";
 import { useNavigate, useSearchParams } from "react-router-dom";
 import { toast } from "react-toastify";
 import { useAuth } from "../context/AuthContext";
-import { listPublicPlayers, type PublicPlayer } from "../services/playerService";
+import { listPublicPlayers, listFavoritePlayers, type PublicPlayer } from "../services/playerService"; // Import the new API function
 import { createInvite } from "../services/inviteService";
 import BioClamp from "./BioClamp";
 import { imgUrl } from "../utils/imgUrl";
-import {
-  getPublicAvailability,
-  type Availability,
-} from "../services/availabilityService";
+import {getPublicAvailability,type Availability,} from "../services/availabilityService"; // New import
 import "./css/Players.css";
 import { track } from "../utils/analytics";
 import { listCitiesByCountry, listCountries } from "../services/locationService";
@@ -37,18 +34,6 @@ const SETTINGS = [
   "Warhammer Quest",
   "Middle-Earth",
 ];
-
-// const regions = [
-//   "North America",
-//   "Caribbean",
-//   "Central America",
-//   "South America",
-//   "Africa",
-//   "Middle East",
-//   "Europe",
-//   "Asia",
-//   "Australia and Oceania",
-// ];
 
 type InvitePanelState = {
   open: boolean;
@@ -165,6 +150,7 @@ const SearchableSelect: React.FC<SearchableSelectProps> = ({
 const Players: React.FC = () => {
   const { user } = useAuth();
   const [players, setPlayers] = useState<PublicPlayer[]>([]);
+  const [favoriteMap, setFavoriteMap] = useState<Record<string, boolean>>({}); // Map of playerId to isFavorite
   const [loading, setLoading] = useState(true);
   const [search, setSearch] = useSearchParams();
   const [panel, setPanel] = useState<InvitePanelState>({ open: false });
@@ -186,6 +172,7 @@ const Players: React.FC = () => {
       date: search.get("date") || "",
       from: search.get("from") || "",
       place: (search.get("place") ?? "") as "" | Place,
+      favorites: search.get("favorites") ?? "", // New favorites filter
     }),
     [search, user?.settings]
   );
@@ -217,7 +204,12 @@ const goFixProfile = () => {
     const load = async () => {
       setLoading(true);
       try {
-        const data = await listPublicPlayers(filters);
+        // const data = await listPublicPlayers(filters);
+        const data = 
+        filters.favorites === "1"
+        ? await listFavoritePlayers(filters)
+        : await listPublicPlayers(filters);
+        // If showing favorites, data is already filtered by API, no need to filter out self
         const meId = (user as any)?.id || (user as any)?._id;
         setPlayers(meId ? data.filter((p) => String(p._id) !== String(meId)) : data);
       } catch (e: any) {
@@ -234,11 +226,12 @@ const goFixProfile = () => {
     filters.date,
     filters.from,
     filters.place,
+    filters.favorites, // Refetch when favorites filter changes
     user,
   ]);
 
   const updateFilter = (
-    k: "setting" | "country" | "city" | "date" | "from" | "place",
+    k: "setting" | "country" | "city" | "date" | "from" | "place" | "favorites", // Add "favorites" to the type
     v: string
   ) => {
     const next = new URLSearchParams(search);
@@ -511,6 +504,22 @@ const submitInvite = async () => {
                 onChange={(e) => updateFilter("from", e.target.value)}
               />
             </div>
+// Show favorites filter only if user is logged in
+          {user && (
+           <div className="col-12 col-md-4 d-flex align-items-end">
+            <button
+            type="button"
+            className={`btn w-100 ${
+            filters.favorites === "1" ? "btn-warning" : "btn-outline-warning"
+            }`}
+            onClick={() => updateFilter("favorites", filters.favorites === "1" ? "" : "1")}
+            title="Show only players you added to Favorites"
+            >
+           {filters.favorites === "1" ? "Hide Favorites" : "Show Favorites"}
+           </button>
+          </div>
+          )}
+// End of favorites filter
           </div>
         </div>
       </div>
@@ -532,6 +541,29 @@ const submitInvite = async () => {
 
                 <div className="card player-card">
                   <div className="card-body d-flex flex-column">
+// Show favorite button only if user is logged in
+                    {user && (
+                     <button
+                     type="button"
+                     className={`fav-btn ${favoriteMap[p._id] ? "active" : ""}`}
+                     onClick={async (e) => {
+                     e.stopPropagation();
+                     try {
+                     const isFavorite = !favoriteMap[p._id];
+                     // Toggle favorite status (call API to add/remove)
+                     setFavoriteMap((prev) => ({
+                     ...prev,
+                     [p._id]: isFavorite,
+                      }));
+                     } catch (err) {
+                     toast.error("Failed to update favorite");
+                     }
+                     }}
+                     >
+                    {favoriteMap[p._id] ? "★" : "☆"}
+                    </button>
+                    )}
+// End of favorite button
                     <div className="player-card-main">
                       <div className="player-card-left">
                         <div className="player-card-photo">

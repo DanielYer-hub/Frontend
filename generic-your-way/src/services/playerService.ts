@@ -59,6 +59,7 @@ export async function listPublicPlayers(params: {
   date?: string;      
   from?: string;
   place?: Place | "";
+  favorites?: string; // Include favorites in params for consistency, even if not used in this function
 }): Promise<PublicPlayer[]> {
   const q = new URLSearchParams();
   if (params.setting) q.set("setting", params.setting);
@@ -68,6 +69,28 @@ export async function listPublicPlayers(params: {
   if (params.from) q.set("from", params.from);
   if (params.place) q.set("place", params.place);
   const { data } = await api.get(`/public/players?${q.toString()}`);
+  const players = (data.players || []) as PublicPlayer[];
+  return players.map(absolutizeImage);
+}
+ // New function to list favorite players with the same filters
+export async function listFavoritePlayers(params: {
+  setting?: string;
+  country?: string;
+  city?: string;
+  date?: string;
+  from?: string;
+  place?: string;
+  favorites?: string;
+}): Promise<PublicPlayer[]> {
+  const q = new URLSearchParams();
+  if (params.setting) q.set("setting", params.setting);
+  if (params.country) q.set("country", params.country);
+  if (params.city) q.set("city", params.city);
+  if (params.date) q.set("date", params.date);
+  if (params.from) q.set("from", params.from);
+  if (params.place) q.set("place", params.place);
+
+  const { data } = await api.get(`/public/players/favorites?${q.toString()}`);
   const players = (data.players || []) as PublicPlayer[];
   return players.map(absolutizeImage);
 }

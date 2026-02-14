@@ -17,7 +17,7 @@ const Updates: FunctionComponent<UpdatesProps> = () => {
             <div className="v-body">
               <ul>
                 <li>Added create Profile.</li>
-                <li>Filter by Regions, Cities, Countries and Settings.</li>
+                <li>Filter by Cities, Countries and Settings.</li>
                 <li>Player Availability Scheduling.</li>
                 <li>Profile Editing &amp; Personalization.</li>
                 <li>Player Invitations &amp; Communication.</li>
@@ -63,7 +63,7 @@ const Updates: FunctionComponent<UpdatesProps> = () => {
             <div className="v-body">
               <ul>
                 <li>Standardized Country/City lists.</li>
-                <li>Forget Password.</li>
+                <li>Favourite Players.</li>
                 <li>Feedback with the Developers.</li>
                 <li>Play Location selection (home / local club / TTS).</li>
                 <li>Location-based filters for player search.</li>
@@ -80,8 +80,8 @@ const Updates: FunctionComponent<UpdatesProps> = () => {
               <ul>
                 <li>Player ratings by Settings, Countries, and Cities.</li>
                 <li>Status selection: <strong> Novice, Fan, Sportsman.</strong></li>
-                <li>Favourite Players.</li>
                 <li>Send Notifications by Bot on your divice.</li>
+                <li>Forget Password.</li>
               </ul>
             </div>
             <div className="v-status is-soon">Soon…</div>
@@ -95,6 +95,7 @@ const Updates: FunctionComponent<UpdatesProps> = () => {
                 <li>Internal chat with other players.</li>
                 <li>Matching players with similar ratings.</li>
                 <li>Player rating option by other players.</li>
+                <li>Hobby Market</li>
               </ul>
             </div>
             <div className="v-status is-soon">Soon…</div>
