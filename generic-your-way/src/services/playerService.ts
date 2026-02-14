@@ -59,7 +59,7 @@ export async function listPublicPlayers(params: {
   date?: string;      
   from?: string;
   place?: Place | "";
-  favorites?: string; // Include favorites in params for consistency, even if not used in this function
+  favorites?: string; 
 }): Promise<PublicPlayer[]> {
   const q = new URLSearchParams();
   if (params.setting) q.set("setting", params.setting);
@@ -72,7 +72,7 @@ export async function listPublicPlayers(params: {
   const players = (data.players || []) as PublicPlayer[];
   return players.map(absolutizeImage);
 }
- // New function to list favorite players with the same filters
+ 
 export async function listFavoritePlayers(params: {
   setting?: string;
   country?: string;

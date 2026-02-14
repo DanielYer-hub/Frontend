@@ -2,14 +2,15 @@ import React, { useEffect, useMemo, useRef, useState } from "react";
 import { useNavigate, useSearchParams } from "react-router-dom";
 import { toast } from "react-toastify";
 import { useAuth } from "../context/AuthContext";
-import { listPublicPlayers, listFavoritePlayers, type PublicPlayer } from "../services/playerService"; // Import the new API function
+import { listPublicPlayers, listFavoritePlayers, type PublicPlayer } from "../services/playerService"; 
 import { createInvite } from "../services/inviteService";
 import BioClamp from "./BioClamp";
 import { imgUrl } from "../utils/imgUrl";
-import {getPublicAvailability,type Availability,} from "../services/availabilityService"; // New import
+import {getPublicAvailability,type Availability,} from "../services/availabilityService"; 
 import "./css/Players.css";
 import { track } from "../utils/analytics";
 import { listCitiesByCountry, listCountries } from "../services/locationService";
+import { getMyFavorites, toggleFavorite } from "../services/favoritesService";
 
 type Place = "tts" | "home" | "club";
 const PLACE_LABEL: Record<Place, string> = {
@@ -150,7 +151,7 @@ const SearchableSelect: React.FC<SearchableSelectProps> = ({
 const Players: React.FC = () => {
   const { user } = useAuth();
   const [players, setPlayers] = useState<PublicPlayer[]>([]);
-  const [favoriteMap, setFavoriteMap] = useState<Record<string, boolean>>({}); // Map of playerId to isFavorite
+  const [favoriteMap, setFavoriteMap] = useState<Record<string, boolean>>({}); 
   const [loading, setLoading] = useState(true);
   const [search, setSearch] = useSearchParams();
   const [panel, setPanel] = useState<InvitePanelState>({ open: false });
@@ -172,7 +173,7 @@ const Players: React.FC = () => {
       date: search.get("date") || "",
       from: search.get("from") || "",
       place: (search.get("place") ?? "") as "" | Place,
-      favorites: search.get("favorites") ?? "", // New favorites filter
+      favorites: search.get("favorites") ?? "", 
     }),
     [search, user?.settings]
   );
@@ -200,16 +201,37 @@ const goFixProfile = () => {
   navigate("/profile-edit");
 };
 
+useEffect(() => {
+  let active = true;
+  (async () => {
+    try {
+      if (!user) {
+        if (active) setFavoriteMap({});
+        return;
+      }
+      const favIds = await getMyFavorites(); 
+      if (!active) return;
+      const map: Record<string, boolean> = {};
+      for (const id of favIds) map[String(id)] = true;
+      setFavoriteMap(map);
+    } catch (e) {
+      if (active) setFavoriteMap({});
+    }
+  })();
+  return () => {
+    active = false;
+  };
+}, [user]);
+
+
   useEffect(() => {
     const load = async () => {
       setLoading(true);
       try {
-        // const data = await listPublicPlayers(filters);
         const data = 
         filters.favorites === "1"
         ? await listFavoritePlayers(filters)
         : await listPublicPlayers(filters);
-        // If showing favorites, data is already filtered by API, no need to filter out self
         const meId = (user as any)?.id || (user as any)?._id;
         setPlayers(meId ? data.filter((p) => String(p._id) !== String(meId)) : data);
       } catch (e: any) {
@@ -226,12 +248,12 @@ const goFixProfile = () => {
     filters.date,
     filters.from,
     filters.place,
-    filters.favorites, // Refetch when favorites filter changes
+    filters.favorites, 
     user,
   ]);
 
   const updateFilter = (
-    k: "setting" | "country" | "city" | "date" | "from" | "place" | "favorites", // Add "favorites" to the type
+    k: "setting" | "country" | "city" | "date" | "from" | "place" | "favorites", 
     v: string
   ) => {
     const next = new URLSearchParams(search);
@@ -541,29 +563,32 @@ const submitInvite = async () => {
 
                 <div className="card player-card">
                   <div className="card-body d-flex flex-column">
-{/* // Show favorite button only if user is logged in */}
                     {user && (
-                     <button
-                     type="button"
-                     className={`fav-btn ${favoriteMap[p._id] ? "active" : ""}`}
-                     onClick={async (e) => {
-                     e.stopPropagation();
-                     try {
-                     const isFavorite = !favoriteMap[p._id];
-                     // Toggle favorite status (call API to add/remove)
-                     setFavoriteMap((prev) => ({
-                     ...prev,
-                     [p._id]: isFavorite,
-                      }));
-                     } catch (err) {
-                     toast.error("Failed to update favorite");
-                     }
-                     }}
-                     >
-                    {favoriteMap[p._id] ? "★" : "☆"}
-                    </button>
-                    )}
-{/* // End of favorite button */}
+                    <button
+                    type="button"
+                    className={`fav-btn ${favoriteMap[p._id] ? "active" : ""}`}
+                    onClick={async (e) => {
+                    e.stopPropagation();
+                    if (!user) return;
+                    const prev = !!favoriteMap[p._id];
+                    setFavoriteMap((m) => ({ ...m, [p._id]: !prev }));
+                    try {
+                    const data = await toggleFavorite(p._id);
+                    setFavoriteMap((m) => {
+                    const next = { ...m };
+                    next[p._id] = !!data.isFavorite;
+                    return next;
+                    });
+                    } catch (err) {
+                    setFavoriteMap((m) => ({ ...m, [p._id]: prev }));
+                    toast.error("Failed to update favorite");
+                    }
+                    }}
+                    >
+                   {favoriteMap[p._id] ? "★" : "☆"}
+                  </button>
+                  )}
+
                     <div className="player-card-main">
                       <div className="player-card-left">
                         <div className="player-card-photo">
