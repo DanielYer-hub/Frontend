@@ -504,9 +504,9 @@ const submitInvite = async () => {
                 onChange={(e) => updateFilter("from", e.target.value)}
               />
             </div>
-// Show favorites filter only if user is logged in
+{ /* Show favorites filter only if user is logged in */ }
           {user && (
-           <div className="col-12 col-md-4 d-flex align-items-end">
+           <div className="col-12 col-md-4 d-flex align-items-end"> 
             <button
             type="button"
             className={`btn w-100 ${
@@ -519,7 +519,7 @@ const submitInvite = async () => {
            </button>
           </div>
           )}
-// End of favorites filter
+{/* // End of favorites filter */}
           </div>
         </div>
       </div>
@@ -541,7 +541,7 @@ const submitInvite = async () => {
 
                 <div className="card player-card">
                   <div className="card-body d-flex flex-column">
-// Show favorite button only if user is logged in
+{/* // Show favorite button only if user is logged in */}
                     {user && (
                      <button
                      type="button"
@@ -563,7 +563,7 @@ const submitInvite = async () => {
                     {favoriteMap[p._id] ? "★" : "☆"}
                     </button>
                     )}
-// End of favorite button
+{/* // End of favorite button */}
                     <div className="player-card-main">
                       <div className="player-card-left">
                         <div className="player-card-photo">
