@@ -70,7 +70,13 @@ const Updates: FunctionComponent<UpdatesProps> = () => {
                 <li>Improved match compatibility.</li>
               </ul>
             </div>
-            <div className="v-status is-soon">Soon…</div>
+              <div className="v-status is-complete">
+               <svg xmlns="http://www.w3.org/2000/svg" 
+               height="23px" viewBox="0 -960 960 960" 
+               width="24px" fill="#25CA61" className="icon-success"> 
+                <path d="M382-240 154-468l57-57 171 171 367-367 57 57-424 424Z"/></svg>
+                Completed 
+              </div>
           </div>
 
           <div className="version">
@@ -80,7 +86,7 @@ const Updates: FunctionComponent<UpdatesProps> = () => {
               <ul>
                 <li>Player ratings by Settings, Countries, and Cities.</li>
                 <li>Status selection: <strong> Novice, Fan, Sportsman.</strong></li>
-                <li>Send Notifications by Bot on your divice.</li>
+                <li>Show Notifications about new Invites.</li>
                 <li>Forget Password.</li>
               </ul>
             </div>

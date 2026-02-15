@@ -526,22 +526,22 @@ const submitInvite = async () => {
                 onChange={(e) => updateFilter("from", e.target.value)}
               />
             </div>
-{ /* Show favorites filter only if user is logged in */ }
+
           {user && (
-           <div className="col-12 col-md-4 d-flex align-items-end"> 
+           <div className="filter-star"> 
             <button
             type="button"
-            className={`btn w-100 ${
-            filters.favorites === "1" ? "btn-warning" : "btn-outline-warning"
+            className={`btn btn-star  ${
+            filters.favorites === "1" ? "" : ""
             }`}
             onClick={() => updateFilter("favorites", filters.favorites === "1" ? "" : "1")}
             title="Show only players you added to Favorites"
             >
-           {filters.favorites === "1" ? "Hide Favorites" : "Show Favorites"}
+           {filters.favorites === "1" ? "★" : "☆"} 
            </button>
           </div>
           )}
-{/* // End of favorites filter */}
+
           </div>
         </div>
       </div>

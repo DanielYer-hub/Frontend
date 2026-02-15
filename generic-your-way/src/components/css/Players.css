@@ -140,6 +140,26 @@
 .fav-btn.active {
   color: #f5c518;
 }
+.filter-star{
+  position: absolute;
+  right: 10px; 
+  top: -10px;
+  width: 30px;
+  height: 30px;
+  border-radius: 999px;
+  background: #ffd000;
+  border: none;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  box-shadow: 0 4px 10px rgba(0,0,0,0.45);
+  transition: transform 0.15s ease, box-shadow 0.15s ease, background 0.15s ease;
+}
+.btn-star{
+  font-size: 18px;
+  margin-bottom: 1.5px;
+}
 
 @media (max-width: 767.98px) {
   .players-filters-wrapper.players-filters-closed {

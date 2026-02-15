@@ -83,7 +83,7 @@ a:hover, .nav-link.active { color: var(--accent); }
 
 
 .bio-clamp {
-  align-items: center;        
+  align-items: center;    
 }
 
 .bio-text {
@@ -108,6 +108,7 @@ a:hover, .nav-link.active { color: var(--accent); }
 }
 .bio-toggle-dots {
   letter-spacing: 2px;
+  
 }
 .bio-toggle-pill:hover {
   background: rgba(255, 255, 255, 0.08);
