@@ -57,7 +57,6 @@ export const AuthProvider: FunctionComponent<{ children: ReactNode }> = ({ child
     const data = await loginUser(email, password);
     setTok(data.token);
     setToken(data.token);
-    localStorage.setItem("token", data.token); 
     setUser(data.user);
     await refreshMe();
     track("Login Success", { method: "password" });
@@ -76,7 +75,6 @@ export const AuthProvider: FunctionComponent<{ children: ReactNode }> = ({ child
     if (reg?.token && reg?.user) {
       setTok(reg.token);
       setToken(reg.token);
-      localStorage.setItem("token", reg.token); 
       setUser(reg.user);
       await refreshMe();
       track("Signup Success", { method: "email" });

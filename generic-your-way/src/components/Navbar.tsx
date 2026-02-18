@@ -4,9 +4,7 @@ import "./css/Navbar.css";
 import FeedbackModal from "./Feedbeck";
 import { useState } from "react";
 
-
 declare const bootstrap: any;
-
 
 
 export default function LayautRight() {
@@ -57,9 +55,9 @@ return (
 <nav className="nav nav-pills flex-column gap-3">
 <NavLink className="btn btn-accent-outline"  to="/dashboard">Invites</NavLink>    
 <NavLink className="btn btn-accent-outline"  to="/player-card">Profile</NavLink>  
+<NavLink className="btn btn-accent-outline" to="/players">Find Players</NavLink>
 <NavLink className="btn btn-accent-outline" to="/about">About</NavLink>  
 <NavLink className="btn btn-accent-outline" to="/updates">Updates</NavLink> 
-<NavLink className="btn btn-accent-outline" to="/players">Find Players</NavLink>
 <button className="btn btn-accent-outline" onClick={() => setOpen(true)}>
   Feedback
   </button>
@@ -103,9 +101,9 @@ return (
 <div className="offcanvas-body d-flex flex-column gap-3">
           <NavLink className="btn btn-accent-outline" to="/dashboard" onClick={closeOffcanvas}>Invites</NavLink>
           <NavLink className="btn btn-accent-outline" to="/player-card" onClick={closeOffcanvas}>Profile</NavLink>
+          <NavLink className="btn btn-accent-outline" to="/players" onClick={closeOffcanvas}>Find Players</NavLink>
           <NavLink className="btn btn-accent-outline" to="/about" onClick={closeOffcanvas}>About</NavLink>
           <NavLink className="btn btn-accent-outline" to="/updates" onClick={closeOffcanvas}>Updates</NavLink> 
-          <NavLink className="btn btn-accent-outline" to="/players" onClick={closeOffcanvas}>Find Players</NavLink>
           <button className="btn btn-accent-outline" onClick={() => setOpen(true)}>
           Feedback
           </button>
